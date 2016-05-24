@@ -4,5 +4,6 @@
 
 if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams', '$location',
     function ($scope, $rootscope, $routeParams, $location) {
+        $rootscope.curpage = "channels";
     }
 ]);

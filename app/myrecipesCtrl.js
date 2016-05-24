@@ -4,5 +4,6 @@
 
 if3tApp.controller('MyRecipesController', ['$scope', '$rootScope', '$routeParams', '$location',
     function ($scope, $rootscope, $routeParams, $location) {
+        $rootscope.curpage = "myrecipes";
     }
 ]);

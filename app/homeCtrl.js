@@ -4,5 +4,7 @@
 
 if3tApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$location',
     function ($scope, $rootscope, $routeParams, $location) {
+        $rootscope.curpage = "home";
+
     }
 ]);
