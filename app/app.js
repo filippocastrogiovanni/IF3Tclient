@@ -8,5 +8,17 @@ if3tApp.config(['$routeProvider', function($routeProvider){
         templateUrl: 'template/home.html',
         controller: 'HomeController'
     });
+    $routeProvider.when('/newrecipe', {
+        templateUrl: 'template/new_recipe.html',
+        controller: 'NewRecipeController'
+    });
+    $routeProvider.when('/myrecipes', {
+        templateUrl: 'template/my_recipes.html',
+        controller: 'MyRecipesController'
+    });
+    $routeProvider.when('/channels', {
+        templateUrl: 'template/channels.html',
+        controller: 'ChannelsController'
+    });
     $routeProvider.otherwise({redirectTo: '/home'});
 }]);
