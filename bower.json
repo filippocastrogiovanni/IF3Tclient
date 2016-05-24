@@ -25,6 +25,7 @@
     "moment-range": "^2.2.0",
     "angular-route": "^1.5.5",
     "angular-sanitize": "^1.5.5",
-    "angular-resource": "^1.5.5"
+    "angular-resource": "^1.5.5",
+    "angular-material": "^1.0.9"
   }
 }
