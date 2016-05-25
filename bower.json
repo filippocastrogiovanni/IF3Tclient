@@ -26,6 +26,7 @@
     "angular-route": "^1.5.5",
     "angular-sanitize": "^1.5.5",
     "angular-resource": "^1.5.5",
-    "angular-material": "^1.0.9"
+    "angular-material": "^1.0.9",
+    "font-awesome": "font-awsome#^4.6.3"
   }
 }

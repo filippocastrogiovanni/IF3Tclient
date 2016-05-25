@@ -3,10 +3,6 @@
  */
 var if3tApp = angular.module('if3tApp', [ 'ngRoute', 'ngSanitize', 'ngResource', 'ngMaterial' ]);
 
-if3tApp.config(function($mdThemingProvider) {
-    $mdThemingProvider.theme('default').dark();
-});
-
 if3tApp.config(['$routeProvider', function($routeProvider){
     $routeProvider.when('/home', {
         templateUrl: 'template/home.html',
