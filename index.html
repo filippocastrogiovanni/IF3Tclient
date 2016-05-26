@@ -12,7 +12,6 @@
     <!-- Style Sheets -->
     <link rel="stylesheet" media="screen" href="css/main.css" />
     <link rel="stylesheet" media="screen" href="css/style.css" />
-    <link rel="stylesheet" media="screen" href="css/theme.css" />
 
     <!-- JQuery -->
     <link rel="stylesheet" media="screen" href="lib/jquery-ui/themes/base/jquery-ui.min.css" />
@@ -62,9 +61,10 @@
     <![endif]-->
 
 </head>
-<body ng-app="if3tApp">
+<body id="page-top" class="index" ng-app="if3tApp">
 
     <header>
+        <!-- Navigation -->
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
 
@@ -102,15 +102,12 @@
                         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
-
             </div><!-- /.container-fluid -->
         </nav>
     </header>
 
     <content>
-        <div class="container">
-            <div ng-view></div>
-        </div>
+        <div ng-view></div>
     </content>
 
     <footer>
