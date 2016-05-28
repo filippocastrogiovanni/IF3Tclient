@@ -1,4 +1,6 @@
+<!--
 <body ng-app="NewRecipeController" layout="column">
+-->
 <md-toolbar layout="row" >
     <h2>Create a recipe</h2>
 </md-toolbar>
@@ -15,7 +17,7 @@
 <div>
     <md-content>
         <h3 class="step_0">if</h3>
-        <a class="step_0_anchor" href="new_recipe/#step_1">this</a>
+        <a class="step_0_anchor" href="#/newrecipe#step_1">this</a>
         <h3 class="step_0">then</h3>
         <h3 class="step_0">that</h3>
         <br>
@@ -86,7 +88,7 @@
 
     <!-- PART B -->
     <div>
-        <a href="new_recipe/#step_1" style="float:right">
+        <a href="#/newrecipe#step_1" style="float:right">
             <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
         </a>
     </div>
@@ -100,7 +102,7 @@
             <h6 class="step_0_helper">You'll only have to do this once.</h6>
             <img style="margin-left: 25px;" id="channel_to_connect" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
 
-            <a id="channel_to_connect_1_anchor" href="new_recipe/#step_2">
+            <a id="channel_to_connect_1_anchor" href="#/newrecipe#step_2">
                 <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
             </a>
 <br>
@@ -125,7 +127,7 @@
     <!-- STEP 2 -->
     <div id="step_2">
         <!-- PART A -->
-        <a href="new_recipe/#step_1" style="float:right">
+        <a href="#/newrecipe#step_1" style="float:right">
             <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
         </a>
 <br>
@@ -171,7 +173,7 @@
             <h3 class="step_0">if</h3>
             <h6 class="step_0_anchor">{{ chosen_trigger_job }}</h6>
             <h3 class="step_0">then</h3>
-            <a class="step_0_anchor" href="new_recipe/#step_3">that</a>
+            <a class="step_0_anchor" href="#/newrecipe#step_3">that</a>
         </md-content>
     </div>
 
@@ -239,7 +241,7 @@
 
     <!-- PART B -->
     <div>
-        <a href="new_recipe/#step_3" style="float:right">
+        <a href="#/newrecipe#step_3" style="float:right">
             <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
         </a>
     </div>
@@ -253,7 +255,7 @@
             <h6 class="step_0_helper">You'll only have to do this once.</h6>
             <img style="margin-left: 25px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
 
-            <a id="channel_to_connect_2_anchor" href="new_recipe/#step_4">
+            <a id="channel_to_connect_2_anchor" href="#/newrecipe#step_4">
                 <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
             </a>
 <br>
@@ -280,7 +282,7 @@
     <!-- STEP 4 -->
     <div id="step_4">
         <div>
-            <a href="new_recipe/#step_3" style="float:right">
+            <a href="#/newrecipe#step_3" style="float:right">
                 <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
             </a>
         </div>
@@ -361,5 +363,6 @@
     </div>
 
 </div>
+<!--
 </body>
-
+-->
