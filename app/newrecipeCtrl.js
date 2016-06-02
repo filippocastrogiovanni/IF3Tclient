@@ -2,6 +2,28 @@
  * Created by Filippo on 24/05/2016.
  */
 
+if3tApp.directive('bindHtmlCompile', ['$compile', function ($compile) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            scope.$watch(function () {
+                return scope.$eval(attrs.bindHtmlCompile);
+            }, function (value) {
+                // Incase value is a TrustedValueHolderType, sometimes it
+                // needs to be explicitly called into a string in order to
+                // get the HTML string.
+                element.html(value && value.toString());
+                // If scope is provided use it, otherwise use parent scope
+                var compileScope = scope;
+                if (attrs.bindHtmlScope) {
+                    compileScope = scope.$eval(attrs.bindHtmlScope);
+                }
+                $compile(element.contents())(compileScope);
+            });
+        }
+    };
+}]);
+
 if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location',
     function ($scope, $rootscope, $routeParams, $location) {
 
@@ -93,73 +115,73 @@ function search_change($scope, o){
 }
 
 function choose_trigger_channel($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_channel = o;
 }
 
 function choose_action_channel($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_action_channel = o;
 }
 
 function choose_trigger_job($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_google_calendar2($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_google_mail3($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_google_mail5($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_facebook1($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_facebook3($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_facebook5($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_facebook7($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_facebook8($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_facebook10($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_twitter1($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_twitter2($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_twitter3($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_twitter8($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 function submit_function_twitter10($scope, o){
-    console.log("You have choosen " + o.name);
+    console.log("You have choosen " + o.header);
     $scope.chosen_trigger_job = o;
 }
 
@@ -172,17 +194,17 @@ function initialize_data($scope){
         {
             header: "Any event starts" ,
             paragraph: "This Trigger fires within 15 minutes of the starting time of any event on your Google Calendar." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "Event from search starts" ,
             paragraph: "This Trigger fires within 15 minutes of the starting time of an event on your Google Calendar that contains a specific keyword or phrase. The search looks at the event’s Title, Description, and Location." ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_google_calendar2(trigger_list_channel.header)'><h4>Keyword or phrase:</h4><input type='text' name='keyword'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value=''&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_google_calendar2(trigger_list_channel)'><h4>Keyword or phrase:</h4><input type='text' name='keyword'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
         {
             header: "Any new event added" ,
             paragraph: "This Trigger fires every time a new event is added to your Google Calendar." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         }
     ];
     channel_google_calendar.action_list = [
@@ -201,32 +223,32 @@ function initialize_data($scope){
         {
             header: "Any new email in inbox" ,
             paragraph: "This Trigger fires every time any new email arrives in Gmail." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "Any new attachment in inbox" ,
             paragraph: "This Trigger fires for every email attachment that arrives in your inbox. NOTE: Multiple attachments each fire separately." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New email in inbox from" ,
             paragraph: "This Trigger fires every time a new email arrives in your inbox from the address you specify." ,
-            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail3(trigger_list_channel.header)'><h4>Email address:</h4><input type='text' name='email_address'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail3(trigger_list_channel)'><h4>Email address:</h4><input type='text' name='email_address'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
         {
             header: "New starred email in inbox" ,
             paragraph: "This Trigger fires every time you add any new star to an email in your inbox." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New email in inbox labeled" ,
             paragraph: "This Trigger fires every time a new email arrives in your inbox with the label you specify." ,
-            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail5(trigger_list_channel.header)'><h4>Email label:</h4><input type='text' name='email_label' placeholder='Case sensitive; '/' to split'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail5(trigger_list_channel)'><h4>Email label:</h4><input type='text' name='email_label' placeholder='Case sensitive; '/' to split'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
         {
             header: "New email in inbox from search" ,
             paragraph: "This Trigger fires every time a new email arrives in your inbox that matches the search query you specify." ,
-            extra_element: "<br><h6 class='step_0_helper' style='padding-left: 0px'>Use Gmail’s <a href='http://support.google.com/mail/bin/answer.py?hl=en&answer=7190'>search operators</a> for advanced search</h6><br><br><form novalidate ng-submit='submit_trigger_google_mail6(trigger_list_channel.header)'><h4>Search for:</h4><input type='text' name='search_for'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+            extra_element: "<br><h6 class='step_0_helper' style='padding-left: 0px'>Use Gmail’s <a href='http://support.google.com/mail/bin/answer.py?hl=en&answer=7190'>search operators</a> for advanced search</h6><br><br><form novalidate ng-submit='submit_trigger_google_mail6(trigger_list_channel)'><h4>Search for:</h4><input type='text' name='search_for'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         }
     ];
     channel_google_mail.action_list = [
@@ -244,54 +266,54 @@ function initialize_data($scope){
         {
             header: "Any new post by you in area" ,
             paragraph: "This Trigger fires every time you post on Facebook at a location you specify." ,
-            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_facebook1(trigger_list_channel.header)'>	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_facebook1(trigger_list_channel)'>	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "New status message by you" ,
             paragraph: "This Trigger fires every time you create a new plain text status message on Facebook." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New status message by you with hashtag" ,
             paragraph: "This Trigger fires every time you create a new plain text status message on Facebook with a specific hashtag." ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_facebook3(trigger_list_channel.header)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_facebook3(trigger_list_channel)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "New link post by you" ,
             paragraph: "This Trigger fires every time you create a new link post on Facebook." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New link post by you with hashtag" ,
             paragraph: "This Trigger fires every time you create a new link post on Facebook with a specific hashtag." ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_facebook5(trigger_list_channel.header)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_facebook5(trigger_list_channel)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "New photo post by you" ,
             paragraph: "This Trigger fires every time you post a new photo on Facebook." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         }
         ,
         {
             header: "New photo post by you with hashtag" ,
             paragraph: "This Trigger fires every time you post a new photo on Facebook with a specific hashtag." ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_facebook7(trigger_list_channel.header)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_facebook7(trigger_list_channel)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "New photo post by you in area" ,
             paragraph: "" ,
-            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_facebook8(trigger_list_channel.header)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_facebook8(trigger_list_channel)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "You are tagged in a photo" ,
             paragraph: "This Trigger fires every time you are tagged you in a new photo. NOTE: Facebook privacy settings may block IFTTT’s access to some photos you are tagged in." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "Your profile changes" ,
             paragraph: "A Trigger that monitors changes in your Facebook profile information. It works with these Facebook profile fields: Name, Profile picture, Location, Website, and Bio." +
             + "Profile fields to watch: all, full name, profile picture, location, websiet, bio" ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_facebook10(trigger_list_channel.header)'> 	<input type='checkbox' name='all'>All<br> 	<input type='checkbox' name='full_name' >Full name<br> 	<input type='checkbox' name='profile_picture'>Profile picture<br> 	<input type='checkbox' name='location' >Location<br> 	<input type='checkbox' name='website' >Website<br> 	<input type='checkbox' name='bio' >Bio<br> 	<br>     <input type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_facebook10(trigger_list_channel)'> 	<input type='checkbox' name='all'>All<br> 	<input type='checkbox' name='full_name' >Full name<br> 	<input type='checkbox' name='profile_picture'>Profile picture<br> 	<input type='checkbox' name='location' >Location<br> 	<input type='checkbox' name='website' >Website<br> 	<input type='checkbox' name='bio' >Bio<br> 	<br>     <input type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
         }
     ];
     channel_facebook.action_list = [
@@ -319,53 +341,53 @@ function initialize_data($scope){
         {
             header: "New tweet by you" ,
             paragraph: "This Trigger fires every time you post a tweet at a location you specify. " ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_twitter1(trigger_list_channel.header)'> 	<input type='checkbox' name='retweets'>Retweets <br> 	<input type='checkbox' name='replies' >@Replies<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_twitter1(trigger_list_channel)'> 	<input type='checkbox' name='retweets'>Retweets <br> 	<input type='checkbox' name='replies' >@Replies<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
         },
         {
             header: "New tweet by you with hashtag" ,
             paragraph: "This Trigger fires every time you post a tweet at a location you specify. " ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_twitter2(trigger_list_channel.header)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_twitter2(trigger_list_channel)'> 	<h4>Hashtag:</h4> 	<input type='text' name='hashtag'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "New tweet by you in area" ,
             paragraph: "This Trigger fires every time you post a tweet at a location you specify. " ,
-            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_twitter3(trigger_list_channel.header)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_twitter3(trigger_list_channel)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "New mention of you" ,
             paragraph: "This Trigger fires every time you are @mentioned in a tweet." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New link by you" ,
             paragraph: "This Trigger fires for every link you tweet. If your tweet has multiple links, it will fire multiple times." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New follower" ,
             paragraph: "This Trigger fires every time a new user starts following you." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New liked tweet by you" ,
             paragraph: "This Trigger fires every time you like a tweet." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New tweet by a specific user" ,
             paragraph: "This Trigger fires every time the Twitter user you specify tweets." ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_twitter8(trigger_list_channel.header)'> 	<h4>Username:</h4> 	<input type='text' name='username'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_twitter8(trigger_list_channel)'> 	<h4>Username:</h4> 	<input type='text' name='username'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
         {
             header: "New tweet from search" ,
             paragraph: "This Trigger fires every time a new tweet matches your search query. NOTE: limited to 15 tweets per check." +
             + "Use Twitter’s <a href='https://support.twitter.com/articles/71577-how-to-use-advanced-twitter-search' >search operators</a> for advanced search. For example: ('@twitter' '#followfriday')",
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel.header)' href='#/step_3\' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
         {
             header: "New tweet by anyone in area" ,
             paragraph: "This Trigger fires every time anyone posts a tweet at a location you specify. " ,
-            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_twitter10(trigger_list_channel.header)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+            extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_twitter10(trigger_list_channel)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
     ];
     channel_twitter.action_list = [

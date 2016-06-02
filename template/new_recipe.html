@@ -1,6 +1,7 @@
 <!--
 <body ng-app="NewRecipeController" layout="column">
 -->
+
 <md-toolbar layout="row" >
     <h2>Create a recipe</h2>
 </md-toolbar>
@@ -19,11 +20,11 @@
         <div layout="row" layout-align="center center"  style="min-height: 500px">
             <md-content>
                 <h3 class="step_0">if</h3>
-                <a class="step_0_anchor" ng-href="#/newrecipe#step_1_a">this</a>
+                <a class="step_0_anchor" >this</a> <!--ng-href="#/newrecipe#step_1_a"-->
                 <h3 class="step_0">then</h3>
                 <h3 class="step_0">that</h3>
                 <br>
-                <h6 class="step_0_helper" style="padding-left: 190px;">Click "this" to get started.</h6>
+                <h6 class="step_0_helper" style="padding-left: 110px;">Click "this" to get started.</h6>
             </md-content>
          </div>
     </div>
@@ -61,7 +62,7 @@
                     <div>
                         <form>
                             <md-input-container>
-                                <input autocapitalization="off" class="step_1_channels_search"
+                                <input aria-label="input" autocapitalization="off" class="step_1_channels_search"
                                    placeholder="Search Channels" type="text"
                                    ng-model="searchBox1.name"
                                 />
@@ -71,7 +72,7 @@
 <br>
                     <md-list >
                         <md-list-item data-ng-repeat="channel in channels | filter:searchBox1" style="display: inline">
-                            <md-button  ng-click="choose_trigger_channel(channel)" ng-href="#step_1_b">
+                            <md-button aria-label="md-button" ng-click="choose_trigger_channel(channel)"> <!--ng-href="#/newrecipe#step_1_a"-->
                                 <img src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100"/>
                             </md-button>
                         </md-list-item>
@@ -115,11 +116,11 @@
 <br>
                 <div>
                     <img style="margin-left: 25px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
-                    <a ng-href="#/newrecipe#step_2_a">
-                        <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" ng-transclude="" ng-href="#step_4" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
+                    <a > <!--ng-href="#/newrecipe#step_2_a"-->
+                        <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
                     </a>
-                    <a ng-href="#/newrecipe#step_1_a" >
-                        <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
+                    <a > <!--ng-href="#/newrecipe#step_1_a"-->
+                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
                     </a>
                 </div>
             </div>
@@ -142,36 +143,38 @@
 <br>
 <br>
 <!-- STEP 2 -->
-    <div id="step_2_a" div layout="row" layout-align="space-around center"  style="min-height: 500px">
-        <br>
-        <br>
-        <br>
+<div id="step_2_a" div layout="row" layout-align="space-around center"  style="min-height: 500px">
+<br>
+<br>
+<br>
         <!-- PART A -->
-        <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(step 2 of 5)</h6>
-<br>
-<br>
-        <div>
-            <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                <md-list >
-                    <md-list-item data-ng-repeat="trigger_list_channel in chosen_trigger_channel.trigger_list" class="trigger-list_item" style="display: inline">
-<br>
-<br>
-                        <h3>{{trigger_list_channel.header}}</h3>
-                        <p>{{trigger_list_channel.paragraph}}</p>
-                        <div ng-bind-html="trigger_list_channel.extra_element"></div>
-<br>
-<br>
-                    </md-list-item>
-                </md-list>
-            </md-content>
+        <div div layout="column">
+            <div div layout="row" layout-align="space-around center">
+                <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+                    <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(step 2 of 5)</h6>
+                    <a style="float:right"> <!--ng-href="#/newrecipe#step_1_b"-->
+                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+                    </a>
+                </md-content>
+            </div>
+            <div div layout="row" layout-align="space-around center"  style="min-height: 500px">
+                <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+                    <md-list >
+                        <md-list-item data-ng-repeat="trigger_list_channel in chosen_trigger_channel.trigger_list" class="trigger-list_item" style="display: inline">
+                            <br>
+                            <br>
+                            <h3>{{trigger_list_channel.header}}</h3>
+                            <p>{{trigger_list_channel.paragraph}}</p>
+                            <div bind-html-compile="trigger_list_channel.extra_element"></div>
+                            <br>
+                            <br>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </div>
         </div>
+</div>
 
-        <div>
-            <a ng-href="#/newrecipe#step_1_b" style="float:right">
-                <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
-            </a>
-        </div>
-    </div>
 <br>
 <br>
 <br>
@@ -200,7 +203,7 @@
                     <h3 class="step_0">if</h3>
                     <h6 class="step_0_anchor">{{ chosen_trigger_job }}</h6>
                     <h3 class="step_0">then</h3>
-                    <a class="step_0_anchor" ng-href="#/newrecipe#step_3_a">that</a>
+                    <a class="step_0_anchor">that</a> <!--ng-href="#/newrecipe#step_3_a"-->
                 </md-content>
             </div>
         </div>
@@ -222,7 +225,7 @@
 <br>
 <br>
 
-    <!-- STEP 3 -->
+<!-- STEP 3 -->
 <div id="step_3_a">
 <br>
 <br>
@@ -238,7 +241,7 @@
                 <div>
                     <form>
                         <md-input-container>
-                            <input autocapitalization="off" class="step_1_channels_search"
+                            <input aria-label="input" autocapitalization="off" class="step_1_channels_search"
                                    placeholder="Search Channels" type="text"
                                    ng-model="searchBox2.name"
                             />
@@ -248,7 +251,7 @@
 <br>
                 <md-list >
                     <md-list-item data-ng-repeat="channel in channels | filter:searchBox2" style="display: inline">
-                        <md-button  ng-href="#step_3_b" ng-click="choose_action_channel(channel)">
+                        <md-button aria-label="md-button" ng-click="choose_action_channel(channel)"> <!--ng-href="#/newrecipe#step_3_b"-->
                             <img src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100"/>
                         </md-button>
                     </md-list-item>
@@ -294,12 +297,12 @@
                 <div>
                     <img style="margin-left: 25px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
 
-                    <a id="channel_to_connect_2_anchor" ng-href="#/newrecipe#step_4_a">
-                        <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" ng-transclude="" ng-href="#step_4_a" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
+                    <a id="channel_to_connect_2_anchor" > <!--ng-href="#/newrecipe#step_4_a"-->
+                        <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
                     </a>
 
-                    <a ng-href="#/newrecipe#step_3_a">
-                        <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
+                    <a > <!--ng-href="#/newrecipe#step_3_a"-->
+                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
                     </a>
                     </div>
              </div>
@@ -324,33 +327,34 @@
 
 <!-- STEP 4 -->
 <div id="step_4_a" div layout="row" layout-align="space-around center"  style="min-height: 500px">
-<br>
-<br>
-<br>
+    <br>
+    <br>
+    <br>
     <!-- PART A -->
-    <h3 class="step_1">Choose an Action</h3><h6 class="step_1_helper">(step 4 of 5)</h6>
-<br>
-<br>
-    <div>
-        <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-            <md-list >
-                <md-list-item data-ng-repeat="action_list_channel in chosen_action_channel.action_list" class="trigger-list_item" style="display: inline">
-<br>
-<br>
-                    <h3>{{action_list_channel.header}}</h3>
-                    <p>{{action_list_channel.paragraph}}</p>
-                    <div ng-bind-html="action_list_channel.extra_element"></div>
-<br>
-<br>
-                </md-list-item>
-            </md-list>
-        </md-content>
-    </div>
-
-    <div>
-        <a ng-href="#/newrecipe#step_3_b" style="float:right">
-            <md-button class="md-warn md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Back">Back</md-button>
-        </a>
+    <div div layout="column">
+        <div div layout="row" layout-align="space-around center">
+            <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+                <h3 class="step_1">Choose an Action</h3><h6 class="step_1_helper">(step 4 of 5)</h6>
+                <a style="float:right"> <!--ng-href="#/newrecipe#step_3_b"-->
+                    <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+                </a>
+            </md-content>
+        </div>
+        <div div layout="row" layout-align="space-around center"  style="min-height: 500px">
+            <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+                <md-list >
+                    <md-list-item data-ng-repeat="action_list_channel in chosen_action_channel.action_list" class="trigger-list_item" style="display: inline">
+                        <br>
+                        <br>
+                        <h3>{{action_list_channel.header}}</h3>
+                        <p>{{action_list_channel.paragraph}}</p>
+                        <div ng-bind-html="action_list_channel.extra_element"></div>
+                        <br>
+                        <br>
+                    </md-list-item>
+                </md-list>
+            </md-content>
+        </div>
     </div>
 </div>
 
@@ -391,7 +395,7 @@
 <br>
 <br>
             <form novalidate ng-submit='submit_recipe()' id="submit_recipe">
-                    <input type="submit" ng-href="#/home" class="btn btn-info btn-large" value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp" />
+                    <input aria-label="input" type="submit" class="btn btn-info btn-large" value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp" /> <!--ng-href="#/home"-->
             </form>
         </div>
     </div>
