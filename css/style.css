@@ -5,7 +5,8 @@
     font-size: 1000%;
 }
 
-a.step_0_anchor { /*class section tag anchor*/
+.step_0_anchor { /*class section tag anchor*/
+    cursor: pointer;
     font-weight: bold;
     font-size: 1000%;
     color:lightseagreen;

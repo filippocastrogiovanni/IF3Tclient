@@ -32,10 +32,6 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
         initialize_data($scope);
 
         //all functions handled by controller
-        $scope.search_change = function(o) {
-            search_change($scope, o);
-        }
-
         $scope.choose_trigger_channel = function(o) {
             choose_trigger_channel($scope, o);
         }
@@ -44,78 +40,67 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             choose_action_channel($scope, o);
         }
 
-        $scope.choose_trigger_job = function(o) {
-            choose_trigger_job($scope, o);
+        $scope.submit_trigger_google_mail1 = function() {
+            submit_trigger_google_mail1($scope);
         }
 
-        $scope.submit_function_google_calendar2 = function(o) {
-            submit_function_google_calendar2($scope, o);
+        $scope.submit_action_google_mail1 = function() {
+            submit_action_google_mail1($scope);
         }
 
-        $scope.submit_function_google_mail3 = function(o) {
-            submit_function_google_mail3($scope, o);
+        $scope.submit_trigger_google_calendar1 = function() {
+            submit_trigger_google_calendar1($scope);
         }
 
-        $scope.submit_function_google_mail5 = function(o) {
-            submit_function_google_mail5($scope, o);
+        $scope.submit_trigger_google_calendar2 = function() {
+            submit_trigger_google_calendar2($scope);
         }
 
-        $scope.submit_function_facebook1 = function(o) {
-            submit_function_facebook1($scope, o);
+        $scope.submit_action_google_calendar1 = function() {
+            submit_action_google_calendar1($scope);
         }
 
-        $scope.submit_function_facebook3 = function(o) {
-            submit_function_facebook3($scope, o);
+        $scope.submit_trigger_weather1 = function() {
+            submit_trigger_weather1($scope);
         }
 
-        $scope.submit_function_facebook5 = function(o) {
-            submit_function_facebook5($scope, o);
+        $scope.submit_trigger_weather2 = function() {
+            submit_trigger_weather2($scope);
         }
 
-        $scope.submit_function_facebook7 = function(o) {
-            submit_function_facebook7($scope, o);
+        $scope.submit_trigger_weather3 = function() {
+            submit_trigger_weather3($scope);
         }
 
-        $scope.submit_function_facebook8 = function(o) {
-            submit_function_facebook8($scope, o);
+        $scope.submit_trigger_facebook1 = function() {
+            submit_trigger_facebook1($scope);
         }
 
-        $scope.submit_function_facebook10 = function(o) {
-            submit_function_facebook10($scope, o);
+        $scope.submit_trigger_facebook2 = function() {
+            submit_trigger_facebook2($scope);
         }
 
-        $scope.submit_function_twitter1 = function(o) {
-            submit_function_twitter1($scope, o);
+        $scope.submit_action_facebook1 = function() {
+            submit_action_facebook1($scope);
         }
 
-        $scope.submit_function_twitter2 = function(o) {
-            submit_function_twitter2($scope, o);
+        $scope.submit_trigger_twitter1 = function() {
+            submit_trigger_twitter1($scope);
         }
 
-        $scope.submit_function_twitter3 = function(o) {
-            submit_function_twitter3($scope, o);
+        $scope.submit_action_twitter1 = function() {
+            submit_action_twitter1($scope);
         }
 
-        $scope.submit_function_twitter8 = function(o) {
-            submit_function_twitter8($scope, o);
+        $scope.submit_recipe = function() {
+            submit_recipe($scope);
         }
-
-        $scope.submit_function_twitter10 = function(o) {
-            submit_function_twitter10($scope, o);
-        }
-
-
-
     }
 ]);
 
 
-function search_change($scope, o){
-    console.log("You have choosen " + o);
-}
-
 function choose_trigger_channel($scope, o){
-    console.log("You have choosen " + o.header);
+    console.log("You have choosen " + o.name);
     $scope.chosen_trigger_channel = o;
 }
 
@@ -124,155 +109,192 @@ function choose_action_channel($scope, o){
     $scope.chosen_action_channel = o;
 }
 
-function choose_trigger_job($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+function submit_trigger_google_mail1($scope){
+    console.log("Input data: " + $scope.email_address);
+    console.log("Input data: " + $scope.email_subject);
 }
-function submit_function_google_calendar2($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_action_google_mail1($scope){
+    console.log("Input data: " + $scope.email_recipient_address);
+    console.log("Input data: " + $scope.email_subject);
+    console.log("Input data: " + $scope.email_body);
 }
-function submit_function_google_mail3($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_google_calendar1($scope){
+    console.log("Input data: " + $scope.keyword_or_phrase);
 }
-function submit_function_google_mail5($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_google_calendar2($scope){
+    console.log("Input data: " + $scope.keyword_or_phrase);
 }
-function submit_function_facebook1($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_action_google_calendar1($scope){
+    console.log("Input data: " + $scope.date);
+    console.log("Input data: " + $scope.title);
 }
-function submit_function_facebook3($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_weather1($scope){
+    console.log("Input data: " + $scope.time);
 }
-function submit_function_facebook5($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_weather2($scope){
+    console.log("Input data: " + $scope.below_or_under);
+    console.log("Input data: " + $scope.temperature);
 }
-function submit_function_facebook7($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_weather3($scope){
+
 }
-function submit_function_facebook8($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_facebook1($scope){
+
 }
-function submit_function_facebook10($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_facebook2($scope){
+    console.log("Input data: " + $scope.full_name);
+    console.log("Input data: " + $scope.profile_picture);
+    console.log("Input data: " + $scope.location);
 }
-function submit_function_twitter1($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_action_facebook1($scope){
+    console.log("Input data: " + $scope.message);
 }
-function submit_function_twitter2($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_trigger_twitter1($scope){
+
 }
-function submit_function_twitter3($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_action_twitter1($scope){
+
 }
-function submit_function_twitter8($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
-}
-function submit_function_twitter10($scope, o){
-    console.log("You have choosen " + o.header);
-    $scope.chosen_trigger_job = o;
+
+function submit_recipe($scope){
+    console.log("Submitting recipe");
 }
 
 function initialize_data($scope){
     //define all the for 4 channels and put it in the array of the scope
+    var channel_google_mail = {};
+    channel_google_mail.name = "Google Mail";
+    channel_google_mail.image_url = "images/google_mail_icon.png";
+    //channel_google_mail.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/33/icons/regular.png";
+    channel_google_mail.trigger_list = [
+         /*
+         {
+         header: "Any new email in inbox" ,
+         paragraph: "This Trigger fires every time any new email arrives in Gmail." ,
+         extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+         },
+         {
+         header: "Any new attachment in inbox" ,
+         paragraph: "This Trigger fires for every email attachment that arrives in your inbox. NOTE: Multiple attachments each fire separately." ,
+         extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+         },
+         */
+        {
+            header: "New email in inbox from" ,
+            paragraph: "This Trigger fires every time a new email arrives in your inbox from the address and with the subject you specify." ,
+            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail1()'><h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br><h4>Email subject:</h4><input type='text' name='email_subject' ng-model='email_subject'><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+        },
+        /*
+         {
+         header: "New starred email in inbox" ,
+         paragraph: "This Trigger fires every time you add any new star to an email in your inbox." ,
+         extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+         },
+         {
+         header: "New email in inbox labeled" ,
+         paragraph: "This Trigger fires every time a new email arrives in your inbox with the label you specify." ,
+         extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail5(trigger_list_channel)'><h4>Email label:</h4><input type='text' name='email_label' placeholder='Case sensitive; '/' to split'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+         },
+         {
+         header: "New email in inbox from search" ,
+         paragraph: "This Trigger fires every time a new email arrives in your inbox that matches the search query you specify." ,
+         extra_element: "<br><h6 class='step_0_helper' style='padding-left: 0px'>Use Gmail’s <a href='http://support.google.com/mail/bin/answer.py?hl=en&answer=7190'>search operators</a> for advanced search</h6><br><br><form novalidate ng-submit='submit_trigger_google_mail6(trigger_list_channel)'><h4>Search for:</h4><input type='text' name='search_for'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+         }
+         */
+    ];
+    channel_google_mail.action_list = [
+        {
+            header: "Send an email" ,
+            paragraph: "This Action will send an email to someone with a given subject and a given body." ,
+            extra_element: "<form novalidate ng-submit='submit_action_google_mail1()'<h4>Email recipient address:</h4><input type='text' name='email_recipient_address' ng-model='email_recipient_address' ><br><h4>Email subject:</h4><input type='text' name='email_subject' ng-model='email_subject' ><br><h4>Body:</h4><input type='text' name='email_body' ng-model='email_body' ><br><input scroll-on-click href='#step_5' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+        },
+    ];
+
     var channel_google_calendar = {};
     channel_google_calendar.name = "Google Calendar";
-    channel_google_calendar.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/36/icons/regular.png";
+    channel_google_calendar.image_url = "images/google_calendar_icon.png";
+    //channel_google_calendar.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/36/icons/regular.png";
     channel_google_calendar.trigger_list = [
         {
-            header: "Any event starts" ,
-            paragraph: "This Trigger fires within 15 minutes of the starting time of any event on your Google Calendar." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            header: "A particular event with a given title or description starts" ,
+            paragraph: "" ,
+            extra_element: "<form novalidate ng-submit='submit_trigger_google_calendar1()'><h4>Keyword or phrase:</h4><input type='text' name='keyword_or_phrase' ng-model='keyword_or_phrase'><br><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
+        /*
         {
             header: "Event from search starts" ,
             paragraph: "This Trigger fires within 15 minutes of the starting time of an event on your Google Calendar that contains a specific keyword or phrase. The search looks at the event’s Title, Description, and Location." ,
             extra_element: "<form novalidate ng-submit='submit_trigger_google_calendar2(trigger_list_channel)'><h4>Keyword or phrase:</h4><input type='text' name='keyword'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
+        */
         {
-            header: "Any new event added" ,
-            paragraph: "This Trigger fires every time a new event is added to your Google Calendar." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            header: "A particular new event ith a given title or description added" ,
+            paragraph: "" ,
+            extra_element: "<form novalidate ng-submit='submit_trigger_google_calendar2()'><h4>Keyword or phrase:</h4><input scroll-on-click href='#step_2_b' type='text' name='keyword_or_phrase' ng-model='keyword_or_phrase'><br><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         }
     ];
     channel_google_calendar.action_list = [
         {
-            header: "Quick add event" ,
+            header: "Quick add event with a given title and date (DD/MM/YYYY HH:MM)" ,
             paragraph: "This Action will add an event to your Google Calendar. Simply include a detailed description of when and what." ,
-            extra_element: "<form novalidate ng-submit='submit_action_google_calendar1 	<input type='checkbox' name='google_mail_from_address'>From Address (somebody@gmail.com) <br> 	<input type='checkbox' name='google_mail_subject' >Subject (email title)<br> 	<input type='checkbox' name='google_mail_body_plain'>Body Plain (email content)<br> 	<input type='checkbox' name='google_mail_first_attachment_URL' >First Attachment URL (http://...)<br> 	<input type='checkbox' name='google_mail_first_attachment_filename' >First Attachment Filename (image_name.png)<br> 	<input type='checkbox' name='google_mail_received_at' >Received At (August 23, 2010 at 11:01 PM)<br> 	<br> 	<input type='submit' value='Confirm actions'> </form>"
+            extra_element: "<form novalidate ng-submit='submit_action_google_calendar1()'><h4>Title:</h4><input type='text' name='title' ng-model='title'><br><h4>Date:</h4><input type='text' name='date' ng-model='date'><br><input scroll-on-click href='#step_5' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'></form>"
         },
     ];
 
-    var channel_google_mail = {};
-    channel_google_mail.name = "Google Mail";
-    channel_google_mail.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/33/icons/regular.png";
-    channel_google_mail.trigger_list = [
-
+    var channel_weather = {};
+    channel_weather.name = "Weather";
+    channel_weather.image_url = "images/weather_icon.png";
+    //channel_weather.image_url = "http://thesweetsetup.com/wp-content/uploads/2013/11/CheckTheWeather512.png";
+    channel_weather.trigger_list = [
         {
-            header: "Any new email in inbox" ,
-            paragraph: "This Trigger fires every time any new email arrives in Gmail." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            header: "Tomorrow weather report at a given time" ,
+            paragraph: "",
+            extra_element: "<form novalidate ng-submit='submit_trigger_weather1()'><h4>Time (HH:MM):</h4><input type='text' name='time' ng-model='time'><br><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
         {
-            header: "Any new attachment in inbox" ,
-            paragraph: "This Trigger fires for every email attachment that arrives in your inbox. NOTE: Multiple attachments each fire separately." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            header: "Current temperature above or below a given threshold" ,
+            paragraph: "" ,
+            extra_element: "<form novalidate ng-submit='submit_trigger_weather2()'><input type='radio' name='below_or_under' ng-model='below_or_under' value='below' checked> Below<br><input type='radio' name='below_or_under' ng-model='below_or_under' value='under'> Under<br><h4>Temperature:</h4><input type='text' name='temperature' ng-model='temperature'><br><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
         {
-            header: "New email in inbox from" ,
-            paragraph: "This Trigger fires every time a new email arrives in your inbox from the address you specify." ,
-            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail3(trigger_list_channel)'><h4>Email address:</h4><input type='text' name='email_address'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
-        },
-        {
-            header: "New starred email in inbox" ,
-            paragraph: "This Trigger fires every time you add any new star to an email in your inbox." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
-        },
-        {
-            header: "New email in inbox labeled" ,
-            paragraph: "This Trigger fires every time a new email arrives in your inbox with the label you specify." ,
-            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail5(trigger_list_channel)'><h4>Email label:</h4><input type='text' name='email_label' placeholder='Case sensitive; '/' to split'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
-        },
-        {
-            header: "New email in inbox from search" ,
-            paragraph: "This Trigger fires every time a new email arrives in your inbox that matches the search query you specify." ,
-            extra_element: "<br><h6 class='step_0_helper' style='padding-left: 0px'>Use Gmail’s <a href='http://support.google.com/mail/bin/answer.py?hl=en&answer=7190'>search operators</a> for advanced search</h6><br><br><form novalidate ng-submit='submit_trigger_google_mail6(trigger_list_channel)'><h4>Search for:</h4><input type='text' name='search_for'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+            header: "Sunrise event in your location at a given time" ,
+            paragraph: "" ,
+            extra_element: "<form novalidate ng-submit='submit_trigger_weather3()'><input scroll-on-click href='#step_2_b' type='submit' scroll-on-click href='#step_2_b' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         }
     ];
-    channel_google_mail.action_list = [
-        {
-            header: "Send an email" ,
-            paragraph: "This Action will send an email to up to five recipients from your Gmail account." ,
-            extra_element: "<form novalidate ng-submit='submit_action_google_mail1'	<h4>Recipiend address:</h4> 	<input type='text' name='recipient_address'> 	<br> 	<h4>Attachment URL:</h4> 	<input type='text' name='attachment_url'> 	<br> 	<h4>Subject:</h4> 	<input type='text' name='subject'> 	<br> 	<h4>Description:</h4> 	<input type='text' name='description'> 	<br> 	<h4>Location:</h4> 	<input type='text' name='location'> 	<br> 	<h4>Starts:</h4> 	<input type='text' name='starts'> 	<br> 	<h4>Ends:</h4> 	<input type='text' name='end'> 	<br> 	<h4>Creation date:</h4> 	<input type='text' name='creation_date'> 	<br> 	<h4>Event URL:</h4> 	<input type='text' name='event_url'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
-        },
+    channel_weather.action_list = [
     ];
 
     var channel_facebook = {};
     channel_facebook.name = "Facebook";
-    channel_facebook.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/10/icons/regular.png";
+    channel_facebook.image_url = "images/facebook_icon.png";
+    //channel_facebook.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/10/icons/regular.png";
     channel_facebook.trigger_list = [
+        /*
         {
             header: "Any new post by you in area" ,
             paragraph: "This Trigger fires every time you post on Facebook at a location you specify." ,
             extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_facebook1(trigger_list_channel)'>	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
+        */
         {
             header: "New status message by you" ,
             paragraph: "This Trigger fires every time you create a new plain text status message on Facebook." ,
-            extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<div><br><a ng-click='submit_trigger_facebook1()' scroll-on-click href='#step_2_b' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
+        /*
         {
             header: "New status message by you with hashtag" ,
             paragraph: "This Trigger fires every time you create a new plain text status message on Facebook with a specific hashtag." ,
@@ -309,19 +331,19 @@ function initialize_data($scope){
             paragraph: "This Trigger fires every time you are tagged you in a new photo. NOTE: Facebook privacy settings may block IFTTT’s access to some photos you are tagged in." ,
             extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
         },
+        */
         {
             header: "Your profile changes" ,
-            paragraph: "A Trigger that monitors changes in your Facebook profile information. It works with these Facebook profile fields: Name, Profile picture, Location, Website, and Bio." +
-            + "Profile fields to watch: all, full name, profile picture, location, websiet, bio" ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_facebook10(trigger_list_channel)'> 	<input type='checkbox' name='all'>All<br> 	<input type='checkbox' name='full_name' >Full name<br> 	<input type='checkbox' name='profile_picture'>Profile picture<br> 	<input type='checkbox' name='location' >Location<br> 	<input type='checkbox' name='website' >Website<br> 	<input type='checkbox' name='bio' >Bio<br> 	<br>     <input type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
+            paragraph: "A Trigger that monitors changes in your Facebook profile information. It works with these Facebook profile fields: Name, Profile picture, Location." ,
+            extra_element: "<form novalidate ng-submit='submit_trigger_facebook2()' ><input type='checkbox' name='full_name' ng-model='full_name'>Full name<br> 	<input type='checkbox' name='profile_picture' ng-model='profile_picture'>Profile picture<br><input type='checkbox' name='location' ng-model='location'>Location<br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
         }
     ];
     channel_facebook.action_list = [
         {
             header: "Create a status message" ,
             paragraph: "This Action will create a new plain text status message on Facebook." ,
-            extra_element: "<form novalidate ng-submit='submit_action_facebook1' id='message_form'> 	<h4>Status:</h4> 	<input type='text' name='status'> 	<br> 	<textarea rows='4' cols='50' name='recipe_title' form='message_form'> 		Message... 	</textarea> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
-        },
+            extra_element: "<form novalidate ng-submit='submit_action_facebook1()' id='message_form'><textarea rows='4' cols='50' name='message' form='message_form' ng-model='message'> 		Message... 	</textarea> <br> 	<input scroll-on-click href='#step_5' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+        }/*,
         {
             header: "Create a link post" ,
             paragraph: "his Action will create a new link post on Facebook." ,
@@ -332,17 +354,19 @@ function initialize_data($scope){
             paragraph: "This Action will upload a new photo, from the given URL, to a Facebook album you specify." ,
             extra_element: "<form novalidate ng-submit='submit_action_facebook3' id='text_form'> 	<h4>Link URL:</h4> 	<input type='text' name='link_url'> 	<br> 	<h4>Album name:</h4> 	<input type='text' name='album_name'> 	<br> 	<textarea rows='4' cols='50' name='recipe_title' form='text_form'> 		Text... 	</textarea> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
+        */
     ];
 
     var channel_twitter = {};
     channel_twitter.name = "Twitter";
-    channel_twitter.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/2/icons/regular.png";
+    channel_twitter.image_url = "images/twitter_icon.png";
+    //channel_twitter.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/2/icons/regular.png";
     channel_twitter.trigger_list = [
         {
             header: "New tweet by you" ,
-            paragraph: "This Trigger fires every time you post a tweet at a location you specify. " ,
-            extra_element: "<form novalidate ng-submit='submit_trigger_twitter1(trigger_list_channel)'> 	<input type='checkbox' name='retweets'>Retweets <br> 	<input type='checkbox' name='replies' >@Replies<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
-        },
+            paragraph: "This Trigger fires every time you post a tweet" ,
+            extra_element: "<form novalidate ng-submit='submit_trigger_twitter1()'> <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp' /> </form>"
+        }/*,
         {
             header: "New tweet by you with hashtag" ,
             paragraph: "This Trigger fires every time you post a tweet at a location you specify. " ,
@@ -389,13 +413,14 @@ function initialize_data($scope){
             paragraph: "This Trigger fires every time anyone posts a tweet at a location you specify. " ,
             extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_twitter10(trigger_list_channel)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
+        */
     ];
     channel_twitter.action_list = [
         {
             header: "Post a tweet" ,
-            paragraph: "This Action will post a new tweet to your Twitter account. NOTE: Please adhere to Twitter’s Rules and Terms of Service. I'm tagged in {{From}}\'s photo! Check it out (if you have permission) {{Link}}" ,
-            extra_element: "<form novalidate ng-submit='submit_action_twitter1'> 	<h4>From:</h4> 	<input type='text' name='from'> 	<br> 	<h4>Link:</h4> 	<input type='text' name='link'> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
-        },
+            paragraph: "This Action will post a new tweet to your Twitter account" ,
+            extra_element: "<form novalidate ng-submit='submit_action_twitter1()'> <input scroll-on-click href='#step_5' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
+        }/*,
         {
             header: "Send an email" ,
             paragraph: "This Action will post a new tweet to your Twitter account with a linked pic.twitter.com image. NOTE: Please adhere to Twitter’s Rules and Terms of Service.Tagged! {{Caption}} {{ImageSource}}" ,
@@ -421,8 +446,48 @@ function initialize_data($scope){
             paragraph: "This Action will add a user to a Twitter list you specify. NOTE: Twitter allows 1000 lists per user and 5000 users per list." ,
             extra_element: "<form novalidate ng-submit='submit_action_twitter2' id='user_list_form'> 	<h4>User name:</h4> 	<input type='text' name='username'> 	<br> 	<textarea rows='4' cols='50' name='recipe_title' form='user_list_form'> 		Enter list of users separated by comma (,). 	</textarea> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
         },
+        */
     ];
 
-    $scope.channels = [channel_google_calendar, channel_google_mail, channel_facebook, channel_twitter];
+    $scope.channels = [channel_google_mail, channel_google_calendar, channel_weather, channel_facebook, channel_twitter];
 
 }
+
+if3tApp.directive('scrollOnClick', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, $elm, attrs) {
+            var idToScroll = attrs.href;
+            $elm.on('click', function() {
+                var $target;
+                if (idToScroll) {
+                    $target = $(idToScroll);
+                } else {
+                    $target = $elm;
+                }
+                $("body").animate({scrollTop: $target.offset().top}, "slow");
+            });
+        }
+    }
+});
+
+if3tApp.directive('scrollOnClickAndChooseChannel', function() {
+    return {
+        restrict: 'A',
+        scope: { callbackFn : '&'},
+        link: function(scope, $elm, attrs) {
+            var idToScroll = attrs.href;
+            $elm.on('click', function() {
+                scope.callbackFn();
+                scope.$apply();
+                var $target;
+                if (idToScroll) {
+                    $target = $(idToScroll);
+                } else {
+                    $target = $elm;
+                }
+                $("body").animate({scrollTop: $target.offset().top}, "slow");
+            });
+        }
+    }
+});

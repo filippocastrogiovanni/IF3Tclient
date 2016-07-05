@@ -1,18 +1,16 @@
 <!--
 <body ng-app="NewRecipeController" layout="column">
 -->
-
+<br>
+<br>
 <md-toolbar layout="row" >
     <h2>Create a recipe</h2>
 </md-toolbar>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<!--
+<style type = "text/css" scoped>
+    body { overflow: hidden; }
+</style>
 
 <!-- STEP 0 -->
 <div>
@@ -20,7 +18,7 @@
         <div layout="row" layout-align="center center"  style="min-height: 500px">
             <md-content>
                 <h3 class="step_0">if</h3>
-                <a class="step_0_anchor" >this</a> <!--ng-href="#/newrecipe#step_1_a"-->
+                <span class="step_0_anchor" scroll-on-click href="#step_1_a">this</span> <!--ng-href="#/newrecipe#step_1_a"-->
                 <h3 class="step_0">then</h3>
                 <h3 class="step_0">that</h3>
                 <br>
@@ -72,9 +70,9 @@
 <br>
                     <md-list >
                         <md-list-item data-ng-repeat="channel in channels | filter:searchBox1" style="display: inline">
-                            <md-button aria-label="md-button" ng-click="choose_trigger_channel(channel)"> <!--ng-href="#/newrecipe#step_1_a"-->
-                                <img src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100"/>
-                            </md-button>
+
+                                <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
+
                         </md-list-item>
                     </md-list>
                 </md-content>
@@ -108,7 +106,9 @@
         <div layout="row" layout-align="center center" >
             <div>
                 <md-content flex md-theme="docs-dark">
-                    <h3 class="step_1">Please connect the {{ chosen_trigger_channel.name }} channel</h3>
+                    <br>
+                    <br>
+                    <h3 class="step_1">To make the recipe work you will later need to authorize the app to use the {{ chosen_trigger_channel.name }} channel</h3>
 <br>
                     <h6 class="step_0_helper">You'll only have to do this once.</h6>
                 </md-content>
@@ -117,10 +117,10 @@
                 <div>
                     <img style="margin-left: 25px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
                     <a > <!--ng-href="#/newrecipe#step_2_a"-->
-                        <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
+                        <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Continue to the next step"><span class="ng-scope" scroll-on-click href="#step_2_a">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span></button>
                     </a>
                     <a > <!--ng-href="#/newrecipe#step_1_a"-->
-                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_a" type="button" aria-label="Back">Back</md-button>
                     </a>
                 </div>
             </div>
@@ -148,18 +148,13 @@
 <br>
 <br>
         <!-- PART A -->
+    <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+        <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(step 2 of 5)</h6>
+    </md-content>
         <div div layout="column">
-            <div div layout="row" layout-align="space-around center">
+            <div div layout="row" layout-align="center"  style="min-height: 500px">
                 <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                    <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(step 2 of 5)</h6>
-                    <a style="float:right"> <!--ng-href="#/newrecipe#step_1_b"-->
-                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
-                    </a>
-                </md-content>
-            </div>
-            <div div layout="row" layout-align="space-around center"  style="min-height: 500px">
-                <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                    <md-list >
+                    <md-list>
                         <md-list-item data-ng-repeat="trigger_list_channel in chosen_trigger_channel.trigger_list" class="trigger-list_item" style="display: inline">
                             <br>
                             <br>
@@ -173,6 +168,9 @@
                 </md-content>
             </div>
         </div>
+    <a style="float:right"> <!--ng-href="#/newrecipe#step_1_b"-->
+        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_b" type="button" aria-label="Back">Back</md-button>
+    </a>
 </div>
 
 <br>
@@ -200,10 +198,12 @@
         <div layout="row" layout-align="center center"  style="min-height: 500px">
             <div>
                 <md-content>
+                    <!--
                     <h3 class="step_0">if</h3>
-                    <h6 class="step_0_anchor">{{ chosen_trigger_job }}</h6>
+                    <h6 class="step_0_anchor">{{ chosen_trigger_channel.header }}</h6>
+                    -->
                     <h3 class="step_0">then</h3>
-                    <a class="step_0_anchor">that</a> <!--ng-href="#/newrecipe#step_3_a"-->
+                    <span class="step_0_anchor" scroll-on-click href="#step_3_a">that</span>  <!--ng-href="#/newrecipe#step_3_a"-->
                 </md-content>
             </div>
         </div>
@@ -251,9 +251,9 @@
 <br>
                 <md-list >
                     <md-list-item data-ng-repeat="channel in channels | filter:searchBox2" style="display: inline">
-                        <md-button aria-label="md-button" ng-click="choose_action_channel(channel)"> <!--ng-href="#/newrecipe#step_3_b"-->
-                            <img src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100"/>
-                        </md-button>
+
+                        <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-channel callback-fn="choose_action_channel(channel)" href="#step_3_b"/>
+
                     </md-list-item>
                 </md-list>
             </md-content>
@@ -288,7 +288,7 @@
         <div layout="row" layout-align="center center"  style="min-height: 500px">
             <div>
                 <md-content flex md-theme="docs-dark">
-                    <h3 class="step_1">Please connect the {{ chosen_action_channel.name }} channel</h3>
+                    <h3 class="step_1">To make the recipe work you will later need to authorize the app to use the {{ chosen_action_channel.name }} channel</h3>
 <br>
                     <h6 class="step_0_helper">You'll only have to do this once.</h6>
                 </md-content>
@@ -298,11 +298,11 @@
                     <img style="margin-left: 25px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
 
                     <a id="channel_to_connect_2_anchor" > <!--ng-href="#/newrecipe#step_4_a"-->
-                        <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Connect/Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspConnect/Continue to the next step&nbsp&nbsp&nbsp</span></button>
+                        <button scroll-on-click href="#step_4_a" style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span></button>
                     </a>
 
                     <a > <!--ng-href="#/newrecipe#step_3_a"-->
-                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+                        <md-button scroll-on-click href="#step_3_a" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
                     </a>
                     </div>
              </div>
@@ -327,16 +327,16 @@
 
 <!-- STEP 4 -->
 <div id="step_4_a" div layout="row" layout-align="space-around center"  style="min-height: 500px">
-    <br>
-    <br>
-    <br>
+<br>
+<br>
+<br>
     <!-- PART A -->
     <div div layout="column">
         <div div layout="row" layout-align="space-around center">
             <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
                 <h3 class="step_1">Choose an Action</h3><h6 class="step_1_helper">(step 4 of 5)</h6>
                 <a style="float:right"> <!--ng-href="#/newrecipe#step_3_b"-->
-                    <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+                    <md-button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
                 </a>
             </md-content>
         </div>
@@ -384,7 +384,7 @@
                 <md-content>
                     <h3 class="step_0">if</h3>
                     <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_trigger_job.image_url }}" alt="{{ chosen_trigger_job.name }}" height="150" width="150"/>
-                    <h3 class="step_0">then</h3>
+                    <h3 class="step_0">&emsp;then</h3>
                     <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_job.image_url }}" alt="{{ chosen_action_job.name }}" height="150" width="150"/>
                 </md-content>
 <br>
