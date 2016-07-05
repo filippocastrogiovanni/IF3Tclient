@@ -7,7 +7,6 @@
     <h2>Create a recipe</h2>
 </md-toolbar>
 
-<!--
 <style type = "text/css" scoped>
     body { overflow: hidden; }
 </style>
@@ -71,7 +70,7 @@
                     <md-list >
                         <md-list-item data-ng-repeat="channel in channels | filter:searchBox1" style="display: inline">
 
-                                <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
+                                <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-trigger-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
 
                         </md-list-item>
                     </md-list>
@@ -147,7 +146,7 @@
 <br>
 <br>
 <br>
-        <!-- PART A -->
+    <!-- PART A -->
     <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
         <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(step 2 of 5)</h6>
     </md-content>
@@ -172,7 +171,6 @@
         <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_b" type="button" aria-label="Back">Back</md-button>
     </a>
 </div>
-
 <br>
 <br>
 <br>
@@ -252,7 +250,7 @@
                 <md-list >
                     <md-list-item data-ng-repeat="channel in channels | filter:searchBox2" style="display: inline">
 
-                        <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-channel callback-fn="choose_action_channel(channel)" href="#step_3_b"/>
+                        <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-action-channel callback-fn="choose_action_channel(channel)" href="#step_3_b"/>
 
                     </md-list-item>
                 </md-list>
@@ -281,9 +279,6 @@
 
     <!-- PART B -->
 <div id="step_3_b">
-<br>
-<br>
-<br>
     <div class="flexbox-parent">
         <div layout="row" layout-align="center center"  style="min-height: 500px">
             <div>
@@ -331,24 +326,19 @@
 <br>
 <br>
     <!-- PART A -->
-    <div div layout="column">
-        <div div layout="row" layout-align="space-around center">
-            <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                <h3 class="step_1">Choose an Action</h3><h6 class="step_1_helper">(step 4 of 5)</h6>
-                <a style="float:right"> <!--ng-href="#/newrecipe#step_3_b"-->
-                    <md-button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
-                </a>
-            </md-content>
-        </div>
-        <div div layout="row" layout-align="space-around center"  style="min-height: 500px">
-            <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                <md-list >
+        <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+            <h3 class="step_1">Choose an Action</h3><h6 class="step_1_helper">(step 4 of 5)</h6>
+        </md-content>
+        <div div layout="column">
+            <div div layout="row" layout-align="center"  style="min-height: 500px">
+                <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+                    <md-list>
                     <md-list-item data-ng-repeat="action_list_channel in chosen_action_channel.action_list" class="trigger-list_item" style="display: inline">
                         <br>
                         <br>
                         <h3>{{action_list_channel.header}}</h3>
                         <p>{{action_list_channel.paragraph}}</p>
-                        <div ng-bind-html="action_list_channel.extra_element"></div>
+                        <div bind-html-compile="action_list_channel.extra_element"></div>
                         <br>
                         <br>
                     </md-list-item>
@@ -356,6 +346,9 @@
             </md-content>
         </div>
     </div>
+    <a style="float:right"> <!--ng-href="#/newrecipe#step_3_b"-->
+        <md-button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+    </a>
 </div>
 
 <br>
@@ -383,14 +376,13 @@
         <div layout="column" layout-align="center center"  style="min-height: 500px">
                 <md-content>
                     <h3 class="step_0">if</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_trigger_job.image_url }}" alt="{{ chosen_trigger_job.name }}" height="150" width="150"/>
+                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
                     <h3 class="step_0">&emsp;then</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_job.image_url }}" alt="{{ chosen_action_job.name }}" height="150" width="150"/>
+                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
                 </md-content>
 <br>
             <h3>Recipe title: </h3>
-                <textarea rows="4" cols="50" name="recipe_title" form="submit_recipe">
-                    When {{ chosen_trigger_job }} in {{ chosen_trigger_channel }}, do {{ chosen_action_job }} in {{ chosen_action_channel }}
+                <textarea rows="4" cols="50" name="recipe_title" form="submit_recipe">When {{ chosen_trigger_job }} in {{ chosen_trigger_channel.name }}, do {{ chosen_action_job }} in {{ chosen_action_channel.name }}
                 </textarea>
 <br>
 <br>

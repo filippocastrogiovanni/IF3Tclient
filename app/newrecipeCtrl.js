@@ -40,32 +40,32 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             choose_action_channel($scope, o);
         }
 
-        $scope.submit_trigger_google_mail1 = function() {
-            submit_trigger_google_mail1($scope);
+        $scope.submit_trigger_google_mail1 = function(email_address, email_subject) {
+            submit_trigger_google_mail1($scope, email_address, email_subject);
         }
 
-        $scope.submit_action_google_mail1 = function() {
-            submit_action_google_mail1($scope);
+        $scope.submit_action_google_mail1 = function(email_recipient_address, email_subject, email_body) {
+            submit_action_google_mail1($scope, email_recipient_address, email_subject, email_body);
         }
 
-        $scope.submit_trigger_google_calendar1 = function() {
-            submit_trigger_google_calendar1($scope);
+        $scope.submit_trigger_google_calendar1 = function(keyword_or_phrase) {
+            submit_trigger_google_calendar1($scope, keyword_or_phrase);
         }
 
-        $scope.submit_trigger_google_calendar2 = function() {
-            submit_trigger_google_calendar2($scope);
+        $scope.submit_trigger_google_calendar2 = function(keyword_or_phrase) {
+            submit_trigger_google_calendar2($scope, keyword_or_phrase);
         }
 
-        $scope.submit_action_google_calendar1 = function() {
-            submit_action_google_calendar1($scope);
+        $scope.submit_action_google_calendar1 = function(date, title) {
+            submit_action_google_calendar1($scope, date, title);
         }
 
-        $scope.submit_trigger_weather1 = function() {
-            submit_trigger_weather1($scope);
+        $scope.submit_trigger_weather1 = function(time) {
+            submit_trigger_weather1($scope, time);
         }
 
-        $scope.submit_trigger_weather2 = function() {
-            submit_trigger_weather2($scope);
+        $scope.submit_trigger_weather2 = function(below_or_under, temperature) {
+            submit_trigger_weather2($scope, below_or_under, temperature);
         }
 
         $scope.submit_trigger_weather3 = function() {
@@ -76,12 +76,12 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             submit_trigger_facebook1($scope);
         }
 
-        $scope.submit_trigger_facebook2 = function() {
-            submit_trigger_facebook2($scope);
+        $scope.submit_trigger_facebook2 = function(full_name, profile_picture, location) {
+            submit_trigger_facebook2($scope, full_name, profile_picture, location);
         }
 
-        $scope.submit_action_facebook1 = function() {
-            submit_action_facebook1($scope);
+        $scope.submit_action_facebook1 = function(message) {
+            submit_action_facebook1($scope, message);
         }
 
         $scope.submit_trigger_twitter1 = function() {
@@ -109,63 +109,72 @@ function choose_action_channel($scope, o){
     $scope.chosen_action_channel = o;
 }
 
-function submit_trigger_google_mail1($scope){
-    console.log("Input data: " + $scope.email_address);
-    console.log("Input data: " + $scope.email_subject);
+function submit_trigger_google_mail1($scope, email_address, email_subject){
+    console.log("Input data: " + email_address);
+    console.log("Input data: " + email_subject);
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
-function submit_action_google_mail1($scope){
-    console.log("Input data: " + $scope.email_recipient_address);
-    console.log("Input data: " + $scope.email_subject);
-    console.log("Input data: " + $scope.email_body);
+function submit_action_google_mail1($scope, email_recipient_address, email_subject, email_body){
+    console.log("Input data: " + email_recipient_address);
+    console.log("Input data: " + email_subject);
+    console.log("Input data: " + email_body);
+    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
 }
 
-function submit_trigger_google_calendar1($scope){
-    console.log("Input data: " + $scope.keyword_or_phrase);
+function submit_trigger_google_calendar1($scope, keyword_or_phrase){
+    console.log("Input data: " + keyword_or_phrase);
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
-function submit_trigger_google_calendar2($scope){
-    console.log("Input data: " + $scope.keyword_or_phrase);
+function submit_trigger_google_calendar2($scope, keyword_or_phrase){
+    console.log("Input data: " + keyword_or_phrase);
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
-function submit_action_google_calendar1($scope){
-    console.log("Input data: " + $scope.date);
-    console.log("Input data: " + $scope.title);
+function submit_action_google_calendar1($scope, date, title){
+    console.log("Input data: " + date);
+    console.log("Input data: " + title);
+    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
 }
 
-function submit_trigger_weather1($scope){
-    console.log("Input data: " + $scope.time);
+function submit_trigger_weather1($scope, time){
+    console.log("Input data: " + time);
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
-function submit_trigger_weather2($scope){
-    console.log("Input data: " + $scope.below_or_under);
-    console.log("Input data: " + $scope.temperature);
+function submit_trigger_weather2($scope, below_or_under, temperature){
+    console.log("Input data: " + below_or_under);
+    console.log("Input data: " + temperature);
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[1].header;
 }
 
 function submit_trigger_weather3($scope){
-
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[2].header;
 }
 
 function submit_trigger_facebook1($scope){
-
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
-function submit_trigger_facebook2($scope){
-    console.log("Input data: " + $scope.full_name);
-    console.log("Input data: " + $scope.profile_picture);
-    console.log("Input data: " + $scope.location);
+function submit_trigger_facebook2($scope, full_name, profile_picture, location){
+    console.log("Input data: " + full_name);
+    console.log("Input data: " + profile_picture);
+    console.log("Input data: " + location);
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[1].header;
 }
 
-function submit_action_facebook1($scope){
-    console.log("Input data: " + $scope.message);
+function submit_action_facebook1($scope, message){
+    console.log("Input data: " + message);
+    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
 }
 
 function submit_trigger_twitter1($scope){
-
+    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
 function submit_action_twitter1($scope){
-
+    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
 }
 
 function submit_recipe($scope){
@@ -194,7 +203,7 @@ function initialize_data($scope){
         {
             header: "New email in inbox from" ,
             paragraph: "This Trigger fires every time a new email arrives in your inbox from the address and with the subject you specify." ,
-            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail1()'><h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br><h4>Email subject:</h4><input type='text' name='email_subject' ng-model='email_subject'><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+            extra_element: "<br><br><form novalidate ng-submit='submit_trigger_google_mail1(email_address, email_subject)'><h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br><h4>Email subject:</h4><input type='text' name='email_subject' ng-model='email_subject'><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
         /*
          {
@@ -292,7 +301,7 @@ function initialize_data($scope){
         {
             header: "New status message by you" ,
             paragraph: "This Trigger fires every time you create a new plain text status message on Facebook." ,
-            extra_element: "<div><br><a ng-click='submit_trigger_facebook1()' scroll-on-click href='#step_2_b' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
+            extra_element: "<form novalidate ng-submit='submit_trigger_facebook1()'><input scroll-on-click href='#step_2_b' type='submit' scroll-on-click href='#step_2_b' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
         },
         /*
         {
@@ -471,7 +480,28 @@ if3tApp.directive('scrollOnClick', function() {
     }
 });
 
-if3tApp.directive('scrollOnClickAndChooseChannel', function() {
+if3tApp.directive('scrollOnClickAndChooseTriggerChannel', function() {
+    return {
+        restrict: 'A',
+        scope: { callbackFn : '&'},
+        link: function(scope, $elm, attrs) {
+            var idToScroll = attrs.href;
+            $elm.on('click', function() {
+                scope.callbackFn();
+                scope.$apply();
+                var $target;
+                if (idToScroll) {
+                    $target = $(idToScroll);
+                } else {
+                    $target = $elm;
+                }
+                $("body").animate({scrollTop: $target.offset().top}, "slow");
+            });
+        }
+    }
+});
+
+if3tApp.directive('scrollOnClickAndChooseActionChannel', function() {
     return {
         restrict: 'A',
         scope: { callbackFn : '&'},
