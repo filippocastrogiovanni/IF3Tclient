@@ -2,34 +2,23 @@
  * Created by Filippo on 24/05/2016.
  */
 
-if3tApp.directive('bindHtmlCompile', ['$compile', function ($compile) {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
-            scope.$watch(function () {
-                return scope.$eval(attrs.bindHtmlCompile);
-            }, function (value) {
-                // Incase value is a TrustedValueHolderType, sometimes it
-                // needs to be explicitly called into a string in order to
-                // get the HTML string.
-                element.html(value && value.toString());
-                // If scope is provided use it, otherwise use parent scope
-                var compileScope = scope;
-                if (attrs.bindHtmlScope) {
-                    compileScope = scope.$eval(attrs.bindHtmlScope);
-                }
-                $compile(element.contents())(compileScope);
-            });
-        }
-    };
-}]);
-
-if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location',
-    function ($scope, $rootscope, $routeParams, $location) {
+if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window',
+    function ($scope, $rootscope, $routeParams, $location, $window) {
 
         $rootscope.curpage = "newrecipe";
 
-        initialize_data($scope);
+        //initialize_data($scope);
+        //fake waiting for data (alias progress dialog) by hiding the first div and wait for the response of the server to show it
+        $("#first_div").hide();
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8181/IF3Tserver/channels/'
+        }).then(function successCallback(response) {
+            $scope.channels = response;
+            $("#first_div").show();
+        }, function errorCallback(response) {
+            alert("You DIDN'T get the channels list");
+        });
 
         //all functions handled by controller
         $scope.choose_trigger_channel = function(o) {
@@ -93,7 +82,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
         }
 
         $scope.submit_recipe = function() {
-            submit_recipe($scope);
+            submit_recipe($scope, $window);
         }
     }
 ]);
@@ -101,12 +90,29 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
 function choose_trigger_channel($scope, o){
     console.log("You have choosen " + o.name);
-    $scope.chosen_trigger_channel = o;
+    //$scope.chosen_trigger_channel = o;
+    $http({
+        method: 'GET',
+        url: 'http://localhost:8181/IF3Tserver/triggers/'+o.id
+    }).then(function successCallback(response) {
+        $scope.chosen_trigger_channel.trigger_list = response;
+    }, function errorCallback(response) {
+        alert("You DIDN'T get the triggers list of trigger channel");
+    });
+
 }
 
 function choose_action_channel($scope, o){
     console.log("You have choosen " + o.header);
-    $scope.chosen_action_channel = o;
+    //$scope.chosen_action_channel = o;
+    $http({
+        method: 'GET',
+        url: 'http://localhost:8181/IF3Tserver/actions/'+o.id
+    }).then(function successCallback(response) {
+        $scope.chosen_action_channel.action_list = response;
+    }, function errorCallback(response) {
+        alert("You DIDN'T get the actions list of action channel");
+    });
 }
 
 function submit_trigger_google_mail1($scope, email_address, email_subject){
@@ -177,8 +183,17 @@ function submit_action_twitter1($scope){
     $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
 }
 
-function submit_recipe($scope){
+function submit_recipe($scope, $window){
     console.log("Submitting recipe");
+    $http({
+        method: 'POST',
+        url: 'http://localhost:8181/IF3Tserver/add_recipe/'
+    }).then(function successCallback(response) {
+        alert("You have create a recipe successfully!");
+        $window.location.href = '/index.html#/myrecipes';
+    }, function errorCallback(response) {
+        alert("You DIDN'T save the recipe");
+    });
 }
 
 function initialize_data($scope){
@@ -521,3 +536,25 @@ if3tApp.directive('scrollOnClickAndChooseActionChannel', function() {
         }
     }
 });
+
+if3tApp.directive('bindHtmlCompile', ['$compile', function ($compile) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            scope.$watch(function () {
+                return scope.$eval(attrs.bindHtmlCompile);
+            }, function (value) {
+                // Incase value is a TrustedValueHolderType, sometimes it
+                // needs to be explicitly called into a string in order to
+                // get the HTML string.
+                element.html(value && value.toString());
+                // If scope is provided use it, otherwise use parent scope
+                var compileScope = scope;
+                if (attrs.bindHtmlScope) {
+                    compileScope = scope.$eval(attrs.bindHtmlScope);
+                }
+                $compile(element.contents())(compileScope);
+            });
+        }
+    };
+}]);

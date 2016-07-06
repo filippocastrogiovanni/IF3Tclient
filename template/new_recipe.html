@@ -12,7 +12,7 @@
 </style>
 
 <!-- STEP 0 -->
-<div>
+<div id="first_div">
     <div class="flexbox-parent">
         <div layout="row" layout-align="center center"  style="min-height: 500px">
             <md-content>
@@ -69,9 +69,8 @@
 <br>
                     <md-list >
                         <md-list-item data-ng-repeat="channel in channels | filter:searchBox1" style="display: inline">
-
-                                <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-trigger-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
-
+                            <span class="loading"> <img src="/images/loading_aninmation.gif"/></span>
+                                <img class="spinner" src="{{src}}" imageonload style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-trigger-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
                         </md-list-item>
                     </md-list>
                 </md-content>
@@ -115,12 +114,12 @@
 <br>
                 <div>
                     <img style="margin-left: 25px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
-                    <a > <!--ng-href="#/newrecipe#step_2_a"-->
+                    <!--<a > <!--ng-href="#/newrecipe#step_2_a"-->
                         <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Continue to the next step"><span class="ng-scope" scroll-on-click href="#step_2_a">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span></button>
-                    </a>
+                    <!--</a>
                     <a > <!--ng-href="#/newrecipe#step_1_a"-->
                         <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_a" type="button" aria-label="Back">Back</md-button>
-                    </a>
+                    <!--</a>-->
                 </div>
             </div>
         </div>
@@ -292,13 +291,13 @@
                 <div>
                     <img style="margin-left: 25px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
 
-                    <a id="channel_to_connect_2_anchor" > <!--ng-href="#/newrecipe#step_4_a"-->
+                    <!--<a id="channel_to_connect_2_anchor" > <!--ng-href="#/newrecipe#step_4_a"-->
                         <button scroll-on-click href="#step_4_a" style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span></button>
-                    </a>
+                    <!--</a>
 
                     <a > <!--ng-href="#/newrecipe#step_3_a"-->
                         <md-button scroll-on-click href="#step_3_a" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
-                    </a>
+                    <!--</a>-->
                     </div>
              </div>
         </div>
