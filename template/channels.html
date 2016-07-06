@@ -1,1 +1,20 @@
-<h1>CHANNELS</h1>
+<md-toolbar layout="row"  >
+    <h2>Search for channels</h2>
+</md-toolbar>
+
+<div class="container">
+    <div class="row">
+        <div ng-repeat="channel in channels" class="col-md-3" ng-show="!showDetailChannel">
+            <md-button ng-click="selectChannel(channel.channelId)">
+                <img class="img-responsive" src="{{channel.url}}" />
+            </md-button>
+        </div>
+    </div>
+</div>
+
+<div id="channel" ng-show="showDetailChannel" align="center">
+    <button ng-click="backToChannels()">Back to Channels</button>
+    <img src="{{selectedChannel.url}}">
+    <span>{{selectedChannel.name}}</span>
+    <button>Connect</button>
+</div>
