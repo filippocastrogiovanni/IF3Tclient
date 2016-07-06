@@ -9,13 +9,13 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         //initialize_data($scope);
         //fake waiting for data (alias progress dialog) by hiding the first div and wait for the response of the server to show it
-        $("#first_div").hide();
+        //$("#first_div").hide();
         $http({
             method: 'GET',
             url: 'http://localhost:8181/IF3Tserver/channels/'
         }).then(function successCallback(response) {
             $scope.channels = response;
-            $("#first_div").show();
+            //$("#first_div").show();
         }, function errorCallback(response) {
             alert("You DIDN'T get the channels list");
         });
@@ -29,56 +29,12 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             choose_action_channel($scope, o);
         }
 
-        $scope.submit_trigger_google_mail1 = function(email_address, email_subject) {
-            submit_trigger_google_mail1($scope, email_address, email_subject);
+        $scope.submit_trigger = function($scope) {
+            submit_trigger($scope);
         }
 
-        $scope.submit_action_google_mail1 = function(email_recipient_address, email_subject, email_body) {
-            submit_action_google_mail1($scope, email_recipient_address, email_subject, email_body);
-        }
-
-        $scope.submit_trigger_google_calendar1 = function(keyword_or_phrase) {
-            submit_trigger_google_calendar1($scope, keyword_or_phrase);
-        }
-
-        $scope.submit_trigger_google_calendar2 = function(keyword_or_phrase) {
-            submit_trigger_google_calendar2($scope, keyword_or_phrase);
-        }
-
-        $scope.submit_action_google_calendar1 = function(date, title) {
-            submit_action_google_calendar1($scope, date, title);
-        }
-
-        $scope.submit_trigger_weather1 = function(time) {
-            submit_trigger_weather1($scope, time);
-        }
-
-        $scope.submit_trigger_weather2 = function(below_or_under, temperature) {
-            submit_trigger_weather2($scope, below_or_under, temperature);
-        }
-
-        $scope.submit_trigger_weather3 = function() {
-            submit_trigger_weather3($scope);
-        }
-
-        $scope.submit_trigger_facebook1 = function() {
-            submit_trigger_facebook1($scope);
-        }
-
-        $scope.submit_trigger_facebook2 = function(full_name, profile_picture, location) {
-            submit_trigger_facebook2($scope, full_name, profile_picture, location);
-        }
-
-        $scope.submit_action_facebook1 = function(message) {
-            submit_action_facebook1($scope, message);
-        }
-
-        $scope.submit_trigger_twitter1 = function() {
-            submit_trigger_twitter1($scope);
-        }
-
-        $scope.submit_action_twitter1 = function() {
-            submit_action_twitter1($scope);
+        $scope.submit_action = function($scope) {
+            submit_action($scope);
         }
 
         $scope.submit_recipe = function() {
@@ -95,7 +51,37 @@ function choose_trigger_channel($scope, o){
         method: 'GET',
         url: 'http://localhost:8181/IF3Tserver/triggers/'+o.id
     }).then(function successCallback(response) {
-        $scope.chosen_trigger_channel.trigger_list = response;
+        $scope.chosen_trigger_channel.trigger_list = response; //List<Trigger>
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8181/IF3Tserver/parameters_triggers/'+o.id
+        }).then(function successCallback(response) {
+            $scope.chosen_trigger_channel.params = response; //List<ParametersTriggers>
+            //preparing parameters_triggers_names_list by concatenating and separating by comma
+            /*
+            parameters_triggers_names_list = [];
+            for(var i=0; i<$scope.chosen_trigger_channel.params; i++)
+            {
+                $scope.parameters_triggers_names_list.push($scope.chosen_trigger_channel.params.name);
+                /*
+                if(!i==$scope.chosen_trigger_channel.params-1)
+                    parameters_triggers_names_list.push(',');
+                */
+            //}
+            $scope.parameters_triggers_names_list = _.pluck(scope.chosen_trigger_channel.params, 'name').join(', ');
+            //preparing <h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br> couples
+            $scope.parameters_triggers_couples = "";
+            for(var i=0; i<$scope.chosen_trigger_channel.params; i++)
+            {
+                $scope.parameters_triggers_couples += "<h4>"+$scope.chosen_trigger_channel.params.name.toString()+"</h4>";
+                $scope.parameters_triggers_couples += "<input type='"+ $scope.chosen_trigger_channel.params.type +"' name='"+ $scope.chosen_trigger_channel.params.name +"' ng-model='"+ $scope.chosen_trigger_channel.params.name +"' <br> ";
+            }
+            $scope.chosen_trigger_channel.extra_element = "<br><br><form novalidate ng-submit='submit_trigger('"+ $scope.parameters_triggers_names_list +"')'>"+ $scope.parameters_triggers_couples +" <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+
+        }, function errorCallback(response) {
+            alert("You DIDN'T get the triggers parameters list of trigger channel");
+        });
+
     }, function errorCallback(response) {
         alert("You DIDN'T get the triggers list of trigger channel");
     });
@@ -103,83 +89,60 @@ function choose_trigger_channel($scope, o){
 }
 
 function choose_action_channel($scope, o){
-    console.log("You have choosen " + o.header);
+    console.log("You have choosen " + o.name);
     //$scope.chosen_action_channel = o;
     $http({
         method: 'GET',
         url: 'http://localhost:8181/IF3Tserver/actions/'+o.id
     }).then(function successCallback(response) {
-        $scope.chosen_action_channel.action_list = response;
+        $scope.chosen_action_channel.action_list = response; //List<Trigger>
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8181/IF3Tserver/parameters_actions/'+o.id
+        }).then(function successCallback(response) {
+            $scope.chosen_action_channel.params = response; //List<ParametersTriggers>
+            //preparing parameters_actions_names_list by concatenating and separating by comma
+            /*
+             parameters_actions_names_list = [];
+             for(var i=0; i<$scope.chosen_action_channel.params; i++)
+             {
+             $scope.parameters_actions_names_list.push($scope.chosen_action_channel.params.name);
+             /*
+             if(!i==$scope.chosen_action_channel.params-1)
+             parameters_actions_names_list.push(',');
+             */
+            //}
+            $scope.parameters_actions_names_list = _.pluck(scope.chosen_action_channel.params, 'name').join(', ');
+            //preparing <h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br> couples
+            $scope.parameters_actions_couples = "";
+            for(var i=0; i<$scope.chosen_action_channel.params; i++)
+            {
+                $scope.parameters_actions_couples += "<h4>"+$scope.chosen_action_channel.params.name+"</h4>";
+                $scope.parameters_actions_couples += "<input type='"+ $scope.chosen_action_channel.params.type +"' name='"+ $scope.chosen_action_channel.params.name +"' ng-model='"+ $scope.chosen_action_channel.params.name +"' <br> ";
+            }
+            $scope.chosen_action_channel.extra_element = "<br><br><form novalidate ng-submit='submit_action('"+ $scope.parameters_actions_names_list +"')'>"+ $scope.parameters_actions_couples +" <input scroll-on-click href='#step_5' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+
+        }, function errorCallback(response) {
+            alert("You DIDN'T get the actions parameters list of action channel");
+        });
+
     }, function errorCallback(response) {
         alert("You DIDN'T get the actions list of action channel");
     });
+
 }
 
-function submit_trigger_google_mail1($scope, email_address, email_subject){
-    console.log("Input data: " + email_address);
-    console.log("Input data: " + email_subject);
+function submit_trigger($scope){
+    for(var i=0; i<$scope.parameters_triggers_names_list; i++){
+        console.log("Input data: " + $scope.parameters_triggers_names_list[i]);
+    }
     $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
-function submit_action_google_mail1($scope, email_recipient_address, email_subject, email_body){
-    console.log("Input data: " + email_recipient_address);
-    console.log("Input data: " + email_subject);
-    console.log("Input data: " + email_body);
-    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
-}
-
-function submit_trigger_google_calendar1($scope, keyword_or_phrase){
-    console.log("Input data: " + keyword_or_phrase);
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
-}
-
-function submit_trigger_google_calendar2($scope, keyword_or_phrase){
-    console.log("Input data: " + keyword_or_phrase);
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
-}
-
-function submit_action_google_calendar1($scope, date, title){
-    console.log("Input data: " + date);
-    console.log("Input data: " + title);
-    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
-}
-
-function submit_trigger_weather1($scope, time){
-    console.log("Input data: " + time);
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
-}
-
-function submit_trigger_weather2($scope, below_or_under, temperature){
-    console.log("Input data: " + below_or_under);
-    console.log("Input data: " + temperature);
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[1].header;
-}
-
-function submit_trigger_weather3($scope){
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[2].header;
-}
-
-function submit_trigger_facebook1($scope){
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
-}
-
-function submit_trigger_facebook2($scope, full_name, profile_picture, location){
-    console.log("Input data: " + full_name);
-    console.log("Input data: " + profile_picture);
-    console.log("Input data: " + location);
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[1].header;
-}
-
-function submit_action_facebook1($scope, message){
-    console.log("Input data: " + message);
-    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
-}
-
-function submit_trigger_twitter1($scope){
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
-}
-
-function submit_action_twitter1($scope){
+function submit_action($scope){
+    for(var i=0; i<$scope.parameters_actions_names_list; i++){
+        console.log("Input data: " + $scope.parameters_actions_names_list[i]);
+    }
     $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
 }
 
@@ -200,7 +163,7 @@ function initialize_data($scope){
     //define all the for 4 channels and put it in the array of the scope
     var channel_google_mail = {};
     channel_google_mail.name = "Google Mail";
-    channel_google_mail.image_url = "images/google_mail_icon.png";
+    channel_google_mail.image_url = "static/images/google_mail_icon.png";
     //channel_google_mail.image_url = "https://d3rnbxvnd0hlox.cloudfront.net/images/channels/33/icons/regular.png";
     channel_google_mail.trigger_list = [
          /*
