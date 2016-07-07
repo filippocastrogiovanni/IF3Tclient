@@ -2,8 +2,8 @@
  * Created by Filippo on 24/05/2016.
  */
 
-if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window',
-    function ($scope, $rootscope, $routeParams, $location, $window) {
+if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', 'userFactory',
+    function ($scope, $rootscope, $routeParams, $location, $window, $http, userFactory) {
 
         $rootscope.curpage = "newrecipe";
 
@@ -37,8 +37,8 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             submit_action($scope);
         }
 
-        $scope.submit_recipe = function() {
-            submit_recipe($scope, $window);
+        $scope.submit_recipe = function(recipe_description, userFactory) {
+            submit_recipe($scope, $window, $http, recipe_description);
         }
     }
 ]);
@@ -136,6 +136,8 @@ function submit_trigger($scope){
     for(var i=0; i<$scope.parameters_triggers_names_list; i++){
         console.log("Input data: " + $scope.parameters_triggers_names_list[i]);
     }
+    //OR
+    //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
     $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
@@ -143,20 +145,43 @@ function submit_action($scope){
     for(var i=0; i<$scope.parameters_actions_names_list; i++){
         console.log("Input data: " + $scope.parameters_actions_names_list[i]);
     }
+    //OR
+    //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
+
     $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
+
+    //preparing data to POST (List<Recipe>) phase1
+    var recipe_to_add;
+    recipe_to_add.id_action = chosen_action_channel.id;
+
+    $scope.recipes_list.push(recipe_to_add);
 }
 
-function submit_recipe($scope, $window){
+function submit_recipe($scope, $window, $http, recipe_description, userFactory) {
     console.log("Submitting recipe");
-    $http({
-        method: 'POST',
-        url: 'http://localhost:8181/IF3Tserver/add_recipe/'
-    }).then(function successCallback(response) {
-        alert("You have create a recipe successfully!");
-        $window.location.href = '/index.html#/myrecipes';
-    }, function errorCallback(response) {
-        alert("You DIDN'T save the recipe");
-    });
+    //preparing data to POST (List<Recipe>) phase2
+    for (var i = 0; i < $scope.recipes_list; i++) {
+        $scope.recipes_list[i].description = recipe_description;
+        $scope.recipes_list[i].is_public = false;
+        $scope.recipes_list[i].is_enabled = false;
+        $scope.recipes_list[i].id_user = userFactory.getProfile().id;
+        $scope.recipes_list[i].id_trigger = chosen_trigger_channel.id;
+    }
+    if(userFactory.isAuthenticated()) {
+        $http({
+            method: 'POST',
+            url: 'http://localhost:8181/IF3Tserver/add_recipe/',
+            data: $scope.recipes_list
+        }).then(function successCallback(response) {
+            alert("You have create a recipe successfully!");
+            $window.location.href = '/index.html#/myrecipes';
+        }, function errorCallback(response) {
+            alert("You DIDN'T save the recipe");
+        });
+    }
+    else{
+        alert("You are noy logged so you CAN'T save the recipe");
+    }
 }
 
 function initialize_data($scope){
