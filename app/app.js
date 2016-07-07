@@ -186,7 +186,7 @@ if3tApp.factory( 'userFactory', function ($http, $cookies) {
                     },
                     function errorCallback(response) {
                         authenticated = false;
-                        console.log("ERRORE GET" + response.status);
+                        console.log("ERROR GET" + response.status);
                     });
         }
     };
@@ -251,7 +251,7 @@ if3tApp.factory( 'userFactory', function ($http, $cookies) {
                     return factory.login({username:data.username, password:data.password});
                 },
                 function errorCallback(response) {
-                    console.log("ERRORE POST:");
+                    console.log("ERROR POST:");
                     console.log(response.error);
                     return false;
                 });
@@ -274,7 +274,25 @@ if3tApp.factory( 'userFactory', function ($http, $cookies) {
                     return true;
                 },
                 function errorCallback(response) {
-                    console.log("ERRORE PUT:");
+                    console.log("ERROR PUT:");
+                    console.log(response.error);
+                    return false;
+                });
+    };
+
+    factory.changePassword = function(data){
+        $http({
+            method: 'PUT',
+            dataType: 'json',
+            url: 'http://localhost:8181/userpassword',
+            headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
+            data: angular.toJson(data)
+        })
+            .then(function successCallback(response) {
+                    return true;
+                },
+                function errorCallback(response) {
+                    console.log("ERROR PUT:");
                     console.log(response.error);
                     return false;
                 });
