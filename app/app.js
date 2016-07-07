@@ -154,4 +154,154 @@ if3tApp.run(function ($rootScope) {
             break;
         }
     }
+
+    $rootScope.signup = function () {
+
+    };
+});
+
+if3tApp.factory( 'userFactory', function ($http, $cookies) {
+
+    var factory = {};
+    var authenticated = false;
+    var profile = {};
+
+
+    factory.signup = function(){};
+
+    factory.getProfile = function(){
+        if(authenticated) {
+            return profile;
+        } else {
+            return null;
+        }
+    };
+
+    factory.isAuthenticated = function() {
+        return authenticated;
+    };
+
+    factory.authenticate = function(credentials, callback) {
+        if(!authenticated) {
+            if (credentials) {
+                $cookies.authorization = "Basic " + btoa(credentials.username + ":" + credentials.password);
+                $cookies.user = credentials.username;
+            }
+            var headers = $cookies.authorization ? {authorization: $cookies.authorization} : {};
+
+            $http.get('http://localhost:8181/user', {headers: headers}).success(function (data) {
+                if (data.name) {
+                    authenticated = true;
+                } else {
+                    authenticated = false;
+                }
+                callback && callback();
+            }).error(function () {
+                authenticated = false;
+                callback && callback();
+            });
+        }
+    };
+
+    factory.login = function(credentials) {
+        factory.authenticate(credentials, function () {
+            if (authenticated) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    };
+
+    factory.logout = function() {
+        $http.post('logout', {}).success(function() {
+            authenticated = false;
+            $cookies.authorization = '';
+         }).error(function(data) {
+             authenticated = false;
+             $cookies.authorization = '';
+         });
+    };
+
+    factory.authenticate();
+
+
+    var bookings = [];
+    var urlPath = "";
+
+    factory.loadBookings = function(path) {
+        bookings = [];
+        urlPath = path;
+        $http.get('http://localhost:8181/bookings/'+urlPath)
+            .then(function successCallback(response) {
+                    bookings = response.data;
+                },
+                function errorCallback(response) {
+                    console.log("ERRORE GET" + response.status);
+                });
+    };
+
+    factory.getBooking = function (timeslot) {
+        for(var i=0; i< bookings.length; i++){
+            if(bookings[i].timeslot == timeslot) {
+                return bookings[i];
+            }
+        }
+        return null;
+    };
+
+    factory.addBooking = function (o) {
+
+        $http({
+            method: 'POST',
+            dataType: 'json',
+            url: 'http://localhost:8181/bookings',
+            headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
+            data: angular.toJson(o)
+        })
+            .then(function successCallback(response) {
+                    factory.loadBookings(urlPath);
+                    return true;
+                },
+                function errorCallback(response) {
+                    console.log("ERRORE POST:");
+                    console.log(response.error);
+                    return false;
+                });
+    };
+
+    factory.delBooking = function (timeslot) {
+        var id = -1;
+
+        for(var i=0; i< bookings.length; i++){
+            if(bookings[i].timeslot == timeslot) {
+                id = bookings[i].id;
+            }
+        }
+
+        if(id != -1) {
+            $http.delete('http://localhost:8181/bookings/' + id, {headers: {'authorization': $cookies.authorization}})
+                .then(function successCallback(response) {
+                        factory.loadBookings(urlPath);
+                        return true;
+                    },
+                    function errorCallback(response) {
+                        console.log("ERRORE DELETE" + response.status);
+                        return false;
+                    });
+        }
+
+
+    };
+
+    factory.isBooking = function (timeslot)  {
+        for(var i=0; i< bookings.length; i++){
+            if(bookings[i].timeslot == timeslot) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    return factory; 	// return the factory !
 });

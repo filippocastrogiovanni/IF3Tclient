@@ -1,56 +1,63 @@
 <div class="modal fade" id="signup" role="dialog">
     <div class="modal-dialog">
 
-        <form class="form-horizontal" role="form">
+        <form name="signupForm" class="form-horizontal" role="form" ng-submit="signup(signupForm.$valid)">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Registrati al servizio</h4>
+                    <h4 class="modal-title">Sign up to the service</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="getname">Nome:</label>
+                        <label class="control-label col-sm-3" for="getName">First name:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="getname" placeholder="Il tuo nome">
+                            <input type="text" required class="form-control" id="getName" placeholder="Your first name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="getsurname">Cognome:</label>
+                        <label class="control-label col-sm-3" for="getSurname">Last name:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="getsurname" placeholder="Il tuo cognome">
+                            <input type="text" required class="form-control" id="getSurname" placeholder="Your last name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="getemail">E-mail:</label>
+                        <label class="control-label col-sm-3" for="getMail">E-mail:</label>
                         <div class="col-sm-8">
-                            <input type="email" class="form-control" id="getemail" placeholder="Inserisci la tua email">
+                            <input type="email" required class="form-control" id="getMail" placeholder="Your email">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="getpassword">Password:</label>
+                        <label class="control-label col-sm-3" for="getUsername">Username:</label>
                         <div class="col-sm-8">
-                            <input type="password" class="form-control" id="getpassword" placeholder="Inserisci una password">
+                            <input type="text" required class="form-control" id="getUsername" placeholder="Choose a unique username">
+                        </div>
+                    </div>
+                    <div class="form-group has-warning has-feedback">
+                        <label class="control-label col-sm-3" for="getPassword">Password:</label>
+                        <div class="col-sm-8">
+                            <input type="password" required class="form-control" id="getPassword" placeholder="Create a secure password">
+                            <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="getpassword2"></label>
+                        <label class="control-label col-sm-3" for="getPassword2"></label>
                         <div class="col-sm-8">
-                            <input type="password" class="form-control" id="getpassword2" placeholder="Ripeti la password">
+                            <input type="password" required class="form-control" id="getPassword2" placeholder="Ripeat the password">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3">Fuso orario</label>
+                        <label class="control-label col-sm-3" for="getTimeZone">Time zone</label>
                         <div class="col-sm-8">
-                            <select class="form-control" name="mySelect" id="gettimezone"
+                            <select class="form-control" id="getTimeZone"
                                     ng-options="option.description for option in timeZones track by option.id"
                                     ng-model="timeZone"></select>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Registrati</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal">SignUp</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
