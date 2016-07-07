@@ -166,14 +166,28 @@ if3tApp.factory( 'userFactory', function ($http, $cookies) {
     var authenticated = false;
     var profile = {};
 
-
-    factory.signup = function(){};
-
     factory.getProfile = function(){
         if(authenticated) {
             return profile;
         } else {
             return null;
+        }
+    };
+
+    factory.loadProfile = function(){
+        if(authenticated) {
+            $http.get('http://localhost:8181/users/'+profile.username)
+                .then(function successCallback(response) {
+                        profile.id = response.data.id;
+                        profile.name = response.data.name;
+                        profile.surname = response.data.surname;
+                        profile.email = response.data.email;
+                        profile.timezone = response.data.timezone;
+                    },
+                    function errorCallback(response) {
+                        authenticated = false;
+                        console.log("ERRORE GET" + response.status);
+                    });
         }
     };
 
@@ -204,8 +218,10 @@ if3tApp.factory( 'userFactory', function ($http, $cookies) {
     };
 
     factory.login = function(credentials) {
+        profile.username = credentials.username;
         factory.authenticate(credentials, function () {
             if (authenticated) {
+                factory.loadProfile();
                 return true;
             } else {
                 return false;
@@ -223,45 +239,16 @@ if3tApp.factory( 'userFactory', function ($http, $cookies) {
          });
     };
 
-    factory.authenticate();
-
-
-    var bookings = [];
-    var urlPath = "";
-
-    factory.loadBookings = function(path) {
-        bookings = [];
-        urlPath = path;
-        $http.get('http://localhost:8181/bookings/'+urlPath)
-            .then(function successCallback(response) {
-                    bookings = response.data;
-                },
-                function errorCallback(response) {
-                    console.log("ERRORE GET" + response.status);
-                });
-    };
-
-    factory.getBooking = function (timeslot) {
-        for(var i=0; i< bookings.length; i++){
-            if(bookings[i].timeslot == timeslot) {
-                return bookings[i];
-            }
-        }
-        return null;
-    };
-
-    factory.addBooking = function (o) {
-
+    factory.signup = function(data){
         $http({
             method: 'POST',
             dataType: 'json',
-            url: 'http://localhost:8181/bookings',
-            headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
-            data: angular.toJson(o)
+            url: 'http://localhost:8181/users',
+            headers: {'Content-Type': 'application/json'},
+            data: angular.toJson(data)
         })
             .then(function successCallback(response) {
-                    factory.loadBookings(urlPath);
-                    return true;
+                    return factory.login({username:data.username, password:data.password});
                 },
                 function errorCallback(response) {
                     console.log("ERRORE POST:");
@@ -270,38 +257,30 @@ if3tApp.factory( 'userFactory', function ($http, $cookies) {
                 });
     };
 
-    factory.delBooking = function (timeslot) {
-        var id = -1;
-
-        for(var i=0; i< bookings.length; i++){
-            if(bookings[i].timeslot == timeslot) {
-                id = bookings[i].id;
-            }
-        }
-
-        if(id != -1) {
-            $http.delete('http://localhost:8181/bookings/' + id, {headers: {'authorization': $cookies.authorization}})
-                .then(function successCallback(response) {
-                        factory.loadBookings(urlPath);
-                        return true;
-                    },
-                    function errorCallback(response) {
-                        console.log("ERRORE DELETE" + response.status);
-                        return false;
-                    });
-        }
-
-
+    factory.editProfile = function(data){
+        $http({
+            method: 'PUT',
+            dataType: 'json',
+            url: 'http://localhost:8181/users',
+            headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
+            data: angular.toJson(data)
+        })
+            .then(function successCallback(response) {
+                    profile.id = data.id;
+                    profile.name = data.name;
+                    profile.surname = data.surname;
+                    profile.email = data.email;
+                    profile.timezone = data.timezone;
+                    return true;
+                },
+                function errorCallback(response) {
+                    console.log("ERRORE PUT:");
+                    console.log(response.error);
+                    return false;
+                });
     };
 
-    factory.isBooking = function (timeslot)  {
-        for(var i=0; i< bookings.length; i++){
-            if(bookings[i].timeslot == timeslot) {
-                return true;
-            }
-        }
-        return false;
-    };
+    factory.authenticate(false, factory.loadProfile());
 
-    return factory; 	// return the factory !
+    return factory;
 });
