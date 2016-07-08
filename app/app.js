@@ -70,89 +70,111 @@ if3tApp.directive("compareTo", function () {
 if3tApp.run(function ($rootScope, userFactory) {
     $rootScope.ipServer = "http://192.168.43.234:8181";
 
+    $rootScope.authenticated = userFactory.isAuthenticated();
+    $rootScope.signupStatus = {};
+    $rootScope.signupStatus.response = false;
+    $rootScope.signupStatus.waiting = false;
+    $rootScope.signupStatus.success = false;
+    $rootScope.signupData = {};
+    $rootScope.signupRQ = function (formValidity) {
+        if (formValidity) {
+            $rootScope.signupStatus.waiting = true;
+            userFactory.signup($rootScope.signupData);
+        }
+    };
+    $rootScope.signupRS = function (status) {
+        $rootScope.signupStatus.response = true;
+        $rootScope.signupStatus.waiting = false;
+        if(status) {
+            $rootScope.signupStatus.success = true;
+        } else {
+            $rootScope.signupStatus.success = false;
+        }
+    };
+
     $rootScope.timeZones = [
-        {timezone: -12, id: 1, description: "(GMT-12:00) International Date Line West"},
-        {timezone: -11, id: 2, description: "(GMT-11:00) Midway Island, Samoa"},
-        {timezone: -10, id: 3, description: "(GMT-10:00) Hawaii"},
-        {timezone: -9, id: 4, description: "(GMT-09:00) Alaska"},
-        {timezone: -8, id: 5, description: "(GMT-08:00) Pacific Time (US & Canada)"},
-        {timezone: -8, id: 6, description: "(GMT-08:00) Tijuana, Baja California"},
-        {timezone: -7, id: 7, description: "(GMT-07:00) Arizona"},
-        {timezone: -7, id: 8, description: "(GMT-07:00) Chihuahua, La Paz, Mazatlan"},
-        {timezone: -7, id: 9, description: "(GMT-07:00) Mountain Time (US & Canada)"},
-        {timezone: -6, id: 10, description: "(GMT-06:00) Central America"},
-        {timezone: -6, id: 11, description: "(GMT-06:00) Central Time (US & Canada)"},
-        {timezone: -6, id: 12, description: "(GMT-06:00) Guadalajara, Mexico City, Monterrey"},
-        {timezone: -6, id: 13, description: "(GMT-06:00) Saskatchewan"},
-        {timezone: -5, id: 14, description: "(GMT-05:00) Bogota, Lima, Quito, Rio Branco"},
-        {timezone: -5, id: 15, description: "(GMT-05:00) Eastern Time (US & Canada)"},
-        {timezone: -5, id: 16, description: "(GMT-05:00) Indiana (East)"},
-        {timezone: -4, id: 17, description: "(GMT-04:00) Atlantic Time (Canada)"},
-        {timezone: -4, id: 18, description: "(GMT-04:00) Caracas, La Paz"},
-        {timezone: -4, id: 19, description: "(GMT-04:00) Manaus"},
-        {timezone: -4, id: 20, description: "(GMT-04:00) Santiago"},
-        {timezone: -3.5, id: 21, description: "(GMT-03:30) Newfoundland"},
-        {timezone: -3, id: 22, description: "(GMT-03:00) Brasilia"},
-        {timezone: -3, id: 23, description: "(GMT-03:00) Buenos Aires, Georgetown"},
-        {timezone: -3, id: 24, description: "(GMT-03:00) Greenland"},
-        {timezone: -3, id: 25, description: "(GMT-03:00) Montevideo"},
-        {timezone: -2, id: 26, description: "(GMT-02:00) Mid-Atlantic"},
-        {timezone: -1, id: 27, description: "(GMT-01:00) Cape Verde Is."},
-        {timezone: -1, id: 28, description: "(GMT-01:00) Azores"},
-        {timezone: 0, id: 29, description: "(GMT+00:00) Casablanca, Monrovia, Reykjavik"},
-        {timezone: 0, id: 30, description: "(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"},
-        {timezone: 1, id: 31, description: "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"},
-        {timezone: 1, id: 32, description: "(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague"},
-        {timezone: 1, id: 33, description: "(GMT+01:00) Brussels, Copenhagen, Madrid, Paris"},
-        {timezone: 1, id: 34, description: "(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb"},
-        {timezone: 1, id: 35, description: "(GMT+01:00) West Central Africa"},
-        {timezone: 2, id: 36, description: "(GMT+02:00) Amman"},
-        {timezone: 2, id: 37, description: "(GMT+02:00) Athens, Bucharest, Istanbul"},
-        {timezone: 2, id: 38, description: "(GMT+02:00) Beirut"},
-        {timezone: 2, id: 39, description: "(GMT+02:00) Cairo"},
-        {timezone: 2, id: 40, description: "(GMT+02:00) Harare, Pretoria"},
-        {timezone: 2, id: 41, description: "(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius"},
-        {timezone: 2, id: 42, description: "(GMT+02:00) Jerusalem"},
-        {timezone: 2, id: 43, description: "(GMT+02:00) Minsk"},
-        {timezone: 2, id: 44, description: "(GMT+02:00) Windhoek"},
-        {timezone: 3, id: 45, description: "(GMT+03:00) Kuwait, Riyadh, Baghdad"},
-        {timezone: 3, id: 46, description: "(GMT+03:00) Moscow, St. Petersburg, Volgograd"},
-        {timezone: 3, id: 47, description: "(GMT+03:00) Nairobi"},
-        {timezone: 3, id: 48, description: "(GMT+03:00) Tbilisi"},
-        {timezone: 3.5, id: 49, description: "(GMT+03:30) Tehran"},
-        {timezone: 4, id: 50, description: "(GMT+04:00) Abu Dhabi, Muscat"},
-        {timezone: 4, id: 51, description: "(GMT+04:00) Baku"},
-        {timezone: 4, id: 52, description: "(GMT+04:00) Yerevan"},
-        {timezone: 4.5, id: 53, description: "(GMT+04:30) Kabul"},
-        {timezone: 5, id: 54, description: "(GMT+05:00) Yekaterinburg"},
-        {timezone: 5, id: 55, description: "(GMT+05:00) Islamabad, Karachi, Tashkent"},
-        {timezone: 5.5, id: 56, description: "(GMT+05:30) Sri Jayawardenapura"},
-        {timezone: 5.5, id: 57, description: "(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi"},
-        {timezone: 5.75, id: 58, description: "(GMT+05:45) Kathmandu"},
-        {timezone: 6, id: 59, description: "(GMT+06:00) Almaty, Novosibirsk"},
-        {timezone: 6, id: 60, description: "(GMT+06:00) Astana, Dhaka"},
-        {timezone: 6.5, id: 61, description: "(GMT+06:30) Yangon (Rangoon)"},
-        {timezone: 7, id: 62, description: "(GMT+07:00) Bangkok, Hanoi, Jakarta"},
-        {timezone: 7, id: 63, description: "(GMT+07:00) Krasnoyarsk"},
-        {timezone: 8, id: 64, description: "(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi"},
-        {timezone: 8, id: 65, description: "(GMT+08:00) Kuala Lumpur, Singapore"},
-        {timezone: 8, id: 66, description: "(GMT+08:00) Irkutsk, Ulaan Bataar"},
-        {timezone: 8, id: 67, description: "(GMT+08:00) Perth"},
-        {timezone: 8, id: 68, description: "(GMT+08:00) Taipei"},
-        {timezone: 9, id: 69, description: "(GMT+09:00) Osaka, Sapporo, Tokyo"},
-        {timezone: 9, id: 70, description: "(GMT+09:00) Seoul"},
-        {timezone: 9, id: 71, description: "(GMT+09:00) Yakutsk"},
-        {timezone: 9.5, id: 72, description: "(GMT+09:30) Adelaide"},
-        {timezone: 9.5, id: 73, description: "(GMT+09:30) Darwin"},
-        {timezone: 10, id: 74, description: "(GMT+10:00) Brisbane"},
-        {timezone: 10, id: 75, description: "(GMT+10:00) Canberra, Melbourne, Sydney"},
-        {timezone: 10, id: 76, description: "(GMT+10:00) Hobart"},
-        {timezone: 10, id: 77, description: "(GMT+10:00) Guam, Port Moresby"},
-        {timezone: 10, id: 78, description: "(GMT+10:00) Vladivostok"},
-        {timezone: 11, id: 79, description: "(GMT+11:00) Magadan, Solomon Is., New Caledonia"},
-        {timezone: 12, id: 80, description: "(GMT+12:00) Auckland, Wellington"},
-        {timezone: 12, id: 81, description: "(GMT+12:00) Fiji, Kamchatka, Marshall Is."},
-        {timezone: 13, id: 82, description: "(GMT+13:00) Nuku'alofa"}
+        {id: 1, daylight_time: 0, timezone_value: -12, name: "(GMT-12:00) International Date Line West"},
+        {id: 2, daylight_time: 0, timezone_value: -11, name: "(GMT-11:00) Midway Island, Samoa"},
+        {id: 3, daylight_time: 0, timezone_value: -10, name: "(GMT-10:00) Hawaii"},
+        {id: 4, daylight_time: 1, timezone_value: -9, name: "(GMT-09:00) Alaska"},
+        {id: 5, daylight_time: 1, timezone_value: -8, name: "(GMT-08:00) Pacific Time (US & Canada)"},
+        {id: 6, daylight_time: 1, timezone_value: -8, name: "(GMT-08:00) Tijuana, Baja California"},
+        {id: 7, daylight_time: 0, timezone_value: -7, name: "(GMT-07:00) Arizona"},
+        {id: 8, daylight_time: 1, timezone_value: -7, name: "(GMT-07:00) Chihuahua, La Paz, Mazatlan"},
+        {id: 9, daylight_time: 1, timezone_value: -7, name: "(GMT-07:00) Mountain Time (US & Canada)"},
+        {id: 10, daylight_time: 0, timezone_value: -6, name: "(GMT-06:00) Central America"},
+        {id: 11, daylight_time: 1, timezone_value: -6, name: "(GMT-06:00) Central Time (US & Canada)"},
+        {id: 12, daylight_time: 1, timezone_value: -6, name: "(GMT-06:00) Guadalajara, Mexico City, Monterrey"},
+        {id: 13, daylight_time: 0, timezone_value: -6, name: "(GMT-06:00) Saskatchewan"},
+        {id: 14, daylight_time: 0, timezone_value: -5, name: "(GMT-05:00) Bogota, Lima, Quito, Rio Branco"},
+        {id: 15, daylight_time: 1, timezone_value: -5, name: "(GMT-05:00) Eastern Time (US & Canada)"},
+        {id: 16, daylight_time: 1, timezone_value: -5, name: "(GMT-05:00) Indiana (East)"},
+        {id: 17, daylight_time: 1, timezone_value: -4, name: "(GMT-04:00) Atlantic Time (Canada)"},
+        {id: 18, daylight_time: 0, timezone_value: -4, name: "(GMT-04:00) Caracas, La Paz"},
+        {id: 19, daylight_time: 0, timezone_value: -4, name: "(GMT-04:00) Manaus"},
+        {id: 20, daylight_time: 1, timezone_value: -4, name: "(GMT-04:00) Santiago"},
+        {id: 21, daylight_time: 1, timezone_value: -3.5, name: "(GMT-03:30) Newfoundland"},
+        {id: 22, daylight_time: 1, timezone_value: -3, name: "(GMT-03:00) Brasilia"},
+        {id: 23, daylight_time: 0, timezone_value: -3, name: "(GMT-03:00) Buenos Aires, Georgetown"},
+        {id: 24, daylight_time: 1, timezone_value: -3, name: "(GMT-03:00) Greenland"},
+        {id: 25, daylight_time: 1, timezone_value: -3, name: "(GMT-03:00) Montevideo"},
+        {id: 26, daylight_time: 1, timezone_value: -2, name: "(GMT-02:00) Mid-Atlantic"},
+        {id: 27, daylight_time: 0, timezone_value: -1, name: "(GMT-01:00) Cape Verde Is."},
+        {id: 28, daylight_time: 1, timezone_value: -1, name: "(GMT-01:00) Azores"},
+        {id: 29, daylight_time: 0, timezone_value: 0, name: "(GMT+00:00) Casablanca, Monrovia, Reykjavik"},
+        {id: 30, daylight_time: 1, timezone_value: 0, name: "(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"},
+        {id: 31, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"},
+        {id: 32, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague"},
+        {id: 33, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Brussels, Copenhagen, Madrid, Paris"},
+        {id: 34, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb"},
+        {id: 35, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) West Central Africa"},
+        {id: 36, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Amman"},
+        {id: 37, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Athens, Bucharest, Istanbul"},
+        {id: 38, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Beirut"},
+        {id: 39, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Cairo"},
+        {id: 40, daylight_time: 0, timezone_value: 2, name: "(GMT+02:00) Harare, Pretoria"},
+        {id: 41, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius"},
+        {id: 42, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Jerusalem"},
+        {id: 43, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Minsk"},
+        {id: 44, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Windhoek"},
+        {id: 45, daylight_time: 0, timezone_value: 3, name: "(GMT+03:00) Kuwait, Riyadh, Baghdad"},
+        {id: 46, daylight_time: 1, timezone_value: 3, name: "(GMT+03:00) Moscow, St. Petersburg, Volgograd"},
+        {id: 47, daylight_time: 0, timezone_value: 3, name: "(GMT+03:00) Nairobi"},
+        {id: 48, daylight_time: 0, timezone_value: 3, name: "(GMT+03:00) Tbilisi"},
+        {id: 49, daylight_time: 1, timezone_value: 3.5, name: "(GMT+03:30) Tehran"},
+        {id: 50, daylight_time: 0, timezone_value: 4, name: "(GMT+04:00) Abu Dhabi, Muscat"},
+        {id: 51, daylight_time: 1, timezone_value: 4, name: "(GMT+04:00) Baku"},
+        {id: 52, daylight_time: 1, timezone_value: 4, name: "(GMT+04:00) Yerevan"},
+        {id: 53, daylight_time: 0, timezone_value: 4.5, name: "(GMT+04:30) Kabul"},
+        {id: 54, daylight_time: 1, timezone_value: 5, name: "(GMT+05:00) Yekaterinburg"},
+        {id: 55, daylight_time: 0, timezone_value: 5, name: "(GMT+05:00) Islamabad, Karachi, Tashkent"},
+        {id: 56, daylight_time: 0, timezone_value: 5.5, name: "(GMT+05:30) Sri Jayawardenapura"},
+        {id: 57, daylight_time: 0, timezone_value: 5.5, name: "(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi"},
+        {id: 58, daylight_time: 0, timezone_value: 5.75, name: "(GMT+05:45) Kathmandu"},
+        {id: 59, daylight_time: 1, timezone_value: 6, name: "(GMT+06:00) Almaty, Novosibirsk"},
+        {id: 60, daylight_time: 0, timezone_value: 6, name: "(GMT+06:00) Astana, Dhaka"},
+        {id: 61, daylight_time: 0, timezone_value: 6.5, name: "(GMT+06:30) Yangon (Rangoon)"},
+        {id: 62, daylight_time: 0, timezone_value: 7, name: "(GMT+07:00) Bangkok, Hanoi, Jakarta"},
+        {id: 63, daylight_time: 1, timezone_value: 7, name: "(GMT+07:00) Krasnoyarsk"},
+        {id: 64, daylight_time: 0, timezone_value: 8, name: "(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi"},
+        {id: 65, daylight_time: 0, timezone_value: 8, name: "(GMT+08:00) Kuala Lumpur, Singapore"},
+        {id: 66, daylight_time: 0, timezone_value: 8, name: "(GMT+08:00) Irkutsk, Ulaan Bataar"},
+        {id: 67, daylight_time: 0, timezone_value: 8, name: "(GMT+08:00) Perth"},
+        {id: 68, daylight_time: 0, timezone_value: 8, name: "(GMT+08:00) Taipei"},
+        {id: 69, daylight_time: 0, timezone_value: 9, name: "(GMT+09:00) Osaka, Sapporo, Tokyo"},
+        {id: 70, daylight_time: 0, timezone_value: 9, name: "(GMT+09:00) Seoul"},
+        {id: 71, daylight_time: 1, timezone_value: 9, name: "(GMT+09:00) Yakutsk"},
+        {id: 72, daylight_time: 0, timezone_value: 9.5, name: "(GMT+09:30) Adelaide"},
+        {id: 73, daylight_time: 0, timezone_value: 9.5, name: "(GMT+09:30) Darwin"},
+        {id: 74, daylight_time: 0, timezone_value: 10, name: "(GMT+10:00) Brisbane"},
+        {id: 75, daylight_time: 1, timezone_value: 10, name: "(GMT+10:00) Canberra, Melbourne, Sydney"},
+        {id: 76, daylight_time: 1, timezone_value: 10, name: "(GMT+10:00) Hobart"},
+        {id: 77, daylight_time: 0, timezone_value: 10, name: "(GMT+10:00) Guam, Port Moresby"},
+        {id: 78, daylight_time: 1, timezone_value: 10, name: "(GMT+10:00) Vladivostok"},
+        {id: 79, daylight_time: 1, timezone_value: 11, name: "(GMT+11:00) Magadan, Solomon Is., New Caledonia"},
+        {id: 80, daylight_time: 1, timezone_value: 12, name: "(GMT+12:00) Auckland, Wellington"},
+        {id: 81, daylight_time: 0, timezone_value: 12, name: "(GMT+12:00) Fiji, Kamchatka, Marshall Is."},
+        {id: 82, daylight_time: 0, timezone_value: 13, name: "(GMT+13:00) Nuku'alofa"}
     ];
 
     var rightNow = new Date();
@@ -175,34 +197,11 @@ if3tApp.run(function ($rootScope, userFactory) {
     valZone = (valZone / 60) * (-1) - dst;
     for (i in $rootScope.timeZones) {
         opt = $rootScope.timeZones[i];
-        if (opt.timezone == valZone) {
-            $rootScope.timeZone = {timezone: opt.timezone, id: opt.id, description: opt.description};
+        if (opt.timezone_value == valZone) {
+            $rootScope.signupData.timezone = {id: opt.id, daylight_time: opt.daylight_time, timezone_value: opt.timezone_value,  name: opt.name};
             break;
         }
     }
-
-    $rootScope.authenticated = userFactory.isAuthenticated();
-    $rootScope.signupStatus = {};
-    $rootScope.signupStatus.response = false;
-    $rootScope.signupStatus.waiting = false;
-    $rootScope.signupStatus.success = false;
-    $rootScope.signupData = {};
-    $rootScope.signupRQ = function (formValidity) {
-        if (formValidity) {
-            $rootScope.signupStatus.waiting = true;
-            $rootScope.signupData.timeZone = $rootScope.timeZone.id;
-            userFactory.signup($rootScope.signupData);
-        }
-    };
-    $rootScope.signupRS = function (status) {
-        $rootScope.signupStatus.response = true;
-        $rootScope.signupStatus.waiting = false;
-        if(status) {
-            $rootScope.signupStatus.success = true;
-        } else {
-            $rootScope.signupStatus.success = false;
-        }
-    };
 
 });
 
@@ -232,7 +231,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     },
                     function errorCallback(response) {
                         authenticated = false;
-                        console.log("ERROR GET" + response.status);
+                        console.log("ERROR GET: loadProfile");
                     });
         }
     };
@@ -249,7 +248,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             }
             var headers = $cookies.authorization ? {authorization: $cookies.authorization} : {};
 
-            $http.get('http://192.168.43.234:8181/user', {headers: headers}).success(function (data) {
+            $http.get($rootScope.ipServer+'/user', {headers: headers}).success(function (data) {
                 if (data.name) {
                     authenticated = true;
                 } else {
@@ -258,6 +257,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 callback && callback();
             }).error(function () {
                 authenticated = false;
+                console.log("ERROR GET: authenticate");
                 callback && callback();
             });
         }
@@ -290,15 +290,15 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             var user = {};
             user.name = data.name;
             user.surname = data.surname;
-            user.mail = data.mail;
+            user.email = data.mail;
             user.username = data.username;
             user.password = data.password;
-            user.timezone = data.timeZone;
+            user.timezone = data.timezone;
             console.log(angular.toJson(user));
             $http({
                 method: 'POST',
                 dataType: 'json',
-                url: 'http://192.168.43.234:8181/users',
+                url: $rootScope.ipServer+'/users',
                 headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(user)
             })
@@ -319,7 +319,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: 'http://192.168.43.234:8181/users',
+            url: $rootScope.ipServer+'/users',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
             data: angular.toJson(data)
         })
@@ -332,8 +332,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     return true;
                 },
                 function errorCallback(response) {
-                    console.log("ERROR PUT:");
-                    console.log(response.error);
+                    console.log("ERROR PUT: editProfile");
                     return false;
                 });
     };
@@ -342,7 +341,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: 'http://192.168.43.234:8181/userpassword',
+            url: $rootScope.ipServer+'/userpassword',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
             data: angular.toJson(data)
         })
@@ -350,8 +349,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     return true;
                 },
                 function errorCallback(response) {
-                    console.log("ERROR PUT:");
-                    console.log(response.error);
+                    console.log("ERROR PUT: changePassword");
                     return false;
                 });
     };
