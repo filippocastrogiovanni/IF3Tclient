@@ -42,6 +42,128 @@ h3.step_1, h6.step_1_helper{
     display:inline;
 }
 
+h2.recipe
+{
+    margin-top: 0.5em;
+    //margin-bottom: 0;
+    padding: 0;
+    margin-left: 19.6%;
+    color: #eee;
+    //border: 1px solid black;
+}
+
+h5.recipe
+{
+    margin-top:0;
+    padding: 0;
+    margin-left: 19.6%;
+    margin-bottom: 0.5em;
+    //border: 1px solid black;
+}
+
+a.recipe
+{
+    color: #eee;
+}
+
+a.recipe:hover
+{
+    color: white;
+    text-decoration: underline;
+}
+
+div.recipe-menu
+{
+    border-radius: 0.5em;
+    border: 1px solid black;
+    display: block;
+    text-align: left;
+    padding: 0;
+    font-size: 120%;
+}
+
+div.content
+{
+    width: 62%;
+    margin-left: 19%;
+    //border: 1px solid black;
+}
+
+div.left
+{
+    text-align: center;
+    //border: 1px solid black;
+}
+
+div.right
+{
+    text-align: center;
+    //border: 1px solid black;
+}
+
+div.div-if
+{
+    background: dodgerblue;
+    border-radius: 0.5em 0 0 0.5em;
+    height: 40%;
+    text-align: right;
+    margin-top: 0.5em;
+}
+
+div.div-then
+{
+    background: darkblue;
+    border-radius: 0 0.5em 0.5em 0;
+    height: 40%;
+    text-align: left;
+    margin-top: 0.5em;
+}
+span.span-if, span.span-then
+{
+    font-size: 7em;
+    font-weight: bold;
+    color: lightgrey;
+    opacity:0.7;
+    //vertical-align: middle;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+}
+
+img.icon-if-then
+{
+    max-height: 100%;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+div.descr
+{
+    border: 1px solid darkgrey;
+    padding: 0.5em;
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+div.descr-right
+{
+    height: 40%;
+    margin-left: 0.25em;
+}
+
+div.descr-left
+{
+    height: 40%;
+    margin-right: 0.25em;
+}
+
+md-toolbar.sub-title
+{
+    width: 60%;
+    margin-left: 20%;
+    padding-left: 1.5%;
+    background: #231d2b;
+}
+
 .step_1_channels_search {
     font-family: "Avenir Next LT W01 Demi",helvetica,arial,sans-serif;
     font-weight: bold;

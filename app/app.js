@@ -16,6 +16,10 @@ if3tApp.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'template/my_recipes.html',
         controller: 'MyRecipesController'
     });
+    $routeProvider.when('/myrecipes/:id_recipe', {
+        templateUrl: 'template/edit_recipe.html',
+        controller: 'EditRecipeController'
+    });
     $routeProvider.when('/channels', {
         templateUrl: 'template/channels.html',
         controller: 'ChannelsController'
