@@ -5,9 +5,11 @@
     <h2>Create a recipe</h2>
 </md-toolbar>
 
+<!--
 <style type = "text/css" scoped>
     body { overflow: hidden; }
 </style>
+-->
 
 <!-- STEP 0 -->
 <div id="first_div">
@@ -67,8 +69,8 @@
 <br>
                     <md-list >
                         <md-list-item data-ng-repeat="channel in channels | filter:searchBox1" style="display: inline">
-                            <span class="loading"> <img src="/images/loading_aninmation.gif"/></span>
-                                <img class="spinner" src="{{src}}" imageonload style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-trigger-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
+                            <span class="loading"> <img src="images/loading.gif"/></span>
+                                <img class="spinner" imageonload style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-trigger-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
                         </md-list-item>
                     </md-list>
                 </md-content>
