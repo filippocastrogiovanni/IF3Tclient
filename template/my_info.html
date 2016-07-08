@@ -1,0 +1,74 @@
+<div class="container"  ng-controller="MyInfoController">
+    <div class="container">
+        <form class="form-horizontal" role="form">
+            <!-- Modal content-->
+            <div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="getname">Name:</label>
+                        <div class="col-sm-8">
+                            <input ng-model="user.name" type="text" class="form-control" id="getname" placeholder="Your first name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="getsurname">Surname:</label>
+                        <div class="col-sm-8">
+                            <input ng-model="user.surname" type="text" class="form-control" id="getsurname" placeholder="Your Surname">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Username:</label>
+                        <div class="col-sm-8">
+                            <span>{{ user.username }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">E-mail:</label>
+                        <div class="col-sm-8">
+                            <span>{{ user.email }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Time zone</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="mySelect" id="gettimezone"
+                                    ng-options="option.description for option in timeZones track by option.id"
+                                    ng-model="user.timezone">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" ng-click="saveUserData()">Save Info</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form class="form-horizontal" role="form">
+        <!-- Modal content-->
+        <div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="getoldpassword">Change password:</label>
+                    <div class="col-sm-8">
+                        <input ng-model="passwordChange.currPass" type="password" class="form-control" id="getoldpassword" placeholder="Current password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="getpassword"></label>
+                    <div class="col-sm-8">
+                        <input ng-model="passwordChange.newPass" type="password" class="form-control" id="getpassword" placeholder="New password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="getpassword2"></label>
+                    <div class="col-sm-8">
+                        <input ng-model="passwordChange.confirmNewPass" type="password" class="form-control" id="getpassword2" placeholder="Confirm new password">
+                    </div>
+                </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" ng-click="changePassword()">Change Password</button>
+            </div>
+        </div>
+    </form>
+</div>

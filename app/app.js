@@ -24,6 +24,10 @@ if3tApp.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'template/channels.html',
         controller: 'ChannelsController'
     });
+    $routeProvider.when('/profile', {
+        templateUrl: 'template/profile.html',
+        controller: 'ProfileController'
+    });
     $routeProvider.otherwise({redirectTo: '/home'});
 }]);
 
