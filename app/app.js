@@ -64,6 +64,8 @@ if3tApp.directive("compareTo", function () {
 
 //http://jsfiddle.net/2CsfZ/47/
 if3tApp.run(function ($rootScope, userFactory) {
+    $rootScope.ipServer = "http://192.168.43.234:8181";
+
     $rootScope.timeZones = [
         {timezone: -12, id: 1, description: "(GMT-12:00) International Date Line West"},
         {timezone: -11, id: 2, description: "(GMT-11:00) Midway Island, Samoa"},
@@ -175,18 +177,32 @@ if3tApp.run(function ($rootScope, userFactory) {
         }
     }
 
+    $rootScope.authenticated = userFactory.isAuthenticated();
+    $rootScope.signupStatus = {};
+    $rootScope.signupStatus.response = false;
+    $rootScope.signupStatus.waiting = false;
+    $rootScope.signupStatus.success = false;
     $rootScope.signupData = {};
-    $rootScope.signup = function (formValidity) {
+    $rootScope.signupRQ = function (formValidity) {
         if (formValidity) {
-            console.log("mandato il singup");
+            $rootScope.signupStatus.waiting = true;
             $rootScope.signupData.timeZone = $rootScope.timeZone.id;
             userFactory.signup($rootScope.signupData);
+        }
+    };
+    $rootScope.signupRS = function (status) {
+        $rootScope.signupStatus.response = true;
+        $rootScope.signupStatus.waiting = false;
+        if(status) {
+            $rootScope.signupStatus.success = true;
+        } else {
+            $rootScope.signupStatus.success = false;
         }
     };
 
 });
 
-if3tApp.factory('userFactory', function ($http, $cookies) {
+if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
 
     var factory = {};
     var authenticated = false;
@@ -202,7 +218,7 @@ if3tApp.factory('userFactory', function ($http, $cookies) {
 
     factory.loadProfile = function () {
         if (authenticated) {
-            $http.get('http://localhost:8181/users/' + profile.username)
+            $http.get($rootScope.ipServer+'/users/' + profile.username)
                 .then(function successCallback(response) {
                         profile.id = response.data.id;
                         profile.name = response.data.name;
@@ -229,7 +245,7 @@ if3tApp.factory('userFactory', function ($http, $cookies) {
             }
             var headers = $cookies.authorization ? {authorization: $cookies.authorization} : {};
 
-            $http.get('http://localhost:8181/user', {headers: headers}).success(function (data) {
+            $http.get('http://192.168.43.234:8181/user', {headers: headers}).success(function (data) {
                 if (data.name) {
                     authenticated = true;
                 } else {
@@ -278,18 +294,20 @@ if3tApp.factory('userFactory', function ($http, $cookies) {
             $http({
                 method: 'POST',
                 dataType: 'json',
-                url: 'http://localhost:8181/users',
+                url: 'http://192.168.43.234:8181/users',
                 headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(user)
             })
                 .then(function successCallback(response) {
-                        return factory.login({username: user.username, password: user.password});
+                        factory.login({username: user.username, password: user.password});
+                        $rootScope.signupRS(true);
                     },
                     function errorCallback(response) {
-                        console.log("ERROR POST:");
-                        console.log(response.error);
-                        return false;
+                        console.log("ERROR POST: signup");
+                        $rootScope.signupRS(false);
                     });
+        } else {
+            $rootScope.signupRS(false);
         }
     };
 
@@ -297,7 +315,7 @@ if3tApp.factory('userFactory', function ($http, $cookies) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: 'http://localhost:8181/users',
+            url: 'http://192.168.43.234:8181/users',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
             data: angular.toJson(data)
         })
@@ -320,7 +338,7 @@ if3tApp.factory('userFactory', function ($http, $cookies) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: 'http://localhost:8181/userpassword',
+            url: 'http://192.168.43.234:8181/userpassword',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
             data: angular.toJson(data)
         })
