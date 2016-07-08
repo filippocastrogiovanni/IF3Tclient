@@ -92,6 +92,28 @@ if3tApp.run(function ($rootScope, userFactory) {
         }
     };
 
+    $rootScope.loginStatus = {};
+    $rootScope.loginStatus.waiting = false;
+    $rootScope.loginStatus.response = false;
+    $rootScope.loginStatus.success = false;
+    $rootScope.loginData = {};
+    $rootScope.loginRQ = function (formValidity) {
+        if (formValidity) {
+            $rootScope.loginStatus.waiting = true;
+            userFactory.login($rootScope.loginData);
+        }
+    };
+    $rootScope.loginRS = function (status) {
+        $rootScope.loginStatus.response = true;
+        $rootScope.loginStatus.waiting = false;
+        if(status) {
+            $rootScope.loginStatus.success = true;
+        } else {
+            $rootScope.loginStatus.success = false;
+        }
+        $rootScope.authenticated = userFactory.isAuthenticated();
+    };
+
     $rootScope.timeZones = [
         {id: 1, daylight_time: 0, timezone_value: -12, name: "(GMT-12:00) International Date Line West"},
         {id: 2, daylight_time: 0, timezone_value: -11, name: "(GMT-11:00) Midway Island, Samoa"},
@@ -227,10 +249,13 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                         profile.name = response.data.name;
                         profile.surname = response.data.surname;
                         profile.email = response.data.email;
+                        profile.username = response.data.username;
                         profile.timezone = response.data.timezone;
+                        $rootScope.loginRS(true);
                     },
                     function errorCallback(response) {
                         authenticated = false;
+                        $rootScope.loginRS(false);
                         console.log("ERROR GET: loadProfile");
                     });
         }
@@ -268,9 +293,8 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         factory.authenticate(credentials, function () {
             if (authenticated) {
                 factory.loadProfile();
-                return true;
             } else {
-                return false;
+                $rootScope.loginRS(false);
             }
         });
     };
@@ -294,7 +318,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             user.username = data.username;
             user.password = data.password;
             user.timezone = data.timezone;
-            console.log(angular.toJson(user));
+            //console.log(angular.toJson(user));
             $http({
                 method: 'POST',
                 dataType: 'json',

@@ -99,8 +99,9 @@
                     </form>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a data-toggle="modal" data-target="#signup" href="#/{{curpage}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                        <li><a data-toggle="modal" data-target="#login" href="#/{{curpage}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <li ng-show="!authenticated"><a data-toggle="modal" data-target="#signup" href="#/{{curpage}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        <li ng-show="!authenticated"><a data-toggle="modal" data-target="#login" href="#/{{curpage}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <li ng-show="authenticated"><a href="#/{{curpage}}" ng-click="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
