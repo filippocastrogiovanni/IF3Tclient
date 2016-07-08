@@ -28,6 +28,7 @@
     "angular-resource": "^1.5.5",
     "angular-material": "^1.0.9",
     "font-awesome": "font-awsome#^4.6.3",
-    "angular-cookie": "^4.1.0"
+    "angular-cookie": "^4.1.0",
+    "angular-cookies": "^1.5.7"
   }
 }
