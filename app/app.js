@@ -270,6 +270,10 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         }
     };
 
+    factory.getAuthorization = function() {
+        return $cookies.authorization ? $cookies.authorization : false;
+    };
+
     factory.loadProfile = function (username) {
         if (authenticated) {
             $http.get($rootScope.ipServer + '/users/' + username)
@@ -301,20 +305,26 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 $cookies.user = credentials.username;
             }
             if ($cookies.authorization) {
-                var headers = $cookies.authorization ? {authorization: $cookies.authorization} : {};
-                console.log("header: " + angular.toJson(headers));
-                $http.get($rootScope.ipServer + '/login', {headers: headers}).success(function (data) {
-                    if (data.name) {
-                        authenticated = true;
-                    } else {
-                        authenticated = false;
-                    }
-                    callback && callback();
-                }).error(function () {
-                    authenticated = false;
-                    console.log("ERROR GET: authenticate");
-                    callback && callback();
-                });
+                $http({
+                    method: 'GET',
+                    dataType: 'json',
+                    url: $rootScope.ipServer + '/login',
+                    headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization}
+                })
+                    .then(function successCallback(response) {
+                        console.log(angular.toJson(response.data));
+                            if (response.name) {
+                                authenticated = true;
+                            } else {
+                                authenticated = false;
+                            }
+                            callback && callback();
+                        },
+                        function errorCallback(response) {
+                            authenticated = false;
+                            console.log("ERROR GET: authenticate");
+                            callback && callback();
+                        });
             }
         }
     };
@@ -325,6 +335,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
     });
 
     factory.login = function (credentials) {
+        console.log("login: "+angular.toJson(credentials));
         factory.authenticate(credentials, function () {
             if (authenticated) {
                 factory.loadProfile(credentials.username);
@@ -335,6 +346,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
     };
 
     factory.logout = function () {
+        //TODO controllare
         $http.post('logout', {}).success(function () {
             authenticated = false;
             $cookies.authorization = '';
@@ -357,7 +369,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             $http({
                 method: 'POST',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/users',
+                url: $rootScope.ipServer + '/signin',
                 headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(user)
             })
