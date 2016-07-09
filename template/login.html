@@ -1,37 +1,126 @@
 <div class="modal fade" id="login" role="dialog">
     <div class="modal-dialog">
 
-        <form class="form-horizontal" role="form">
+        <form name="loginForm" class="form-horizontal" role="form" ng-submit="loginRQ(loginForm.$valid)" novalidate>
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Accedi al tuo profilo</h4>
+                    <h2 class="modal-title">SignIn to the service</h2>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="email">E-mail:</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" id="email" placeholder="Inserisci la tua email">
+                    <div ng-show="!loginStatus.waiting && !loginStatus.response">
+                        <div class="form-group  has-feedback"
+                             ng-class="{
+                            'has-error': (loginForm.$submitted || loginForm.username.$dirty) && loginForm.username.$invalid,
+                            'has-success': (loginForm.$submitted || loginForm.username.$dirty) && !loginForm.username.$invalid
+                            }">
+                            <label class="control-label col-sm-3" for="getUsername">Username:</label>
+                            <div class="col-sm-8">
+                                <input
+                                        autofocus
+                                        type="text"
+                                        required
+                                        class="form-control"
+                                        id="getUsername"
+                                        name="username"
+                                        ng-minlength="6"
+                                        ng-maxlength="30"
+                                        ng-pattern="/^[a-zA-Z0-9]*$/"
+                                        ng-model="loginData.username"
+                                        placeholder="Enter your username"/>
+                                <div ng-show="loginForm.$submitted || loginForm.username.$dirty">
+                                    <div ng-show="loginForm.username.$invalid">
+                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        <div ng-if="loginForm.username.$error.required" class="help-block">
+                                            The username is required to login
+                                        </div>
+                                        <div ng-if="loginForm.username.$error.minlength ||
+                                                loginForm.username.$error.maxlength ||
+                                                loginForm.username.$error.pattern"
+                                             class="help-block">
+                                            The username is not valid
+                                        </div>
+                                    </div>
+                                    <div ng-show="!loginForm.username.$invalid">
+                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="password">Password:</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="password" placeholder="Inserisci la tua password">
+                        <div class="form-group  has-feedback"
+                             ng-class="{
+                            'has-error': (loginForm.$submitted || loginForm.password.$dirty) && loginForm.password.$invalid,
+                            'has-success': (loginForm.$submitted || loginForm.password.$dirty) && !loginForm.password.$invalid
+                            }">
+                            <label class="control-label col-sm-3" for="getPassword">Password:</label>
+                            <div class="col-sm-8">
+                                <input
+                                        type="password"
+                                        required
+                                        class="form-control"
+                                        id="getPassword"
+                                        name="password"
+                                        ng-minlength="6"
+                                        ng-maxlength="30"
+                                        ng-pattern="/^[a-zA-Z0-9,!\?.£\$%&;:\-=]*$/"
+                                        ng-model="loginData.password"
+                                        placeholder="Enter your password"/>
+                                <div ng-show="loginForm.$submitted || loginForm.password.$dirty">
+                                    <div ng-show="loginForm.password.$invalid">
+                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        <div ng-if="loginForm.password.$error.required" class="help-block">
+                                            The password is required
+                                        </div>
+                                        <div ng-if="loginForm.password.$error.minlength ||
+                                                loginForm.username.$error.maxlength ||
+                                                loginForm.password.$error.pattern"
+                                             class="help-block">
+                                            The password is not valid
+                                        </div>
+                                    </div>
+                                    <div ng-show="!loginForm.password.$invalid">
+                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <div class="checkbox">
-                                <label><input type="checkbox"> Ricordami!</label>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label><input type="checkbox"> Ricordami!</label>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div ng-show="loginStatus.waiting && !loginStatus.response" align="center">
+                        <img src="images/loading.gif" width="150" />
+                        <br />
+                        <h3>Waiting for server response</h3>
+                    </div>
+                    <div ng-show="loginStatus.response" align="center">
+                        <h3 ng-show="loginStatus.success">Welcome {{loginData.username}}</h3>
+                        <h3 ng-show="!loginStatus.success">Connection failed... try later</h3>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Accedi</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                    <button ng-show="!loginStatus.response" type="submit" class="form-control"
+                            ng-class="{
+                                'btn-primary' : !loginStatus.waiting,
+                                'btn-warning' : loginStatus.waiting}">
+                        <span ng-show="loginStatus.waiting"
+                              class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                        <span ng-show="loginStatus.waiting"> Loading...</span>
+                        <span ng-show="!loginStatus.waiting">SignIn</span>
+                    </button>
+                    <button ng-click="loginStatus.waiting=false;loginStatus.response=false;loginData={}" ng-show="loginStatus.response" class="form-control" data-dismiss="modal"
+                            ng-class="{
+                                'btn-primary' : loginStatus.success,
+                                'btn-danger' : !loginStatus.success}">
+                        <span ng-show="loginStatus.success" class="glyphicon glyphicon-ok"></span>
+                        <span ng-show="!loginStatus.success" class="glyphicon glyphicon-remove"></span>
+                        <span> Close</span>
+                    </button>
                 </div>
             </div>
         </form>

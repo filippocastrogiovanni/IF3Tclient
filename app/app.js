@@ -72,7 +72,7 @@ if3tApp.directive("compareTo", function () {
 
 //http://jsfiddle.net/2CsfZ/47/
 if3tApp.run(function ($rootScope, userFactory) {
-    $rootScope.ipServer = "http://192.168.43.234:8181";
+    $rootScope.ipServer = "http://localhost:8181";
 
     $rootScope.authenticated = userFactory.isAuthenticated();
     $rootScope.signupStatus = {};
@@ -89,7 +89,7 @@ if3tApp.run(function ($rootScope, userFactory) {
     $rootScope.signupRS = function (status) {
         $rootScope.signupStatus.response = true;
         $rootScope.signupStatus.waiting = false;
-        if(status) {
+        if (status) {
             $rootScope.signupStatus.success = true;
         } else {
             $rootScope.signupStatus.success = false;
@@ -110,7 +110,7 @@ if3tApp.run(function ($rootScope, userFactory) {
     $rootScope.loginRS = function (status) {
         $rootScope.loginStatus.response = true;
         $rootScope.loginStatus.waiting = false;
-        if(status) {
+        if (status) {
             $rootScope.loginStatus.success = true;
         } else {
             $rootScope.loginStatus.success = false;
@@ -148,9 +148,24 @@ if3tApp.run(function ($rootScope, userFactory) {
         {id: 27, daylight_time: 0, timezone_value: -1, name: "(GMT-01:00) Cape Verde Is."},
         {id: 28, daylight_time: 1, timezone_value: -1, name: "(GMT-01:00) Azores"},
         {id: 29, daylight_time: 0, timezone_value: 0, name: "(GMT+00:00) Casablanca, Monrovia, Reykjavik"},
-        {id: 30, daylight_time: 1, timezone_value: 0, name: "(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"},
-        {id: 31, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"},
-        {id: 32, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague"},
+        {
+            id: 30,
+            daylight_time: 1,
+            timezone_value: 0,
+            name: "(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"
+        },
+        {
+            id: 31,
+            daylight_time: 1,
+            timezone_value: 1,
+            name: "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
+        },
+        {
+            id: 32,
+            daylight_time: 1,
+            timezone_value: 1,
+            name: "(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague"
+        },
         {id: 33, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Brussels, Copenhagen, Madrid, Paris"},
         {id: 34, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb"},
         {id: 35, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) West Central Africa"},
@@ -159,7 +174,12 @@ if3tApp.run(function ($rootScope, userFactory) {
         {id: 38, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Beirut"},
         {id: 39, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Cairo"},
         {id: 40, daylight_time: 0, timezone_value: 2, name: "(GMT+02:00) Harare, Pretoria"},
-        {id: 41, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius"},
+        {
+            id: 41,
+            daylight_time: 1,
+            timezone_value: 2,
+            name: "(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius"
+        },
         {id: 42, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Jerusalem"},
         {id: 43, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Minsk"},
         {id: 44, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Windhoek"},
@@ -224,7 +244,12 @@ if3tApp.run(function ($rootScope, userFactory) {
     for (i in $rootScope.timeZones) {
         opt = $rootScope.timeZones[i];
         if (opt.timezone_value == valZone) {
-            $rootScope.signupData.timezone = {id: opt.id, daylight_time: opt.daylight_time, timezone_value: opt.timezone_value,  name: opt.name};
+            $rootScope.signupData.timezone = {
+                id: opt.id,
+                daylight_time: opt.daylight_time,
+                timezone_value: opt.timezone_value,
+                name: opt.name
+            };
             break;
         }
     }
@@ -245,9 +270,9 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         }
     };
 
-    factory.loadProfile = function () {
+    factory.loadProfile = function (username) {
         if (authenticated) {
-            $http.get($rootScope.ipServer+'/users/' + profile.username)
+            $http.get($rootScope.ipServer + '/users/' + username)
                 .then(function successCallback(response) {
                         profile.id = response.data.id;
                         profile.name = response.data.name;
@@ -275,28 +300,34 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 $cookies.authorization = "Basic " + btoa(credentials.username + ":" + credentials.password);
                 $cookies.user = credentials.username;
             }
-            var headers = $cookies.authorization ? {authorization: $cookies.authorization} : {};
-
-            $http.get($rootScope.ipServer+'/user', {headers: headers}).success(function (data) {
-                if (data.name) {
-                    authenticated = true;
-                } else {
+            if ($cookies.authorization) {
+                var headers = $cookies.authorization ? {authorization: $cookies.authorization} : {};
+                console.log("header: " + angular.toJson(headers));
+                $http.get($rootScope.ipServer + '/login', {headers: headers}).success(function (data) {
+                    if (data.name) {
+                        authenticated = true;
+                    } else {
+                        authenticated = false;
+                    }
+                    callback && callback();
+                }).error(function () {
                     authenticated = false;
-                }
-                callback && callback();
-            }).error(function () {
-                authenticated = false;
-                console.log("ERROR GET: authenticate");
-                callback && callback();
-            });
+                    console.log("ERROR GET: authenticate");
+                    callback && callback();
+                });
+            }
         }
     };
+    factory.authenticate(false, function () {
+        if (authenticated) {
+            factory.loadProfile($cookies.user);
+        }
+    });
 
     factory.login = function (credentials) {
-        profile.username = credentials.username;
         factory.authenticate(credentials, function () {
             if (authenticated) {
-                factory.loadProfile();
+                factory.loadProfile(credentials.username);
             } else {
                 $rootScope.loginRS(false);
             }
@@ -326,12 +357,14 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             $http({
                 method: 'POST',
                 dataType: 'json',
-                url: $rootScope.ipServer+'/users',
+                url: $rootScope.ipServer + '/users',
                 headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(user)
             })
                 .then(function successCallback(response) {
-                        factory.login({username: user.username, password: user.password});
+                        $rootScope.loginData.username = user.username;
+                        $rootScope.loginData.password = user.password;
+                        factory.login($rootScope.loginData);
                         $rootScope.signupRS(true);
                     },
                     function errorCallback(response) {
@@ -347,7 +380,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: $rootScope.ipServer+'/users',
+            url: $rootScope.ipServer + '/users',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
             data: angular.toJson(data)
         })
@@ -369,7 +402,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: $rootScope.ipServer+'/userpassword',
+            url: $rootScope.ipServer + '/userpassword',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization},
             data: angular.toJson(data)
         })
@@ -382,7 +415,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 });
     };
 
-    factory.authenticate(false, factory.loadProfile());
+    //factory.authenticate(false, factory.loadProfile());
 
     return factory;
 });
