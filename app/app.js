@@ -271,27 +271,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
     };
 
     factory.getAuthorization = function() {
-        return $cookies.authorization ? $cookies.authorization : false;
-    };
-
-    factory.loadProfile = function (username) {
-        if (authenticated) {
-            $http.get($rootScope.ipServer + '/users/' + username)
-                .then(function successCallback(response) {
-                        profile.id = response.data.id;
-                        profile.name = response.data.name;
-                        profile.surname = response.data.surname;
-                        profile.email = response.data.email;
-                        profile.username = response.data.username;
-                        profile.timezone = response.data.timezone;
-                        $rootScope.loginRS(true);
-                    },
-                    function errorCallback(response) {
-                        authenticated = false;
-                        $rootScope.loginRS(false);
-                        console.log("ERROR GET: loadProfile");
-                    });
-        }
+        return authenticated ? $cookies.get("authorization") : false;
     };
 
     factory.isAuthenticated = function () {
@@ -301,44 +281,46 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
     factory.authenticate = function (credentials, callback) {
         if (!authenticated) {
             if (credentials) {
-                $cookies.authorization = "Basic " + btoa(credentials.username + ":" + credentials.password);
-                $cookies.user = credentials.username;
+                $cookies.put('authorization', "Basic " + btoa(credentials.username + ":" + credentials.password));
             }
-            if ($cookies.authorization) {
+            if ($cookies.get("authorization")) {
+                console.log("cookie: "+angular.toJson($cookies.get("authorization")));
                 $http({
                     method: 'GET',
                     dataType: 'json',
                     url: $rootScope.ipServer + '/login',
-                    headers: {'Content-Type': 'application/json', 'authorization': $cookies.authorization}
+                    headers: {'Content-Type': 'application/json', 'authorization': $cookies.get("authorization")}
                 })
                     .then(function successCallback(response) {
-                        console.log(angular.toJson(response.data));
-                            if (response.name) {
+                            if (response.data.principal.user) {
                                 authenticated = true;
+                                profile.id = response.data.principal.user.id;
+                                profile.name = response.data.principal.user.name;
+                                profile.surname = response.data.principal.user.surname;
+                                profile.email = response.data.principal.user.email;
+                                profile.username = response.data.principal.user.username;
+                                profile.timezone = response.data.principal.user.timezone;
                             } else {
+                                profile = {};
                                 authenticated = false;
                             }
                             callback && callback();
                         },
                         function errorCallback(response) {
                             authenticated = false;
+                            profile = {};
                             console.log("ERROR GET: authenticate");
                             callback && callback();
                         });
             }
         }
     };
-    factory.authenticate(false, function () {
-        if (authenticated) {
-            factory.loadProfile($cookies.user);
-        }
-    });
+    factory.authenticate();
 
     factory.login = function (credentials) {
-        console.log("login: "+angular.toJson(credentials));
         factory.authenticate(credentials, function () {
             if (authenticated) {
-                factory.loadProfile(credentials.username);
+                $rootScope.loginRS(true);
             } else {
                 $rootScope.loginRS(false);
             }
@@ -365,7 +347,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             user.username = data.username;
             user.password = data.password;
             user.timezone = data.timezone;
-            //console.log(angular.toJson(user));
+
             $http({
                 method: 'POST',
                 dataType: 'json',
@@ -426,8 +408,6 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     return false;
                 });
     };
-
-    //factory.authenticate(false, factory.loadProfile());
 
     return factory;
 });
