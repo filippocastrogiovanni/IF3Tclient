@@ -40,12 +40,28 @@ if3tApp.controller('MyRecipesController', ['$scope', '$rootScope', '$routeParams
     }
 ]);
 
-if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$location',
-    function ($scope, $rootscope, $routeParams, $location)
+if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', 'recipesFactory',
+    function ($scope, $rootscope, $routeParams, $location, recipesFactory)
     {
-        //rootscope.curpage = "editrecipe";
         $scope.idRecipe = $routeParams.id_recipe;
-        $scope.urlTriggerImg = "images/google_calendar_icon.png";
-        $scope.urlActionImg = "images/google_mail_icon.png";
+        var recipe = recipesFactory.getRecipe(1);
+        console.log(recipe);
+        console.log($scope.recProva);
+
+        $scope.savedRecipe =
+        {
+            urlTriggerImg: "images/google_calendar_icon.png",
+            urlActionImg: "images/google_mail_icon.png"
+        };
+
+        $scope.reset = function()
+        {
+            $scope.updatedRecipe = angular.copy($scope.savedRecipe);
+        };
+
+        $scope.submit = function()
+        {
+            alert("ccwcee");
+        };
     }
 ]);

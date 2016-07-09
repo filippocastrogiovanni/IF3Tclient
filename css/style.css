@@ -136,12 +136,25 @@ img.icon-if-then
     margin-bottom: 1em;
 }
 
+img.icon-trig-act
+{
+    width: 4%;
+    height: 4%;
+}
+
 div.descr
 {
     border: 1px solid darkgrey;
     padding: 0.5em;
-    text-align: center;
+    text-align: center;-
     margin-top: 0.5em;
+}
+
+div.descr-unique
+{
+    width: 68%;
+    margin-left: 1%;
+    padding-left: 1.5%;
 }
 
 div.descr-right
@@ -162,6 +175,21 @@ md-toolbar.sub-title
     margin-left: 20%;
     padding-left: 1.5%;
     background: #231d2b;
+}
+
+button.mybutton
+{
+    width: 68%;
+    margin-left: 1%;
+    background: dodgerblue;
+    border: 1px solid mediumblue;
+    font-weight: bold;
+    font-size: 150%;
+}
+
+p.sub-descr
+{
+    color: darkgrey;
 }
 
 .step_1_channels_search {

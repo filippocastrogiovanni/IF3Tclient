@@ -435,3 +435,79 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
 
     return factory;
 });
+
+if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope)
+{
+    var factory = {}
+
+    function Channel(id, name, image_url)
+    {
+        this.id = id;
+        this.name = name;
+        this.image_url = image_url;
+    }
+
+    function Trigger(id, channel, header, paragraph)
+    {
+        this.id = id;
+        this.channel = channel;
+        this.header = header;
+        this.paragraph = paragraph;
+    }
+
+    function Action(id, channel, header, paragraph)
+    {
+        this.id = id;
+        this.channel = channel;
+        this.header = header;
+        this.paragraph = paragraph;
+    }
+
+    function Recipe(id, groupId, description, isPublic, isEnabled, trigger, actions)
+    {
+        this.id = id;
+        this.groupId = groupId;
+        this.description = description;
+        this.isPublic = isPublic;
+        this.isEnabled = isEnabled;
+        this.trigger = trigger;
+        this.actions = actions;
+    }
+
+    factory.getRecipe = function(id)
+    {
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8181/recipe/' + id
+        }).then
+        (
+            function successCallback(resp)
+            {
+                var actArray = [];
+                var r = resp.data[0];
+                var tri = r.trigger;
+                var chaTri = new Channel(tri.channel.channelId, tri.channel.name, tri.channel.image_url);
+                var trig = new Trigger(tri.id, chaTri, tri.header, tri.paragraph);
+
+                for (var i = 0; i < resp.data.length; i++)
+                {
+                    var act = resp.data[i].action;
+                    var chaAct = new Channel(act.channel.channelId, act.channel.name, act.channel.image_url);
+
+                    actArray.push(new Action(act.id, chaAct, act.header, act.paragraph));
+                }
+
+                var rec = new Recipe(r.id, r.groupId, r.description, r.isPublic, r.isEnabled, trig, actArray);
+                console.log(rec);
+                $rootScope.recProva = rec;
+                return rec;
+            },
+            function errorCallback(resp)
+            {
+                alert("You DIDN'T get the recipe " + id);
+            }
+        );
+    };
+
+    return factory;
+});
