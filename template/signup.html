@@ -1,6 +1,5 @@
 <div class="modal fade" id="signup" role="dialog">
     <div class="modal-dialog">
-
         <form name="signupForm" class="form-horizontal" role="form" ng-submit="signupRQ(signupForm.$valid)" novalidate>
             <!-- Modal content-->
             <div class="modal-content">
@@ -183,7 +182,7 @@
                                     <div ng-if="signupForm.password.$error.required" class="help-block">
                                         The password is required
                                     </div>
-                                    <div ng-if="signupForm.password.$error.minlength || signupForm.username.$error.maxlength"
+                                    <div ng-if="signupForm.password.$error.minlength || signupForm.password.$error.maxlength"
                                          class="help-block">
                                         The password is not valid: must be 6-30 characters long
                                     </div>
@@ -228,7 +227,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-3" for="getTimeZone">Time zone</label>
+                        <label class="control-label col-sm-3" for="getTimeZone">Time zone:</label>
                         <div class="col-sm-8">
                             <select
                                     class="form-control"

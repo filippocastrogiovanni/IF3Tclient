@@ -422,7 +422,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 });
     };
 
-    factory.changePassword = function (data) {
+    factory.changePassword = function (data, callback) {
         $http({
             method: 'PUT',
             dataType: 'json',
@@ -431,11 +431,11 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             data: angular.toJson(data)
         })
             .then(function successCallback(response) {
-                    return true;
+                    callback && callback(true);
                 },
                 function errorCallback(response) {
+                    callback && callback(false);
                     console.log("ERROR PUT: changePassword");
-                    return false;
                 });
     };
 
@@ -477,7 +477,7 @@ if3tApp.factory('messageFactory', function()
     factory.showWarningMsg = function (message) {
         $("#alert-warning").show()
             .html(message)
-            .fadeTo(800, 500).fadeOut(500, function(){
+            .fadeTo(1500, 500).fadeOut(500, function(){
                 $("#alert-warning").hide();
             });
     };
@@ -493,7 +493,7 @@ if3tApp.factory('messageFactory', function()
     factory.showInfoMsg = function (message) {
         $("#alert-info").show()
             .html(message)
-            .fadeTo(800, 500).fadeOut(500, function(){
+            .fadeTo(1000, 500).fadeOut(500, function(){
                 $("#alert-info").hide();
             });
     };
@@ -501,7 +501,7 @@ if3tApp.factory('messageFactory', function()
     factory.showDangerMsg = function (message) {
         $("#alert-danger").show()
             .html(message)
-            .fadeTo(800, 500).fadeOut(500, function(){
+            .fadeTo(2000, 500).fadeOut(500, function(){
                 $("#alert-danger").hide();
             });
     };

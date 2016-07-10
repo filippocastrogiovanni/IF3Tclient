@@ -15,24 +15,30 @@ if3tApp.controller('MyInfoController', ['messageFactory','userFactory', '$scope'
         $scope.callback = function(response){
             messageFactory.hideLoading();
             if(response)
-                messageFactory.showSuccessMsg("Information successfully modified!");
+                messageFactory.showSuccessMsg("Profile successfully updated!");
             else
                 messageFactory.showDangerMsg("There was an error with the server, try again!");
         };
         
-        $scope.saveUserData = function(){
-            var currentUser = userFactory.getProfile();
-            if(currentUser != $scope.user)
-                return;
+        $scope.saveUserData = function(formValidity){
+            if(formValidity) {
+                var currentUser = userFactory.getProfile();
+                if(currentUser != $scope.user)
+                    return;
 
-            messageFactory.showLoading();
-            userFactory.editProfile($scope.user, $scope.callback);
+                messageFactory.showLoading();
+                userFactory.editProfile($scope.user, $scope.callback);
+            }
         };
 
-        $scope.changePassword = function(){
-            //userFactory.changePassword();
-            console.log($scope.passwordChange);
-            $scope.passwordChange = {currPass: "", newPass:"", confirmNewPass:""};
+        $scope.changePassword = function(form){
+            if(form.$valid) {
+                messageFactory.showLoading();
+                userFactory.changePassword($scope.passwordChange, $scope.callback);
+                $scope.passwordChange = {};
+                form.$setPristine();
+            }
+
         }
     }
 ]);

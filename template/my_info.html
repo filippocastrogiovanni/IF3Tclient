@@ -1,75 +1,231 @@
-<div class="container"  ng-controller="MyInfoController">
-    <div class="container">
-        <form class="form-horizontal" role="form">
-            <!-- Modal content-->
-            <div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label col-sm-3" for="getname">Name:</label>
-                        <div class="col-sm-8">
-                            <input ng-model="user.name" type="text" class="form-control" id="getname" placeholder="Your first name">
+<div class="container" ng-controller="MyInfoController">
+
+    <fieldset class="form-group">
+        <legend>Update your profile</legend>
+        <form name="profileForm" class="form-horizontal" role="form" ng-submit="saveUserData(profileForm.$valid)"
+              novalidate>
+            <div class="form-group  has-feedback"
+                 ng-class="{
+                            'has-error': (profileForm.$submitted || profileForm.name.$dirty) && profileForm.name.$invalid,
+                            'has-success': (profileForm.$submitted || profileForm.name.$dirty) && !profileForm.name.$invalid
+                            }">
+                <label class="control-label col-sm-3" for="getName">First name:</label>
+                <div class="col-sm-8">
+                    <input
+                            autofocus
+                            type="text"
+                            required
+                            class="form-control"
+                            id="getName"
+                            name="name"
+                            ng-minlength="3"
+                            ng-maxlength="30"
+                            ng-pattern="/^[a-zA-Z \-\']*$/"
+                            ng-model="user.name"
+                            placeholder="Your first name"/>
+                    <div ng-show="profileForm.$submitted || profileForm.name.$dirty">
+                        <div ng-show="profileForm.name.$invalid">
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div ng-if="profileForm.name.$error.required" class="help-block">
+                                Your name is required
+                            </div>
+                            <div ng-if="profileForm.name.$error.minlength || profileForm.name.$error.maxlength"
+                                 class="help-block">
+                                The name is not valid: must be 3-30 characters long
+                            </div>
+                            <div ng-if="profileForm.name.$error.pattern" class="help-block">
+                                The name is not valid: no special characters are allowed
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3" for="getsurname">Surname:</label>
-                        <div class="col-sm-8">
-                            <input ng-model="user.surname" type="text" class="form-control" id="getsurname" placeholder="Your Surname">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Username:</label>
-                        <div class="col-sm-8">
-                            <span>{{ user.username }}</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">E-mail:</label>
-                        <div class="col-sm-8">
-                            <span>{{ user.email }}</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Time zone</label>
-                        <div class="col-sm-8">
-                            <select class="form-control" name="mySelect" id="gettimezone"
-                                    ng-options="option.description for option in timeZones track by option.id"
-                                    ng-model="user.timezone">
-                            </select>
+                        <div ng-show="!profileForm.name.$invalid">
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" ng-click="saveUserData()">Save Info</button>
+            </div>
+            <div class="form-group  has-feedback"
+                 ng-class="{
+                            'has-error': (profileForm.$submitted || profileForm.surname.$dirty) && profileForm.surname.$invalid,
+                            'has-success': (profileForm.$submitted || profileForm.surname.$dirty) && !profileForm.surname.$invalid
+                            }">
+                <label class="control-label col-sm-3" for="getSurname">Last name:</label>
+                <div class="col-sm-8">
+                    <input
+                            type="text"
+                            required
+                            class="form-control"
+                            id="getSurname"
+                            name="surname"
+                            ng-minlength="3"
+                            ng-maxlength="30"
+                            ng-pattern="/^[a-zA-Z \-\']*$/"
+                            ng-model="user.surname"
+                            placeholder="Your last name"/>
+                    <div ng-show="profileForm.$submitted || profileForm.surname.$dirty">
+                        <div ng-show="profileForm.surname.$invalid">
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div ng-if="profileForm.surname.$error.required" class="help-block">
+                                Your last name is required
+                            </div>
+                            <div ng-if="profileForm.surname.$error.minlength || profileForm.surname.$error.maxlength"
+                                 class="help-block">
+                                The last name is not valid: must be 3-30 characters long
+                            </div>
+                            <div ng-if="profileForm.surname.$error.pattern" class="help-block">
+                                The last name is not valid: no special characters are allowed
+                            </div>
+                        </div>
+                        <div ng-show="!profileForm.surname.$invalid">
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">E-mail:</label>
+                <div class="col-sm-8">
+                    <span>{{user.email}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">Username:</label>
+                <div class="col-sm-8">
+                    <span>{{user.username}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3" for="getTimeZone">Time zone:</label>
+                <div class="col-sm-8">
+                    <select
+                            class="form-control"
+                            id="getTimeZone"
+                            ng-options="option.name for option in timeZones track by option.id"
+                            ng-model="user.timezone"></select>
+                </div>
+            </div>
+            <div class="col-sm-offset-8 col-sm-3">
+                <button type="submit" class="form-control btn-primary">Save Info</button>
             </div>
         </form>
-    </div>
-    <form class="form-horizontal" role="form">
-        <!-- Modal content-->
-        <div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="control-label col-sm-3" for="getoldpassword">Change password:</label>
-                    <div class="col-sm-8">
-                        <input ng-model="passwordChange.currPass" type="password" class="form-control" id="getoldpassword" placeholder="Current password">
+    </fieldset>
+
+    <br />
+
+    <fieldset class="form-group">
+        <legend>Change your password</legend>
+        <form name="passwordForm" class="form-horizontal" role="form" ng-submit="changePassword(passwordForm)"
+              novalidate>
+            <div class="form-group  has-feedback"
+                 ng-class="{
+                            'has-error': passwordForm.curPass.$dirty && passwordForm.curPass.$invalid,
+                            'has-success': passwordForm.curPass.$dirty && !passwordForm.curPass.$invalid
+                            }">
+                <label class="control-label col-sm-3" for="getCurPass">Current password:</label>
+                <div class="col-sm-8">
+                    <input
+                            type="password"
+                            required
+                            class="form-control"
+                            id="getCurPass"
+                            name="curPass"
+                            ng-minlength="6"
+                            ng-maxlength="30"
+                            ng-pattern="/^[a-zA-Z0-9,!\?.£\$%&;:\-=]*$/"
+                            ng-model="passwordChange.curPass"
+                            placeholder="Enter your current password"/>
+                    <div ng-show="passwordForm.curPass.$dirty">
+                        <div ng-show="passwordForm.curPass.$invalid">
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div ng-if="passwordForm.curPass.$error.required" class="help-block">
+                                The current password is required
+                            </div>
+                            <div ng-if="passwordForm.curPass.$error.minlength || passwordForm.curPass.$error.maxlength"
+                                 class="help-block">
+                                The password is not valid: must be 6-30 characters long
+                            </div>
+                            <div ng-if="passwordForm.curPass.$error.pattern" class="help-block">
+                                The password is not valid: only letters, digits and characters ,!?.£$=%&;:-
+                                are allowed
+                            </div>
+                        </div>
+                        <div ng-show="!passwordForm.curPass.$invalid">
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-3" for="getpassword"></label>
-                    <div class="col-sm-8">
-                        <input ng-model="passwordChange.newPass" type="password" class="form-control" id="getpassword" placeholder="New password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-3" for="getpassword2"></label>
-                    <div class="col-sm-8">
-                        <input ng-model="passwordChange.confirmNewPass" type="password" class="form-control" id="getpassword2" placeholder="Confirm new password">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" ng-click="changePassword()">Change Password</button>
                 </div>
             </div>
-        </div>
-    </form>
+            <div class="form-group  has-feedback"
+                 ng-class="{
+                            'has-error': passwordForm.newPass.$dirty && passwordForm.newPass.$invalid,
+                            'has-success': passwordForm.newPass.$dirty && !passwordForm.newPass.$invalid
+                            }">
+                <label class="control-label col-sm-3" for="getNewPass">Password:</label>
+                <div class="col-sm-8">
+                    <input
+                            type="password"
+                            required
+                            class="form-control"
+                            id="getNewPass"
+                            name="newPass"
+                            ng-minlength="6"
+                            ng-maxlength="30"
+                            ng-pattern="/^[a-zA-Z0-9,!\?.£\$%&;:\-=]*$/"
+                            ng-model="passwordChange.newPass"
+                            placeholder="Enter the new password"/>
+                    <div ng-show="passwordForm.newPass.$dirty">
+                        <div ng-show="passwordForm.newPass.$invalid">
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div ng-if="passwordForm.newPass.$error.required" class="help-block">
+                                The password is required
+                            </div>
+                            <div ng-if="passwordForm.newPass.$error.minlength || passwordForm.newPass.$error.maxlength"
+                                 class="help-block">
+                                The password is not valid: must be 6-30 characters long
+                            </div>
+                            <div ng-if="passwordForm.newPass.$error.pattern" class="help-block">
+                                The password is not valid: only letters, digits and characters ,!?.£$=%&;:-
+                                are allowed
+                            </div>
+                        </div>
+                        <div ng-show="!passwordForm.newPass.$invalid">
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group  has-feedback"
+                 ng-class="{
+                            'has-error': passwordForm.repPass.$dirty && passwordForm.repPass.$invalid,
+                            'has-success': passwordForm.repPass.$dirty && !passwordForm.repPass.$invalid
+                            }">
+                <label class="control-label col-sm-3" for="getRepPass"></label>
+                <div class="col-sm-8">
+                    <input
+                            type="password"
+                            required
+                            class="form-control"
+                            id="getRepPass"
+                            name="repPass"
+                            ng-model="passwordChange.repPass"
+                            compare-to="passwordChange.newPass"
+                            placeholder="Confirm the new password">
+                    <div ng-show="passwordForm.repPass.$dirty">
+                        <div ng-show="passwordForm.repPass.$invalid">
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="help-block">
+                                The password doesn't match
+                            </div>
+                        </div>
+                        <div ng-show="!passwordForm.repPass.$invalid">
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-offset-8 col-sm-3">
+                <button type="submit" class="form-control btn-primary">Change Password</button>
+            </div>
+        </form>
+    </fieldset>
+    <br /><br /><br />
 </div>
