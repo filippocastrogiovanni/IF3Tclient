@@ -71,9 +71,9 @@ if3tApp.directive("compareTo", function () {
 });
 
 //http://jsfiddle.net/2CsfZ/47/
-if3tApp.run(function ($rootScope, userFactory) {
+if3tApp.run(function ($rootScope, userFactory, $window) {
     $rootScope.ipServer = "http://localhost:8181";
-
+    //$('#msgAlert').hide();
     $rootScope.authenticated = userFactory.isAuthenticated();
     $rootScope.signupStatus = {};
     $rootScope.signupStatus.response = false;
@@ -97,26 +97,22 @@ if3tApp.run(function ($rootScope, userFactory) {
         }
     };
 
-    $rootScope.loginStatus = {};
-    $rootScope.loginStatus.waiting = false;
-    $rootScope.loginStatus.response = false;
-    $rootScope.loginStatus.success = false;
     $rootScope.loginRQ = function (formValidity) {
         if (formValidity) {
             $('#login').modal('hide');
+            $('#loading').modal('show');
             //waitingDialog.show('Custom message', {dialogSize: 'sm', progressType: 'warning'});
-            $rootScope.loginStatus.waiting = true;
             userFactory.login($rootScope.loginData);
         }
     };
     $rootScope.loginRS = function (status) {
-        $rootScope.loginStatus.response = true;
-        $rootScope.loginStatus.waiting = false;
         if (status) {
-            $rootScope.loginStatus.success = true;
+            //TODO msg  success
+            $('#msgAlert').show();
         } else {
-            $rootScope.loginStatus.success = false;
+            //TODO msg error
         }
+        $('#loading').modal('hide');
         $rootScope.authenticated = userFactory.isAuthenticated();
     };
     $rootScope.logoutRQ = function () {
@@ -124,6 +120,7 @@ if3tApp.run(function ($rootScope, userFactory) {
     };
     $rootScope.logoutRS = function (status) {
         $rootScope.authenticated = userFactory.isAuthenticated();
+        $window.location.href = "#/home";
     };
 
     $rootScope.timeZones = [
