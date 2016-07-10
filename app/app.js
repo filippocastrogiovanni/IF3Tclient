@@ -100,7 +100,7 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
     $rootScope.loginRQ = function (formValidity) {
         if (formValidity) {
             $('#login').modal('hide');
-            messageFactory.showLoding();
+            messageFactory.showLoading();
             userFactory.login($rootScope.loginData);
         }
     };
@@ -110,7 +110,7 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
         } else {
             messageFactory.showDangerMsg("Login failed");
         }
-        messageFactory.hideLoding();
+        messageFactory.hideLoading();
         $rootScope.authenticated = userFactory.isAuthenticated();
     };
     $rootScope.logoutRQ = function () {
@@ -453,11 +453,11 @@ if3tApp.factory('messageFactory', function()
 {
     var factory = {};
 
-    factory.showLoding = function () {
+    factory.showLoading = function () {
         $('#loading').modal('show');
     };
 
-    factory.hideLoding = function () {
+    factory.hideLoading = function () {
         $('#loading').modal('hide');
     };
 
@@ -473,6 +473,7 @@ if3tApp.factory('messageFactory', function()
         $("#alert-success").fadeTo(2000, 500).fadeOut(500, function(){
             $("#alert-success").alert('close');
         });
+        $('#alert-success').hide();
     };
 
     factory.showInfoMsg = function (message) {
