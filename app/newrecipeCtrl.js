@@ -244,10 +244,10 @@ function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $l
 
     //preparing data to POST (List<Recipe>) phase1
     var recipe_to_add = {};
-    recipe_to_add.data_action = data_action;
+    //recipe_to_add.action = data_action;
 
     $scope.recipes_list = [];
-    $scope.recipes_list.push(recipe_to_add);
+    //$scope.recipes_list.push(recipe_to_add);
     $rootScope.recipes_list = $scope.recipes_list;
 
     $scope.chosen_trigger_channel = $rootScope.chosen_trigger_channel;
@@ -259,22 +259,42 @@ function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $l
 }
 
 function submit_recipe($rootScope, $scope, $window, $http, recipe_description, userFactory) {
-    $scope.recipes_list = $rootScope.recipes_list;
+    $scope.recipes_list = [];
     console.log("Submitting recipe");
     //preparing data to POST (List<Recipe>) phase2
+    /*
     for (var i = 0; i < $scope.recipes_list.length; i++) {
         $scope.recipes_list[i].description = recipe_description;
         $scope.recipes_list[i].trigger = $rootScope.chosen_trigger_data;
         $scope.recipes_list[i].action = $rootScope.chosen_action_data;
         $scope.recipes_list[i].trigger_ingredients = $rootScope.chosen_trigger_parameters;
         $scope.recipes_list[i].action_ingredients = $rootScope.chosen_action_parameters;
+        for(var j=0; j<$scope.recipes_list[i].trigger_ingredients.length; j++) {
+            delete $scope.recipes_list[i].trigger_ingredients[j].unbinded_name;
+        }
+        for(var j=0; j<$scope.recipes_list[i].action_ingredients.length; j++) {
+            delete $scope.recipes_list[i].action_ingredients[j].unbinded_name;
+        }
         $scope.recipes_list[i].is_public = false;
         $scope.recipes_list[i].is_enabled = false;
     }
+    */
+    var element_recipe = {};
+    element_recipe.description = recipe_description;
+    element_recipe.trigger = $rootScope.chosen_trigger_data;
+    element_recipe.action = $rootScope.chosen_action_data;
+    element_recipe.trigger_ingredients = $rootScope.chosen_trigger_parameters;
+    element_recipe.action_ingredients = $rootScope.chosen_action_parameters;
+    delete element_recipe.trigger_ingredients.unbinded_name;
+    delete element_recipe.action_ingredients.unbinded_name;
+    element_recipe.is_public = false;
+    element_recipe.is_enabled = false;
+    $scope.recipes_list.push(element_recipe);
     if(userFactory.isAuthenticated()) {
         $http({
             method: 'POST',
-            url: $rootScope.ipServer+'/add_recipe/',
+            url: $rootScope.ipServer+'/add_recipe',
+            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()},
             data: $scope.recipes_list
         }).then(function successCallback(response) {
             alert("You have create a recipe successfully!");
