@@ -86,9 +86,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
+                            <div class="col-sm-offset-3 col-sm-8">
                                 <div class="checkbox">
-                                    <label><input type="checkbox"> Ricordami!</label>
+                                    <label><input ng-model="loginData.remember" type="checkbox"> Remember me!</label>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                         <span ng-show="loginStatus.waiting"> Loading...</span>
                         <span ng-show="!loginStatus.waiting">SignIn</span>
                     </button>
-                    <button ng-click="loginStatus.waiting=false;loginStatus.response=false;loginData={}" ng-show="loginStatus.response" class="form-control" data-dismiss="modal"
+                    <button ng-click="loginStatus.waiting=false;loginStatus.response=false" ng-show="loginStatus.response" class="form-control" data-dismiss="modal"
                             ng-class="{
                                 'btn-primary' : loginStatus.success,
                                 'btn-danger' : !loginStatus.success}">

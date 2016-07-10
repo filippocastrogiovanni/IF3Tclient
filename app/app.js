@@ -100,7 +100,6 @@ if3tApp.run(function ($rootScope, userFactory) {
     $rootScope.loginStatus.waiting = false;
     $rootScope.loginStatus.response = false;
     $rootScope.loginStatus.success = false;
-    $rootScope.loginData = {};
     $rootScope.loginRQ = function (formValidity) {
         if (formValidity) {
             $rootScope.loginStatus.waiting = true;
@@ -293,40 +292,53 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         if (!authenticated) {
             if (credentials) {
                 $cookies.put('authorization', "Basic " + btoa(credentials.username + ":" + credentials.password));
+                if(credentials.remember) {
+                    $cookies.put("remember", angular.toJson(credentials));
+                } else {
+                    $cookies.remove("remember");
+                }
+            } else {
+                if($cookies.get('remember')){
+                    $rootScope.loginData = angular.fromJson($cookies.get('remember'));
+                } else {
+                    $rootScope.loginData = {};
+                }
             }
 
-            $http({
-                method: 'GET',
-                dataType: 'json',
-                url: $rootScope.ipServer + '/login',
-                headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
-            })
-                .then(function successCallback(response) {
-                        if (response.data.principal.user) {
-                            authenticated = true;
-                            profile.id = response.data.principal.user.id;
-                            profile.name = response.data.principal.user.name;
-                            profile.surname = response.data.principal.user.surname;
-                            profile.email = response.data.principal.user.email;
-                            profile.username = response.data.principal.user.username;
-                            profile.timezone = response.data.principal.user.timezone;
-                            $cookies.put('user', profile);
-                        } else {
-                            profile = {};
+            if($cookies.get('authorization')) {
+                $http({
+                    method: 'GET',
+                    dataType: 'json',
+                    url: $rootScope.ipServer + '/login',
+                    headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
+                })
+                    .then(function successCallback(response) {
+                            if (response.data.principal.user) {
+                                authenticated = true;
+                                profile.id = response.data.principal.user.id;
+                                profile.name = response.data.principal.user.name;
+                                profile.surname = response.data.principal.user.surname;
+                                profile.email = response.data.principal.user.email;
+                                profile.username = response.data.principal.user.username;
+                                profile.timezone = response.data.principal.user.timezone;
+                                $cookies.put('user', profile);
+                            } else {
+                                profile = {};
+                                authenticated = false;
+                                $cookies.remove("authorization");
+                                $cookies.remove("user");
+                            }
+                            callback && callback();
+                        },
+                        function errorCallback(response) {
                             authenticated = false;
+                            profile = {};
                             $cookies.remove("authorization");
                             $cookies.remove("user");
-                        }
-                        callback && callback();
-                    },
-                    function errorCallback(response) {
-                        authenticated = false;
-                        profile = {};
-                        $cookies.remove("authorization");
-                        $cookies.remove("user");
-                        console.log("ERROR GET: authenticate");
-                        callback && callback();
-                    });
+                            console.log("ERROR GET: authenticate");
+                            callback && callback();
+                        });
+            }
         }
     };
     factory.authenticate();
@@ -352,12 +364,18 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     authenticated = false;
                     $cookies.remove("authorization");
                     $cookies.remove("user");
+                    if($cookies.get('remember')){
+                        $rootScope.loginData = angular.fromJson($cookies.get('remember'));;
+                    }
                     $rootScope.logoutRS(true);
                 },
                 function errorCallback(response) {
                     authenticated = false;
                     $cookies.remove("authorization");
                     $cookies.remove("user");
+                    if($cookies.get('remember')){
+                        $rootScope.loginData = angular.fromJson($cookies.get('remember'));;
+                    }
                     $rootScope.logoutRS(false);
                 });
     };
