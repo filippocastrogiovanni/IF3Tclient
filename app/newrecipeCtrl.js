@@ -3,20 +3,21 @@
  */
 
 if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', 'userFactory',
-    function ($scope, $rootscope, $routeParams, $location, $window, $http, userFactory) {
+    function ($scope, $rootScope, $routeParams, $location, $window, $http, userFactory) {
 
-        $rootscope.curpage = "newrecipe";
+        $rootScope.curpage = "newrecipe";
 
         //initialize_data($scope);
         //fake waiting for data (alias progress dialog) by hiding the first div and wait for the response of the server to show it
         $("#first_div").hide();
         $http({
             method: 'GET',
-            url: $rootscope.ipServer+'/channels/'
+            url: $rootScope.ipServer+'/channels/',
+            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
         }).then(function successCallback(response) {
             $scope.channels = response.data;
             for(var i=0; i<$scope.channels.length; i++){
-                $scope.channels[i].image_url = $rootscope.ipServer+'/'+$scope.channels[i].image_url;
+                $scope.channels[i].image_url = $rootScope.ipServer+'/'+$scope.channels[i].image_url;
             }
             $("#first_div").show();
         }, function errorCallback(response) {
@@ -25,19 +26,19 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         //all functions handled by controller
         $scope.choose_trigger_channel = function(o) {
-            choose_trigger_channel($scope, $http, $rootscope, o);
+            choose_trigger_channel($scope, $http, $rootScope, o, userFactory);
         }
 
         $scope.choose_action_channel = function(o) {
-            choose_action_channel($scope, $http, $rootscope, o);
+            choose_action_channel($scope, $http, $rootScope, o, userFactory);
         }
 
-        $scope.submit_trigger = function($scope) {
-            submit_trigger($scope);
+        $scope.submit_trigger = function(triggers_parameters) {
+            submit_trigger(triggers_parameters);
         }
 
-        $scope.submit_action = function($scope) {
-            submit_action($scope);
+        $scope.submit_action = function(actions_parameters) {
+            submit_action(actions_parameters);
         }
 
         $scope.submit_recipe = function(recipe_description, userFactory) {
@@ -47,60 +48,76 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 ]);
 
 
-function choose_trigger_channel($scope, $http, $rootscope, o){
+function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
     console.log("You have choosen " + o.name);
     $scope.chosen_trigger_channel = o;
     $http({
         method: 'GET',
-        url: $rootscope.ipServer+'/triggers/'+o.channelId
+        url: $rootScope.ipServer+'/triggers/'+o.channelId,
+        headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
     }).then(function successCallback(response) {
         $scope.chosen_trigger_channel.trigger_list = response.data; //List<Trigger>
         $http({
             method: 'GET',
-            url: $rootscope.ipServer+'/parameters_triggers/'+o.channelId
+            url: $rootScope.ipServer+'/parameters_triggers/'+o.channelId,
+            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
         }).then(function successCallback(response) {
-            $scope.chosen_trigger_channel.trigger_list.params = response.data; //List<ParametersTriggers>
-            var array = $scope.chosen_trigger_channel.trigger_list.params
-            var flags = [], output_distinct = [], l = array.length, i;
+            var params = response.data; //List<ParametersTriggers>
+            var flags = [], output_distinct = [], l = params.length, i;
             for( i=0; i<l; i++) {
-                if (flags[array[i].id_trigger]) continue;
-                flags[array[i].id_trigger] = true;
-                output_distinct.push(array[i].id_trigger);
+                if (flags[params[i].id_trigger]) continue;
+                flags[params[i].id_trigger] = true;
+                output_distinct.push(params[i].id_trigger);
             }
             //creating array_parameters_triggers_same_id_trigger
-            var array_parameters_triggers = [];
-            var element_parameters_triggers = {};
-            for(var i=0; i<output_distinct.length; i++) {
-                element_parameters_triggers.id_trigger = output_distinct[i];
-                element_parameters_triggers.array_same_id_trigger = [];
-                for(var j=0; j<$scope.chosen_trigger_channel.trigger_list.params.length ; j++) {
-                    if($scope.chosen_trigger_channel.trigger_list.params[j].id_trigger == output_distinct[i])
-                        element_parameters_triggers.array_same_id_trigger.push($scope.chosen_trigger_channel.trigger_list.params[j]);
-                }
-                array_parameters_triggers.push(element_parameters_triggers)
+            for(var i=0; i<$scope.chosen_trigger_channel.trigger_list.length; i++) {
+                $scope.chosen_trigger_channel.trigger_list[i].params = [];
             }
-            //preparing parameters to pass to form
-            //preparing parameters_triggers_names_list by concatenating and separating by comma
+            for(var i=0; i<output_distinct.length; i++) {
+                var params_same_id_trigger = [];
+                for(var j=0; j<params.length ; j++) {
+                    if(params[j].id_trigger == output_distinct[i]) {
+                        var element_parameters_triggers = {};
+                        element_parameters_triggers.name = params[j].name;
+                        element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
+                        element_parameters_triggers.type = params[j].type;
+                        params_same_id_trigger.push(element_parameters_triggers);
+                    }
+                }
+                $scope.chosen_trigger_channel.trigger_list[i].params = params_same_id_trigger;
+            }
+
             /*
-             parameters_triggers_names_list = [];
-             for(var i=0; i<$scope.chosen_trigger_channel.params; i++)
-             {
-             $scope.parameters_triggers_names_list.push($scope.chosen_trigger_channel.params.name);
-             /*
-             if(!i==$scope.chosen_trigger_channel.params-1)
-             parameters_triggers_names_list.push(',');
-             */
-            //}
-            $scope.parameters_triggers_names_list = _.map($scope.chosen_trigger_channel.trigger_list.params, 'name').join(', ');
-            for(var j=0; j<array_parameters_triggers.length; j++) {
+            $scope.array_try = [];
+            var elem_try = {};
+            elem_try.aa = "aa";
+            elem_try.bb = "bb";
+            $scope.array_try.push(elem_try);
+            elem_try.aa = "AA";
+            elem_try.bb = "BB";
+            $scope.array_try.push(elem_try);
+            */
+            //preparing parameters to pass to form
+            /*
+            $scope.parameters_triggers_names_list = [];
+            $scope.chosen_trigger_channel.trigger_list.params = [];
+            for(var j=0; j<$scope.array_parameters_triggers.length; j++) {
+                for(var k=0; k<$scope.chosen_trigger_channel.trigger_list.params.length; k++) {
+                    chosen_trigger_channel.trigger_list.params.push($scope.chosen_trigger_channel.trigger_list.params[k].name);
+                }
+            }
+            */
+            /*
+            for(var j=0; j<$scope.array_parameters_triggers.length; j++) {
                 //preparing <h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br> couples
                 $scope.parameters_triggers_couples = "";
                 for (var i = 0; i < array_parameters_triggers[j].array_same_id_trigger.length; i++) {
                     $scope.parameters_triggers_couples += "<h4>" + array_parameters_triggers[j].array_same_id_trigger[i].name + "</h4>";
                     $scope.parameters_triggers_couples += "<input type='" + array_parameters_triggers[j].array_same_id_trigger[i].type + "' name='" + array_parameters_triggers[j].array_same_id_trigger[i].name + "' ng-model='" + array_parameters_triggers[j].array_same_id_trigger[i].name + "' <br> ";
                 }
-                $scope.chosen_trigger_channel.trigger_list[j].extra_element = "<br><br><form novalidate ng-submit='submit_trigger(" + $scope.parameters_triggers_names_list + ")'>" + $scope.parameters_triggers_couples + " <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+                $scope.chosen_trigger_channel.trigger_list[j].extra_element = "<br><br><form novalidate ng-submit='submit_trigger(" +$scope.parameters_triggers_names_list[j] + ")'>" + $scope.parameters_triggers_couples + " <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
             }
+            */
         }, function errorCallback(response) {
             alert("You DIDN'T get the triggers parameters list of trigger channel");
         });
@@ -111,40 +128,57 @@ function choose_trigger_channel($scope, $http, $rootscope, o){
 
 }
 
-function choose_action_channel($scope, $http, $rootscope, o){
+function choose_action_channel($scope, $http, $rootScope, o, userFactory){
     console.log("You have choosen " + o.name);
     $scope.chosen_action_channel = o;
     $http({
         method: 'GET',
-        url: $rootscope.ipServer+'/actions/'+o.id
+        url: $rootScope.ipServer+'/actions/'+o.channelId,
+        headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
     }).then(function successCallback(response) {
         $scope.chosen_action_channel.action_list = response.data; //List<Trigger>
         $http({
             method: 'GET',
-            url: $rootscope.ipServer+'/parameters_actions/'+o.id
+            url: $rootScope.ipServer+'/parameters_actions/'+o.channelId,
+            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
         }).then(function successCallback(response) {
-            $scope.chosen_action_channel.params = response.data; //List<ParametersTriggers>
-            //preparing parameters_actions_names_list by concatenating and separating by comma
-            /*
-             parameters_actions_names_list = [];
-             for(var i=0; i<$scope.chosen_action_channel.params; i++)
-             {
-             $scope.parameters_actions_names_list.push($scope.chosen_action_channel.params.name);
-             /*
-             if(!i==$scope.chosen_action_channel.params-1)
-             parameters_actions_names_list.push(',');
-             */
-            //}
-            $scope.parameters_actions_names_list = _.map(scope.chosen_action_channel.params, 'name').join(', ');
-            //preparing <h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br> couples
-            $scope.parameters_actions_couples = "";
-            for(var i=0; i<$scope.chosen_action_channel.params; i++)
-            {
-                $scope.parameters_actions_couples += "<h4>"+$scope.chosen_action_channel.params[i].name+"</h4>";
-                $scope.parameters_actions_couples += "<input type='"+ $scope.chosen_action_channel.params[i].type +"' name='"+ $scope.chosen_action_channel.params[i].name +"' ng-model='"+ $scope.chosen_action_channel.params[i].name +"' <br> ";
+            var params = response.data; //List<ParametersTriggers>
+            var flags = [], output_distinct = [], l = params.length, i;
+            for( i=0; i<l; i++) {
+                if (flags[params[i].id_action]) continue;
+                flags[params[i].id_action] = true;
+                output_distinct.push(params[i].id_action);
             }
-            $scope.chosen_action_channel.extra_element = "<br><br><form novalidate ng-submit='submit_action("+ $scope.parameters_actions_names_list +")'>"+ $scope.parameters_actions_couples +" <input scroll-on-click href='#step_5' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
-
+            //creating array_parameters_actions_same_id_action
+            for(var i=0; i<$scope.chosen_action_channel.action_list.length; i++) {
+                $scope.chosen_action_channel.action_list[i].params = [];
+            }
+            for(var i=0; i<output_distinct.length; i++) {
+                var params_same_id_action = [];
+                for(var j=0; j<params.length ; j++) {
+                    if(params[j].id_action == output_distinct[i]) {
+                        var element_parameters_actions = {};
+                        element_parameters_actions.name = params[j].name;
+                        element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
+                        element_parameters_actions.type = params[j].type;
+                        params_same_id_action.push(element_parameters_actions);
+                    }
+                }
+                $scope.chosen_action_channel.action_list[i].params = params_same_id_action;
+            }
+            //preparing parameters to pass to form
+            /*
+            $scope.parameters_actions_names_list = _.map($scope.chosen_action_channel.action_list.params, 'name').join(', ');
+            for(var j=0; j<array_parameters_actions.length; j++) {
+                //preparing <h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br> couples
+                $scope.parameters_actions_couples = "";
+                for (var i = 0; i < array_parameters_actions[j].array_same_id_action.length; i++) {
+                    $scope.parameters_actions_couples += "<h4>" + array_parameters_actions[j].array_same_id_action[i].name + "</h4>";
+                    $scope.parameters_actions_couples += "<input type='" + array_parameters_actions[j].array_same_id_action[i].type + "' name='" + array_parameters_actions[j].array_same_id_action[i].name + "' ng-model='" + array_parameters_actions[j].array_same_id_action[i].name + "' <br> ";
+                }
+                $scope.chosen_action_channel.action_list[j].extra_element = "<br><br><form novalidate ng-submit='submit_action(" + $scope.parameters_actions_names_list + ")'>" + $scope.parameters_actions_couples + " <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+            }
+            */
         }, function errorCallback(response) {
             alert("You DIDN'T get the actions parameters list of action channel");
         });
@@ -155,17 +189,17 @@ function choose_action_channel($scope, $http, $rootscope, o){
 
 }
 
-function submit_trigger($scope){
-    for(var i=0; i<$scope.parameters_triggers_names_list; i++){
-        console.log("Input data: " + $scope.parameters_triggers_names_list[i]);
+function submit_trigger(parameters_parameters){
+    for(var i=0; i<parameters_parameters.length; i++){
+        console.log("Input data: " + variabile[i]);
     }
     //OR
     //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
     $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
 }
 
-function submit_action($scope){
-    for(var i=0; i<$scope.parameters_actions_names_list; i++){
+function submit_action(actions_parameters){
+    for(var i=0; i<actions_parameters.length; i++){
         console.log("Input data: " + $scope.parameters_actions_names_list[i]);
     }
     //OR
@@ -194,7 +228,7 @@ function submit_recipe($scope, $window, $http, recipe_description, userFactory) 
     if(userFactory.isAuthenticated()) {
         $http({
             method: 'POST',
-            url: $rootscope.ipServer+'/add_recipe/',
+            url: $rootScope.ipServer+'/add_recipe/',
             data: $scope.recipes_list
         }).then(function successCallback(response) {
             alert("You have create a recipe successfully!");
@@ -570,3 +604,9 @@ if3tApp.directive('bindHtmlCompile', ['$compile', function ($compile) {
         }
     };
 }]);
+
+String.prototype.capitalize = function(){
+    return this.toLowerCase().replace( /\b\w/g, function (m) {
+        return m.toUpperCase();
+    });
+}

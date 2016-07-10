@@ -153,12 +153,22 @@
             <div div layout="row" layout-align="center"  style="min-height: 500px">
                 <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
                     <md-list>
-                        <md-list-item data-ng-repeat="trigger_list_channel in chosen_trigger_channel.trigger_list" class="trigger-list_item" style="display: inline">
+                        <br>
+                        <br>
+                        <md-list-item  ng-repeat="data_triggers in chosen_trigger_channel.trigger_list track by $index" class="trigger-list_item" style="display: inline">
+                            <h3>{{data_triggers.header}}</h3>
+                            <p>{{data_triggers.paragraph}}</p>
                             <br>
                             <br>
-                            <h3>{{trigger_list_channel.header}}</h3>
-                            <p>{{trigger_list_channel.paragraph}}</p>
-                            <div bind-html-compile="trigger_list_channel.extra_element"></div>
+                            <form novalidate ng-submit="submit_trigger( data_triggers.params )">
+                                <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
+                                    <h4>{{same_id_trigger.unbinded_name}}</h4>
+                                    <input type='{{same_id_trigger.type}}' name='{{same_id_trigger.name}}' ng-model="same_id_trigger.name">
+<br>
+                                </div>
+<br>
+                                <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
+                            </form>
                             <br>
                             <br>
                         </md-list-item>
@@ -332,16 +342,26 @@
             <div div layout="row" layout-align="center"  style="min-height: 500px">
                 <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
                     <md-list>
-                    <md-list-item data-ng-repeat="action_list_channel in chosen_action_channel" class="trigger-list_item" style="display: inline">
                         <br>
                         <br>
-                        <h3>{{action_list_channel.header}}</h3>
-                        <p>{{action_list_channel.paragraph}}</p>
-                        <div bind-html-compile="action_list_channel.extra_element"></div>
-                        <br>
-                        <br>
-                    </md-list-item>
-                </md-list>
+                        <md-list-item  ng-repeat="data_actions in chosen_action_channel.action_list track by $index" class="action-list_item" style="display: inline">
+                            <h3>{{data_actions.header}}</h3>
+                            <p>{{data_actions.paragraph}}</p>
+                            <br>
+                            <br>
+                            <form novalidate ng-submit="submit_action( data_actions.params )">
+                                <div ng-repeat="same_id_action in data_actions.params track by $index">
+                                    <h4>{{same_id_action.unbinded_name}}</h4>
+                                    <input type='{{same_id_action.type}}' name='{{same_id_action.name}}' ng-model="same_id_action.name">
+                                    <br>
+                                </div>
+                                <br>
+                                <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
+                            </form>
+                            <br>
+                            <br>
+                        </md-list-item>
+                    </md-list>
             </md-content>
         </div>
     </div>
@@ -375,7 +395,7 @@
         <div layout="column" layout-align="center center"  style="min-height: 500px">
                 <md-content>
                     <h3 class="step_0">if</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
+                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
                     <h3 class="step_0">&emsp;then</h3>
                     <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
                 </md-content>
