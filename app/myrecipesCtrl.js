@@ -11,7 +11,7 @@ if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope',
 
         $http({
             method: 'GET',
-            url: $rootScope.ipServer + '/recipes/' + userFactory.getProfile().id,
+            url: $rootScope.ipServer + '/user_recipes',
             headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
         })
             .then(
@@ -20,7 +20,7 @@ if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope',
                     //console.log($scope.recipes);
                 },
                 function error(error){
-                    console.log(error.statusText);
+                    console.log(error);
                 }
             );
 
@@ -57,12 +57,12 @@ if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope',
             })
                 .then(
                     function success(response){
-                        //console.log(response);
+                        console.log(response);
                         recipe.isEnabled = !recipe.isEnabled;
                     },
                     function error(error){
-                        //$window.alert(error.data.message);
-                        console.log("ciao");
+                        $window.alert(error.data.message);
+                        console.log(error);
                     }
                 );
         };

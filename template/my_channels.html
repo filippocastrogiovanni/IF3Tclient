@@ -1,8 +1,8 @@
 <div  class="container"  ng-controller="MyChannelsController">
     <ul>
         <li ng-repeat="channel in channels">
-            <img class="img-responsive" ng-src="{{channel.url}}"/>
-            <button>Disconnect</button>
+            <img class="img-responsive" ng-src="{{channel.image_url}}"/>
+            <button ng-click="disconnectChannel(channel.channelId)">Disconnect</button>
         </li>
     </ul>
 </div>

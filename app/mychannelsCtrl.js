@@ -1,19 +1,42 @@
 /**
  * Created by TheChuck on 07/07/2016.
  */
-if3tApp.controller('MyChannelsController', ['$scope', '$rootScope', '$routeParams', '$location', '$http',
-    function ($scope, $rootScope,  $routeParams, $location, $http) {        
+if3tApp.controller('MyChannelsController', ['$scope', '$rootScope', '$routeParams', '$window', '$http', 'userFactory',
+    function ($scope, $rootScope,  $routeParams, $window, $http, userFactory) {
         $rootScope.curpage = "profile";
 
-        /*$http.get("localhost:8181/channels")
-            .then(function(response){
-                $scope.myChannels = response;
-         });*/
+        if(!userFactory.isAuthenticated())
+            $window.location.href = "#/home";
 
-        $scope.channels = [];
-        $scope.channels[0] = {channelId: 0, name: "facebook", url:"images/facebook_icon.png"};
-        $scope.channels[1] = {channelId: 1, name: "google_calendar", url:"images/google_calendar_icon.png"};
-        $scope.channels[2] = {channelId: 2, name: "google_mail", url:"images/google_mail_icon.png"};
-        $scope.channels[3] = {channelId: 3, name: "twitter", url:"images/twitter_icon.png"};
+        $http({
+            method: 'GET',
+            url: $rootScope.ipServer + '/authorized_channels',
+            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+        })
+            .then(
+                function success(response){
+                    $scope.channels = response.data;
+                    console.log(response);
+                },
+                function error(error){
+                    console.log(error);
+                }
+            );
+
+        $scope.disconnectChannel = function(channelId){
+            $http({
+                method: 'POST',
+                dataType: 'json',
+                url: $rootScope.ipServer + '/unauthorize_channel/' + channelId,
+                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            })
+                .then(
+                    function successCallback(response) {
+                        console.log(response);
+                    },
+                    function errorCallback(error) {
+                        console.log(error);
+                    });
+        }
     }
 ]);

@@ -5,11 +5,10 @@ if3tApp.controller('MyInfoController', ['userFactory', '$scope', '$rootScope', '
     function (userFactory, $scope, $rootScope, $routeParams, $location, $http) {
         $rootScope.curpage = "profile";
 
-        //if(!userFactory.isAuthenticated())
+        if(!userFactory.isAuthenticated())
+            $window.location.href = "#/home";
 
-        $scope.user = {name: "Andrea", surname: "Cuiuli", username: "TheChuck",
-                        email: "ciaociao@gmail.com", enable: 0, role: "USER",
-                        timezone: {timezone: -9, id: 4, daylight_time: 1, description: "(GMT-09:00) Alaska"}};
+        $scope.user = userFactory.getProfile();
         
         $scope.passwordChange = {currPass: "", newPass:"", confirmNewPass:""};
         
