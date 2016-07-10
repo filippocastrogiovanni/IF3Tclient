@@ -33,12 +33,12 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             choose_action_channel($scope, $http, $rootScope, o, userFactory);
         }
 
-        $scope.submit_trigger = function(triggers_parameters, is_form_valid) {
-            submit_trigger($scope, triggers_parameters, is_form_valid, $location, $anchorScroll);
+        $scope.submit_trigger = function(triggers_parameters, is_form_valid, trigger_header) {
+            submit_trigger($scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header);
         }
 
-        $scope.submit_action = function(actions_parameters, is_form_valid) {
-            submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll);
+        $scope.submit_action = function(actions_parameters, is_form_valid, action_header) {
+            submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header);
         }
 
         $scope.submit_recipe = function(recipe_description, userFactory) {
@@ -189,7 +189,7 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
 
 }
 
-function submit_trigger($scope, parameters_parameters, is_form_valid, $location, $anchorScroll){
+function submit_trigger($scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header){
     for(var i=0; i<parameters_parameters.length; i++){
         console.log("Input data: " + parameters_parameters[i]);
     }
@@ -207,10 +207,11 @@ function submit_trigger($scope, parameters_parameters, is_form_valid, $location,
             $anchorScroll();
         }
     }
-    $scope.chosen_trigger_job;
+    $scope.chosen_trigger_job = trigger_header;
+    $scope.chose_trigger_parameters = triggers_parameters;
 }
 
-function submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll){
+function submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header){
     for(var i=0; i<actions_parameters.length; i++){
         console.log("Input data: " + actions_parameters[i]);
     }
@@ -229,10 +230,11 @@ function submit_action($scope, actions_parameters, is_form_valid, $location, $an
         }
     }
 
-    $scope.chosen_action_job;
+    $scope.chosen_action_job = action_header;
+    $scope.chose_action_parameters = actions_parameters;
 
     //preparing data to POST (List<Recipe>) phase1
-    var recipe_to_add;
+    var recipe_to_add = {};
     recipe_to_add.id_action = chosen_action_channel.id;
 
     $scope.recipes_list.push(recipe_to_add);
@@ -246,7 +248,6 @@ function submit_recipe($scope, $window, $http, recipe_description, userFactory) 
         $scope.recipes_list[i].is_public = false;
         $scope.recipes_list[i].is_enabled = false;
         //$scope.recipes_list[i].id_user = userFactory.getProfile().id;
-        $scope.recipes_list[i].id_user = 1;
         $scope.recipes_list[i].id_trigger = chosen_trigger_channel.id;
     }
     if(userFactory.isAuthenticated()) {

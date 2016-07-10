@@ -162,7 +162,7 @@
                             <p>{{data_triggers.paragraph}}</p>
                             <br>
                             <br>
-                            <form name="triggerForm" novalidate ng-submit="submit_trigger( data_triggers.params, triggerForm.$valid )">
+                            <form name="triggerForm" novalidate ng-submit="submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header )">
                                 <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
                                     <h4>{{same_id_trigger.unbinded_name}}</h4>
                                     <input type='{{same_id_trigger.type}}' name='{{same_id_trigger.name}}' ng-model="same_id_trigger.name" required>
@@ -353,7 +353,7 @@
                             <p>{{data_actions.paragraph}}</p>
 <br>
 <br>
-                            <form name="actionForm" novalidate ng-submit="submit_action( data_actions.params, actionForm.$valid )">
+                            <form name="actionForm" novalidate ng-submit="submit_action( data_actions.params, actionForm.$valid, data_actions.header )">
                                 <div ng-repeat="same_id_action in data_actions.params track by $index">
                                     <h4>{{same_id_action.unbinded_name}}</h4>
                                     <input type='{{same_id_action.type}}' name='{{same_id_action.name}}' ng-model="same_id_action.name" required>
