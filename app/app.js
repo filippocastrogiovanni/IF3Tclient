@@ -71,9 +71,9 @@ if3tApp.directive("compareTo", function () {
 });
 
 //http://jsfiddle.net/2CsfZ/47/
-if3tApp.run(function ($rootScope, userFactory, $window) {
+if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
     $rootScope.ipServer = "http://localhost:8181";
-    //$('#msgAlert').hide();
+
     $rootScope.authenticated = userFactory.isAuthenticated();
     $rootScope.signupStatus = {};
     $rootScope.signupStatus.response = false;
@@ -100,19 +100,17 @@ if3tApp.run(function ($rootScope, userFactory, $window) {
     $rootScope.loginRQ = function (formValidity) {
         if (formValidity) {
             $('#login').modal('hide');
-            $('#loading').modal('show');
-            //waitingDialog.show('Custom message', {dialogSize: 'sm', progressType: 'warning'});
+            messageFactory.showLoding();
             userFactory.login($rootScope.loginData);
         }
     };
     $rootScope.loginRS = function (status) {
         if (status) {
-            //TODO msg  success
-            $('#msgAlert').show();
+            messageFactory.showSuccessMsg("Login successful");
         } else {
-            //TODO msg error
+            messageFactory.showDangerMsg("Login failed");
         }
-        $('#loading').modal('hide');
+        messageFactory.hideLoding();
         $rootScope.authenticated = userFactory.isAuthenticated();
     };
     $rootScope.logoutRQ = function () {
@@ -452,6 +450,50 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
     };
 
     return factory;
+});
+
+if3tApp.factory('messageFactory', function()
+{
+    var factory = {};
+
+    factory.showLoding = function () {
+        $('#loading').modal('show');
+    };
+
+    factory.hideLoding = function () {
+        $('#loading').modal('hide');
+    };
+
+    factory.showWarningMsg = function (message) {
+        $('#alert-warning').html(message);
+        $("#alert-warning").fadeTo(2000, 500).fadeOut(500, function(){
+            $("#alert-warning").alert('close');
+        });
+    };
+
+    factory.showSuccessMsg = function (message) {
+        $('#alert-success').html(message);
+        $("#alert-success").fadeTo(2000, 500).fadeOut(500, function(){
+            $("#alert-success").alert('close');
+        });
+    };
+
+    factory.showInfoMsg = function (message) {
+        $('#alert-info').html(message);
+        $("#alert-info").fadeTo(2000, 500).fadeOut(500, function(){
+            $("#alert-info").alert('close');
+        });
+    };
+
+    factory.showDangerMsg = function (message) {
+        $('#alert-danger').html(message);
+        $("#alert-danger").fadeTo(2000, 500).fadeOut(500, function(){
+            $("#alert-danger").alert('close');
+        });
+    };
+
+    return factory;
+
 });
 
 if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope)
