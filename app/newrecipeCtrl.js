@@ -2,8 +2,8 @@
  * Created by Filippo on 24/05/2016.
  */
 
-if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', 'userFactory',
-    function ($scope, $rootScope, $routeParams, $location, $window, $http, userFactory) {
+if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', 'userFactory', '$anchorScroll',
+    function ($scope, $rootScope, $routeParams, $location, $window, $http, userFactory, $anchorScroll) {
 
         $rootScope.curpage = "newrecipe";
 
@@ -33,12 +33,12 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             choose_action_channel($scope, $http, $rootScope, o, userFactory);
         }
 
-        $scope.submit_trigger = function(triggers_parameters) {
-            submit_trigger(triggers_parameters);
+        $scope.submit_trigger = function(triggers_parameters, is_form_valid) {
+            submit_trigger($scope, triggers_parameters, is_form_valid, $location, $anchorScroll);
         }
 
-        $scope.submit_action = function(actions_parameters) {
-            submit_action(actions_parameters);
+        $scope.submit_action = function(actions_parameters, is_form_valid) {
+            submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll);
         }
 
         $scope.submit_recipe = function(recipe_description, userFactory) {
@@ -189,23 +189,47 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
 
 }
 
-function submit_trigger(parameters_parameters){
+function submit_trigger($scope, parameters_parameters, is_form_valid, $location, $anchorScroll){
     for(var i=0; i<parameters_parameters.length; i++){
-        console.log("Input data: " + variabile[i]);
+        console.log("Input data: " + parameters_parameters[i]);
     }
     //OR
     //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
-    $scope.chosen_trigger_job = $scope.chosen_trigger_channel.trigger_list[0].header;
+    if(is_form_valid) {
+        var newHash = 'step_2_b';
+        if ($location.hash() !== newHash) {
+            // set the $location.hash to `newHash` and
+            // $anchorScroll will automatically scroll to it
+            $location.hash('step_2_b');
+        } else {
+            // call $anchorScroll() explicitly,
+            // since $location.hash hasn't changed
+            $anchorScroll();
+        }
+    }
+    $scope.chosen_trigger_job;
 }
 
-function submit_action(actions_parameters){
+function submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll){
     for(var i=0; i<actions_parameters.length; i++){
-        console.log("Input data: " + $scope.parameters_actions_names_list[i]);
+        console.log("Input data: " + actions_parameters[i]);
     }
     //OR
     //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
+    if(is_form_valid) {
+        var newHash = 'step_5';
+        if ($location.hash() !== newHash) {
+            // set the $location.hash to `newHash` and
+            // $anchorScroll will automatically scroll to it
+            $location.hash('step_5');
+        } else {
+            // call $anchorScroll() explicitly,
+            // since $location.hash hasn't changed
+            $anchorScroll();
+        }
+    }
 
-    $scope.chosen_action_job = $scope.chosen_action_channel.action_list[0].header;
+    $scope.chosen_action_job;
 
     //preparing data to POST (List<Recipe>) phase1
     var recipe_to_add;
@@ -528,17 +552,17 @@ if3tApp.directive('scrollOnClick', function() {
         restrict: 'A',
         link: function(scope, $elm, attrs) {
             var idToScroll = attrs.href;
-            $elm.on('click', function() {
-                var $target;
-                if (idToScroll) {
-                    $target = $(idToScroll);
-                } else {
-                    $target = $elm;
+                    $elm.on('click', function () {
+                        var $target;
+                        if (idToScroll) {
+                            $target = $(idToScroll);
+                        } else {
+                            $target = $elm;
+                        }
+                        $("body").animate({scrollTop: $target.offset().top}, "slow");
+                    });
                 }
-                $("body").animate({scrollTop: $target.offset().top}, "slow");
-            });
-        }
-    }
+            }
 });
 
 if3tApp.directive('scrollOnClickAndChooseTriggerChannel', function() {

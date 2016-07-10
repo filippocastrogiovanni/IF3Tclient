@@ -44,9 +44,10 @@
 
 <!-- STEP 1 -->
     <!-- PART A -->
+<div id="step_1_a">
     <div class="flexbox-parent">
         <div layout="row" layout-align="center center"  style="min-height: 500px">
-            <div id="step_1_a" ng-cloak class="md-inline-form">
+            <div ng-cloak class="md-inline-form">
 <br>
 <br>
 <br>
@@ -77,6 +78,7 @@
             </div>
         </div>
     </div>
+</div>
 <br>
 <br>
 <br>
@@ -118,7 +120,7 @@
                         <button style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Continue to the next step"><span class="ng-scope" scroll-on-click href="#step_2_a">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span></button>
                     <!--</a>
                     <a > <!--ng-href="#/newrecipe#step_1_a"-->
-                        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_a" type="button" aria-label="Back">Back</md-button>
+                        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_a" type="button" aria-label="Back">Back</button>
                     <!--</a>-->
                 </div>
             </div>
@@ -160,14 +162,16 @@
                             <p>{{data_triggers.paragraph}}</p>
                             <br>
                             <br>
-                            <form novalidate ng-submit="submit_trigger( data_triggers.params )">
+                            <form name="triggerForm" novalidate ng-submit="submit_trigger( data_triggers.params, triggerForm.$valid )">
                                 <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
                                     <h4>{{same_id_trigger.unbinded_name}}</h4>
-                                    <input type='{{same_id_trigger.type}}' name='{{same_id_trigger.name}}' ng-model="same_id_trigger.name">
-<br>
+                                    <input type='{{same_id_trigger.type}}' name='{{same_id_trigger.name}}' ng-model="same_id_trigger.name" required>
+                                    <span ng-show="triggerForm.$dirty && triggerForm.same_id_trigger.name.$error.required">This is a required field</span>
+                                    <br>
                                 </div>
 <br>
-                                <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
+                                <input type='submit' class='btn btn-info btn-large' style='float:left'
+                                       value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
                             </form>
                             <br>
                             <br>
@@ -177,7 +181,7 @@
             </div>
         </div>
     <a style="float:right"> <!--ng-href="#/newrecipe#step_1_b"-->
-        <md-button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_b" type="button" aria-label="Back">Back</md-button>
+        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_b" type="button" aria-label="Back">Back</button>
     </a>
 </div>
 <br>
@@ -306,7 +310,7 @@
                     <!--</a>
 
                     <a > <!--ng-href="#/newrecipe#step_3_a"-->
-                        <md-button scroll-on-click href="#step_3_a" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+                        <button scroll-on-click href="#step_3_a" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</button>
                     <!--</a>-->
                     </div>
              </div>
@@ -344,29 +348,30 @@
                     <md-list>
                         <br>
                         <br>
-                        <md-list-item  ng-repeat="data_actions in chosen_action_channel.action_list track by $index" class="action-list_item" style="display: inline">
+                        <md-list-item  ng-repeat="data_actions in chosen_action_channel.action_list track by $index" class="trigger-list_item" style="display: inline">
                             <h3>{{data_actions.header}}</h3>
                             <p>{{data_actions.paragraph}}</p>
-                            <br>
-                            <br>
-                            <form novalidate ng-submit="submit_action( data_actions.params )">
+<br>
+<br>
+                            <form name="actionForm" novalidate ng-submit="submit_action( data_actions.params, actionForm.$valid )">
                                 <div ng-repeat="same_id_action in data_actions.params track by $index">
                                     <h4>{{same_id_action.unbinded_name}}</h4>
-                                    <input type='{{same_id_action.type}}' name='{{same_id_action.name}}' ng-model="same_id_action.name">
-                                    <br>
+                                    <input type='{{same_id_action.type}}' name='{{same_id_action.name}}' ng-model="same_id_action.name" required>
+                                    <span ng-show="actionForm.$dirty && actionForm.same_id_action.name.$error.required">This is a required field</span>
+<br>
                                 </div>
-                                <br>
-                                <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
+<br>
+                                <input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
                             </form>
-                            <br>
-                            <br>
+<br>
+<br>
                         </md-list-item>
                     </md-list>
             </md-content>
         </div>
     </div>
     <a style="float:right"> <!--ng-href="#/newrecipe#step_3_b"-->
-        <md-button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</md-button>
+        <button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</button>
     </a>
 </div>
 
@@ -395,7 +400,7 @@
         <div layout="column" layout-align="center center"  style="min-height: 500px">
                 <md-content>
                     <h3 class="step_0">if</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
+                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
                     <h3 class="step_0">&emsp;then</h3>
                     <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
                 </md-content>
