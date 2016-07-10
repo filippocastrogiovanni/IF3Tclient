@@ -2,8 +2,8 @@
  * Created by Filippo on 24/05/2016.
  */
 
-if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope', '$routeParams', '$window', '$http',
-    function (userFactory, $scope, $rootScope, $routeParams, $window, $http) {
+if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$scope', '$rootScope', '$routeParams', '$window', '$http',
+    function (messageFactory, userFactory, $scope, $rootScope, $routeParams, $window, $http) {
         $rootScope.curpage = "myrecipes";
 
         if(!userFactory.isAuthenticated())
@@ -29,6 +29,7 @@ if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope',
         };
 
         $scope.toggleRecipePublic = function(recipe){
+            messageFactory.showLoading();
             $http({
                 method: 'PUT',
                 dataType: 'json',
@@ -38,7 +39,7 @@ if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope',
             })
                 .then(
                     function successCallback(response) {
-                        console.log(response);
+                        messageFactory.hideLoading();
                         recipe.isPublic = !recipe.isPublic;
                     },
                     function errorCallback(error) {
@@ -48,6 +49,7 @@ if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope',
         };
 
         $scope.toggleRecipeEnabled = function(recipe){
+            messageFactory.showLoading();
             $http({
                 method: 'PUT',
                 dataType: 'json',
@@ -58,10 +60,12 @@ if3tApp.controller('MyRecipesController', ['userFactory','$scope', '$rootScope',
                 .then(
                     function success(response){
                         console.log(response);
+                        messageFactory.hideLoading();
                         recipe.isEnabled = !recipe.isEnabled;
                     },
                     function error(error){
                         $window.alert(error.data.message);
+                        messageFactory.hideLoading();
                         console.log(error);
                     }
                 );

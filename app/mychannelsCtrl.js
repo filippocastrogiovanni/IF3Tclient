@@ -1,8 +1,8 @@
 /**
  * Created by TheChuck on 07/07/2016.
  */
-if3tApp.controller('MyChannelsController', ['$scope', '$rootScope', '$routeParams', '$window', '$http', 'userFactory',
-    function ($scope, $rootScope,  $routeParams, $window, $http, userFactory) {
+if3tApp.controller('MyChannelsController', ['messageFactory', '$scope', '$rootScope', '$routeParams', '$window', '$http', 'userFactory',
+    function (messageFactory, $scope, $rootScope,  $routeParams, $window, $http, userFactory) {
         $rootScope.curpage = "profile";
 
         if(!userFactory.isAuthenticated())
@@ -23,19 +23,26 @@ if3tApp.controller('MyChannelsController', ['$scope', '$rootScope', '$routeParam
                 }
             );
 
-        $scope.disconnectChannel = function(channelId){
+        $scope.disconnectChannel = function(channel){
+            messageFactory.showLoading();
             $http({
                 method: 'POST',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/unauthorize_channel/' + channelId,
+                url: $rootScope.ipServer + '/unauthorize_channel/' + channel.channelId,
                 headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
             })
                 .then(
                     function successCallback(response) {
-                        console.log(response);
+                        messageFactory.hideLoading();
+                        var index = $scope.channels.indexOf(channel);
+                        if (index != -1) {
+                            $scope.channels.splice(index, 1);
+                            messageFactory.showSuccessMsg("Channel successfully disconnected!");
+                        }
+                        //console.log(response);
                     },
                     function errorCallback(error) {
-                        console.log(error);
+                        //console.log(error);
                     });
         }
     }
