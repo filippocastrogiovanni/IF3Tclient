@@ -5,18 +5,18 @@
                 <label>{{recipe.description}}</label><br>
                 <div>
                     <label>Trigger:</label>
-                    <img class="img-responsive" src="{{recipe.trigger.channel.image_url}}"/><br>
+                    <img class="img-responsive" ng-src="{{recipe.trigger.channel.image_url}}"/><br>
                     <span>{{recipe.trigger.paragraph}}</span>
                     <span>{{recipe.trigger.header}}</span>
                 </div>
                 <div>
                     <label>Action:</label>
-                    <img class="img-responsive" src="{{recipe.action.channel.image_url}}"/><br>
+                    <img class="img-responsive" ng-src="{{recipe.action.channel.image_url}}"/><br>
                     <span>{{recipe.action.paragraph}}</span>
                     <span>{{recipe.action.header}}</span>
                 </div>
                 <br>
-                <button ng-click="removeRecipe(recipe.id)">Remove</button>
+                <button ng-click="removeRecipe(recipe.id)">Delete</button>
                 <button ng-click="toggleRecipePublic(recipe)">{{ recipe.isPublic? "UnPublish" : "Publish"}}</button>
                 <button ng-click="toggleRecipeEnabled(recipe)">{{ recipe.isEnabled? "Disable" : "Enable"}}</button>
             </div>
