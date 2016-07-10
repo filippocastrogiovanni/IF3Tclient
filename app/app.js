@@ -419,18 +419,13 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             data: angular.toJson(data)
         })
             .then(function successCallback(response) {
-                    profile.id = data.id;
-                    profile.name = data.name;
-                    profile.surname = data.surname;
-                    profile.email = data.email;
-                    profile.timezone = data.timezone;
+                    profile = data;
+                    $cookies.put('user', angular.toJson(profile));
                     callback && callback(true);
-                    return true;
                 },
                 function errorCallback(response) {
                     console.log("ERROR PUT: editProfile" + response);
                     callback && callback(false);
-                    return false;
                 });
     };
 
