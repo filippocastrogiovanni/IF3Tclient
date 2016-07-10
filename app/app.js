@@ -82,6 +82,7 @@ if3tApp.run(function ($rootScope, userFactory) {
     $rootScope.signupData = {};
     $rootScope.signupRQ = function (formValidity) {
         if (formValidity) {
+            $('#signin').modal('hide');
             $rootScope.signupStatus.waiting = true;
             userFactory.signup($rootScope.signupData);
         }
@@ -102,6 +103,8 @@ if3tApp.run(function ($rootScope, userFactory) {
     $rootScope.loginStatus.success = false;
     $rootScope.loginRQ = function (formValidity) {
         if (formValidity) {
+            $('#login').modal('hide');
+            //waitingDialog.show('Custom message', {dialogSize: 'sm', progressType: 'warning'});
             $rootScope.loginStatus.waiting = true;
             userFactory.login($rootScope.loginData);
         }
@@ -286,7 +289,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
     factory.authenticate = function (credentials, callback) {
         if($cookies.get('authorization')) {
             authenticated = true;
-            profile = $cookies.get('user');
+            profile = angular.fromJson($cookies.get('user'));
         }
 
         if (!authenticated) {
@@ -321,7 +324,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                                 profile.email = response.data.principal.user.email;
                                 profile.username = response.data.principal.user.username;
                                 profile.timezone = response.data.principal.user.timezone;
-                                $cookies.put('user', profile);
+                                $cookies.put('user', angular.toJson(profile));
                             } else {
                                 profile = {};
                                 authenticated = false;
