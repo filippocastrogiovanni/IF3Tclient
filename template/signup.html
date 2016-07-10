@@ -9,263 +9,237 @@
                     <h2 class="modal-title">Sign up to the service</h2>
                 </div>
                 <div class="modal-body">
-                    <div ng-show="!signupStatus.waiting && !signupStatus.response">
-                        <div class="form-group  has-feedback"
-                             ng-class="{
+                    <div class="form-group  has-feedback"
+                         ng-class="{
                             'has-error': (signupForm.$submitted || signupForm.name.$dirty) && signupForm.name.$invalid,
                             'has-success': (signupForm.$submitted || signupForm.name.$dirty) && !signupForm.name.$invalid
                             }">
-                            <label class="control-label col-sm-3" for="getName">First name:</label>
-                            <div class="col-sm-8">
-                                <input
-                                        autofocus
-                                        type="text"
-                                        required
-                                        class="form-control"
-                                        id="getName"
-                                        name="name"
-                                        ng-minlength="3"
-                                        ng-maxlength="30"
-                                        ng-pattern="/^[a-zA-Z \-\']*$/"
-                                        ng-model="signupData.name"
-                                        placeholder="Your first name"/>
-                                <div ng-show="signupForm.$submitted || signupForm.name.$dirty">
-                                    <div ng-show="signupForm.name.$invalid">
-                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                        <div ng-if="signupForm.name.$error.required" class="help-block">
-                                            Your name is required
-                                        </div>
-                                        <div ng-if="signupForm.name.$error.minlength || signupForm.name.$error.maxlength"
-                                             class="help-block">
-                                            The name is not valid: must be 3-30 characters long
-                                        </div>
-                                        <div ng-if="signupForm.name.$error.pattern" class="help-block">
-                                            The name is not valid: no special characters are allowed
-                                        </div>
+                        <label class="control-label col-sm-3" for="getName">First name:</label>
+                        <div class="col-sm-8">
+                            <input
+                                    autofocus
+                                    type="text"
+                                    required
+                                    class="form-control"
+                                    id="getName"
+                                    name="name"
+                                    ng-minlength="3"
+                                    ng-maxlength="30"
+                                    ng-pattern="/^[a-zA-Z \-\']*$/"
+                                    ng-model="signupData.name"
+                                    placeholder="Your first name"/>
+                            <div ng-show="signupForm.$submitted || signupForm.name.$dirty">
+                                <div ng-show="signupForm.name.$invalid">
+                                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                    <div ng-if="signupForm.name.$error.required" class="help-block">
+                                        Your name is required
                                     </div>
-                                    <div ng-show="!signupForm.name.$invalid">
-                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    <div ng-if="signupForm.name.$error.minlength || signupForm.name.$error.maxlength"
+                                         class="help-block">
+                                        The name is not valid: must be 3-30 characters long
                                     </div>
+                                    <div ng-if="signupForm.name.$error.pattern" class="help-block">
+                                        The name is not valid: no special characters are allowed
+                                    </div>
+                                </div>
+                                <div ng-show="!signupForm.name.$invalid">
+                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group  has-feedback"
-                             ng-class="{
+                    </div>
+                    <div class="form-group  has-feedback"
+                         ng-class="{
                             'has-error': (signupForm.$submitted || signupForm.surname.$dirty) && signupForm.surname.$invalid,
                             'has-success': (signupForm.$submitted || signupForm.surname.$dirty) && !signupForm.surname.$invalid
                             }">
-                            <label class="control-label col-sm-3" for="getSurname">Last name:</label>
-                            <div class="col-sm-8">
-                                <input
-                                        type="text"
-                                        required
-                                        class="form-control"
-                                        id="getSurname"
-                                        name="surname"
-                                        ng-minlength="3"
-                                        ng-maxlength="30"
-                                        ng-pattern="/^[a-zA-Z \-\']*$/"
-                                        ng-model="signupData.surname"
-                                        placeholder="Your last name"/>
-                                <div ng-show="signupForm.$submitted || signupForm.surname.$dirty">
-                                    <div ng-show="signupForm.surname.$invalid">
-                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                        <div ng-if="signupForm.surname.$error.required" class="help-block">
-                                            Your last name is required
-                                        </div>
-                                        <div ng-if="signupForm.surname.$error.minlength || signupForm.surname.$error.maxlength"
-                                             class="help-block">
-                                            The last name is not valid: must be 3-30 characters long
-                                        </div>
-                                        <div ng-if="signupForm.surname.$error.pattern" class="help-block">
-                                            The last name is not valid: no special characters are allowed
-                                        </div>
+                        <label class="control-label col-sm-3" for="getSurname">Last name:</label>
+                        <div class="col-sm-8">
+                            <input
+                                    type="text"
+                                    required
+                                    class="form-control"
+                                    id="getSurname"
+                                    name="surname"
+                                    ng-minlength="3"
+                                    ng-maxlength="30"
+                                    ng-pattern="/^[a-zA-Z \-\']*$/"
+                                    ng-model="signupData.surname"
+                                    placeholder="Your last name"/>
+                            <div ng-show="signupForm.$submitted || signupForm.surname.$dirty">
+                                <div ng-show="signupForm.surname.$invalid">
+                                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                    <div ng-if="signupForm.surname.$error.required" class="help-block">
+                                        Your last name is required
                                     </div>
-                                    <div ng-show="!signupForm.surname.$invalid">
-                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    <div ng-if="signupForm.surname.$error.minlength || signupForm.surname.$error.maxlength"
+                                         class="help-block">
+                                        The last name is not valid: must be 3-30 characters long
                                     </div>
+                                    <div ng-if="signupForm.surname.$error.pattern" class="help-block">
+                                        The last name is not valid: no special characters are allowed
+                                    </div>
+                                </div>
+                                <div ng-show="!signupForm.surname.$invalid">
+                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group  has-feedback"
-                             ng-class="{
+                    </div>
+                    <div class="form-group  has-feedback"
+                         ng-class="{
                             'has-error': (signupForm.$submitted || signupForm.mail.$dirty) && signupForm.mail.$invalid,
                             'has-success': (signupForm.$submitted || signupForm.mail.$dirty) && !signupForm.mail.$invalid
                             }">
-                            <label class="control-label col-sm-3" for="getMail">E-mail:</label>
-                            <div class="col-sm-8">
-                                <input
-                                        type="email"
-                                        required
-                                        class="form-control"
-                                        id="getMail"
-                                        name="mail"
-                                        ng-maxlength="255"
-                                        ng-model="signupData.mail"
-                                        placeholder="Your email"/>
-                                <div ng-show="signupForm.$submitted || signupForm.mail.$dirty">
-                                    <div ng-show="signupForm.mail.$invalid">
-                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                        <div ng-if="signupForm.mail.$error.required" class="help-block">
-                                            Your e-mail is required
-                                        </div>
-                                        <div ng-if="signupForm.mail.$error.maxlength" class="help-block">
-                                            The e-mail is too much long
-                                        </div>
-                                        <div ng-if="signupForm.mail.$error.email" class="help-block">
-                                            The e-mail is not valid
-                                        </div>
+                        <label class="control-label col-sm-3" for="getMail">E-mail:</label>
+                        <div class="col-sm-8">
+                            <input
+                                    type="email"
+                                    required
+                                    class="form-control"
+                                    id="getMail"
+                                    name="mail"
+                                    ng-maxlength="255"
+                                    ng-model="signupData.mail"
+                                    placeholder="Your email"/>
+                            <div ng-show="signupForm.$submitted || signupForm.mail.$dirty">
+                                <div ng-show="signupForm.mail.$invalid">
+                                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                    <div ng-if="signupForm.mail.$error.required" class="help-block">
+                                        Your e-mail is required
                                     </div>
-                                    <div ng-show="!signupForm.mail.$invalid">
-                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    <div ng-if="signupForm.mail.$error.maxlength" class="help-block">
+                                        The e-mail is too much long
                                     </div>
+                                    <div ng-if="signupForm.mail.$error.email" class="help-block">
+                                        The e-mail is not valid
+                                    </div>
+                                </div>
+                                <div ng-show="!signupForm.mail.$invalid">
+                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group  has-feedback"
-                             ng-class="{
+                    </div>
+                    <div class="form-group  has-feedback"
+                         ng-class="{
                             'has-error': (signupForm.$submitted || signupForm.username.$dirty) && signupForm.username.$invalid,
                             'has-success': (signupForm.$submitted || signupForm.username.$dirty) && !signupForm.username.$invalid
                             }">
-                            <label class="control-label col-sm-3" for="getUsername">Username:</label>
-                            <div class="col-sm-8">
-                                <input
-                                        type="text"
-                                        required
-                                        class="form-control"
-                                        id="getUsername"
-                                        name="username"
-                                        ng-minlength="6"
-                                        ng-maxlength="30"
-                                        ng-pattern="/^[a-zA-Z0-9]*$/"
-                                        ng-model="signupData.username"
-                                        placeholder="Choose a unique username"/>
-                                <div ng-show="signupForm.$submitted || signupForm.username.$dirty">
-                                    <div ng-show="signupForm.username.$invalid">
-                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                        <div ng-if="signupForm.username.$error.required" class="help-block">
-                                            The username is required
-                                        </div>
-                                        <div ng-if="signupForm.username.$error.minlength || signupForm.username.$error.maxlength"
-                                             class="help-block">
-                                            The username is not valid: must be 6-30 characters long
-                                        </div>
-                                        <div ng-if="signupForm.username.$error.pattern" class="help-block">
-                                            The username is not valid: only letters and digits are allowed
-                                        </div>
+                        <label class="control-label col-sm-3" for="getUsername">Username:</label>
+                        <div class="col-sm-8">
+                            <input
+                                    type="text"
+                                    required
+                                    class="form-control"
+                                    id="getUsername"
+                                    name="username"
+                                    ng-minlength="6"
+                                    ng-maxlength="30"
+                                    ng-pattern="/^[a-zA-Z0-9]*$/"
+                                    ng-model="signupData.username"
+                                    placeholder="Choose a unique username"/>
+                            <div ng-show="signupForm.$submitted || signupForm.username.$dirty">
+                                <div ng-show="signupForm.username.$invalid">
+                                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                    <div ng-if="signupForm.username.$error.required" class="help-block">
+                                        The username is required
                                     </div>
-                                    <div ng-show="!signupForm.username.$invalid">
-                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    <div ng-if="signupForm.username.$error.minlength || signupForm.username.$error.maxlength"
+                                         class="help-block">
+                                        The username is not valid: must be 6-30 characters long
                                     </div>
+                                    <div ng-if="signupForm.username.$error.pattern" class="help-block">
+                                        The username is not valid: only letters and digits are allowed
+                                    </div>
+                                </div>
+                                <div ng-show="!signupForm.username.$invalid">
+                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group  has-feedback"
-                             ng-class="{
+                    </div>
+                    <div class="form-group  has-feedback"
+                         ng-class="{
                             'has-error': (signupForm.$submitted || signupForm.password.$dirty) && signupForm.password.$invalid,
                             'has-success': (signupForm.$submitted || signupForm.password.$dirty) && !signupForm.password.$invalid
                             }">
-                            <label class="control-label col-sm-3" for="getPassword">Password:</label>
-                            <div class="col-sm-8">
-                                <input
-                                        type="password"
-                                        required
-                                        class="form-control"
-                                        id="getPassword"
-                                        name="password"
-                                        ng-minlength="6"
-                                        ng-maxlength="30"
-                                        ng-pattern="/^[a-zA-Z0-9,!\?.£\$%&;:\-=]*$/"
-                                        ng-model="signupData.password"
-                                        placeholder="Create a secure password"/>
-                                <div ng-show="signupForm.$submitted || signupForm.password.$dirty">
-                                    <div ng-show="signupForm.password.$invalid">
-                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                        <div ng-if="signupForm.password.$error.required" class="help-block">
-                                            The password is required
-                                        </div>
-                                        <div ng-if="signupForm.password.$error.minlength || signupForm.username.$error.maxlength"
-                                             class="help-block">
-                                            The password is not valid: must be 6-30 characters long
-                                        </div>
-                                        <div ng-if="signupForm.password.$error.pattern" class="help-block">
-                                            The password is not valid: only letters, digits and characters ,!?.£$=%&;:-
-                                            are allowed
-                                        </div>
+                        <label class="control-label col-sm-3" for="getPassword">Password:</label>
+                        <div class="col-sm-8">
+                            <input
+                                    type="password"
+                                    required
+                                    class="form-control"
+                                    id="getPassword"
+                                    name="password"
+                                    ng-minlength="6"
+                                    ng-maxlength="30"
+                                    ng-pattern="/^[a-zA-Z0-9,!\?.£\$%&;:\-=]*$/"
+                                    ng-model="signupData.password"
+                                    placeholder="Create a secure password"/>
+                            <div ng-show="signupForm.$submitted || signupForm.password.$dirty">
+                                <div ng-show="signupForm.password.$invalid">
+                                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                    <div ng-if="signupForm.password.$error.required" class="help-block">
+                                        The password is required
                                     </div>
-                                    <div ng-show="!signupForm.password.$invalid">
-                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    <div ng-if="signupForm.password.$error.minlength || signupForm.username.$error.maxlength"
+                                         class="help-block">
+                                        The password is not valid: must be 6-30 characters long
                                     </div>
+                                    <div ng-if="signupForm.password.$error.pattern" class="help-block">
+                                        The password is not valid: only letters, digits and characters ,!?.£$=%&;:-
+                                        are allowed
+                                    </div>
+                                </div>
+                                <div ng-show="!signupForm.password.$invalid">
+                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group  has-feedback"
-                             ng-class="{
+                    </div>
+                    <div class="form-group  has-feedback"
+                         ng-class="{
                             'has-error': (signupForm.$submitted || signupForm.confirmPassword.$dirty) && signupForm.confirmPassword.$invalid,
                             'has-success': (signupForm.$submitted || signupForm.confirmPassword.$dirty) && !signupForm.confirmPassword.$invalid
                             }">
-                            <label class="control-label col-sm-3" for="getConfirmPassword"></label>
-                            <div class="col-sm-8">
-                                <input
-                                        type="password"
-                                        required
-                                        class="form-control"
-                                        id="getConfirmPassword"
-                                        name="confirmPassword"
-                                        ng-model="signupData.confirmPassword"
-                                        compare-to="signupData.password"
-                                        placeholder="Confirm the password">
-                                <div ng-show="signupForm.$submitted || signupForm.confirmPassword.$dirty">
-                                    <div ng-show="signupForm.confirmPassword.$invalid">
-                                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                        <div class="help-block">
-                                            The password doesn't match
-                                        </div>
+                        <label class="control-label col-sm-3" for="getConfirmPassword"></label>
+                        <div class="col-sm-8">
+                            <input
+                                    type="password"
+                                    required
+                                    class="form-control"
+                                    id="getConfirmPassword"
+                                    name="confirmPassword"
+                                    ng-model="signupData.confirmPassword"
+                                    compare-to="signupData.password"
+                                    placeholder="Confirm the password">
+                            <div ng-show="signupForm.$submitted || signupForm.confirmPassword.$dirty">
+                                <div ng-show="signupForm.confirmPassword.$invalid">
+                                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                    <div class="help-block">
+                                        The password doesn't match
                                     </div>
-                                    <div ng-show="!signupForm.confirmPassword.$invalid">
-                                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                    </div>
+                                </div>
+                                <div ng-show="!signupForm.confirmPassword.$invalid">
+                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3" for="getTimeZone">Time zone</label>
-                            <div class="col-sm-8">
-                                <select
-                                        class="form-control"
-                                        id="getTimeZone"
-                                        ng-options="option.name for option in timeZones track by option.id"
-                                        ng-model="signupData.timezone"></select>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="getTimeZone">Time zone</label>
+                        <div class="col-sm-8">
+                            <select
+                                    class="form-control"
+                                    id="getTimeZone"
+                                    ng-options="option.name for option in timeZones track by option.id"
+                                    ng-model="signupData.timezone"></select>
                         </div>
-                    </div>
-                    <div ng-show="signupStatus.waiting && !signupStatus.response" align="center">
-                        <img src="images/loading.gif" width="150" />
-                        <br />
-                        <h3>Waiting for server response</h3>
-                    </div>
-                    <div ng-show="signupStatus.response" align="center">
-                        <h3 ng-show="signupStatus.success">Successfully registered</h3>
-                        <h3 ng-show="!signupStatus.success">Connection failed... try later</h3>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button ng-show="!signupStatus.response" type="submit" class="form-control"
-                            ng-class="{
-                                'btn-primary' : !signupStatus.waiting,
-                                'btn-warning' : signupStatus.waiting}">
-                        <span ng-show="signupStatus.waiting" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-                        <span ng-show="signupStatus.waiting"> Loading...</span>
-                        <span ng-show="!signupStatus.waiting">SignUp</span>
-                    </button>
-                    <button ng-show="signupStatus.response" class="form-control" data-dismiss="modal"
-                            ng-class="{
-                                'btn-primary' : signupStatus.success,
-                                'btn-danger' : !signupStatus.success}">
-                        <span ng-show="signupStatus.success" class="glyphicon glyphicon-ok"></span>
-                        <span ng-show="!signupStatus.success" class="glyphicon glyphicon-remove"></span>
-                        <span> Close</span>
-                    </button>
+                    <button type="submit" class="form-control btn-primary">SignUp</button>
                 </div>
             </div>
         </form>

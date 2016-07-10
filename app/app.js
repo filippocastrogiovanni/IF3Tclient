@@ -75,25 +75,18 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
     $rootScope.ipServer = "http://localhost:8181";
 
     $rootScope.authenticated = userFactory.isAuthenticated();
-    $rootScope.signupStatus = {};
-    $rootScope.signupStatus.response = false;
-    $rootScope.signupStatus.waiting = false;
-    $rootScope.signupStatus.success = false;
     $rootScope.signupData = {};
     $rootScope.signupRQ = function (formValidity) {
         if (formValidity) {
-            $('#signin').modal('hide');
-            $rootScope.signupStatus.waiting = true;
+            $('#signup').modal('hide');
             userFactory.signup($rootScope.signupData);
         }
     };
     $rootScope.signupRS = function (status) {
-        $rootScope.signupStatus.response = true;
-        $rootScope.signupStatus.waiting = false;
         if (status) {
-            $rootScope.signupStatus.success = true;
+            messageFactory.showSuccessMsg("SignUp successful");
         } else {
-            $rootScope.signupStatus.success = false;
+            messageFactory.showDangerMsg("SignUp failed");
         }
     };
 
@@ -461,36 +454,56 @@ if3tApp.factory('messageFactory', function()
         $('#loading').modal('hide');
     };
 
+    factory.showDialog = function (title, message, confirm, cancel, callback) {
+        $("#dialog-box").modal('show');
+        $('#dialog-title').html(title);
+        $('#dialog-message').html(message);
+        $('#dialog-confirm').html(confirm)
+            .click(function(){
+                callback(true);
+            });
+        $('#dialog-cancel').html(cancel)
+            .click(function(){
+                callback(false);
+            });
+    };
+
+    factory.showError = function (title, message) {
+        $("#error-box").modal('show');
+        $('#error-title').html(title);
+        $('#error-message').html(message);
+    };
+
     factory.showWarningMsg = function (message) {
-        $("#alert-warning").show();
-        $('#alert-warning').html(message);
-        $("#alert-warning").fadeTo(800, 500).fadeOut(500, function(){
-            $("#alert-warning").hide();
-        });
+        $("#alert-warning").show()
+            .html(message)
+            .fadeTo(800, 500).fadeOut(500, function(){
+                $("#alert-warning").hide();
+            });
     };
 
     factory.showSuccessMsg = function (message) {
-        $("#alert-success").show();
-        $('#alert-success').html(message);
-        $("#alert-success").fadeTo(800, 500).fadeOut(500, function(){
-            $("#alert-success").hide();
-        });
+        $("#alert-success").show()
+            .html(message)
+            .fadeTo(800, 500).fadeOut(500, function(){
+                $("#alert-success").hide();
+            });
     };
 
     factory.showInfoMsg = function (message) {
-        $("#alert-info").show();
-        $('#alert-info').html(message);
-        $("#alert-info").fadeTo(800, 500).fadeOut(500, function(){
-            $("#alert-info").hide();
-        });
+        $("#alert-info").show()
+            .html(message)
+            .fadeTo(800, 500).fadeOut(500, function(){
+                $("#alert-info").hide();
+            });
     };
 
     factory.showDangerMsg = function (message) {
-        $("#alert-danger").show();
-        $('#alert-danger').html(message);
-        $("#alert-danger").fadeTo(800, 500).fadeOut(500, function(){
-            $("#alert-danger").hide();
-        });
+        $("#alert-danger").show()
+            .html(message)
+            .fadeTo(800, 500).fadeOut(500, function(){
+                $("#alert-danger").hide();
+            });
     };
 
     return factory;
