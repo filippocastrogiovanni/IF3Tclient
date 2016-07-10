@@ -33,16 +33,16 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             choose_action_channel($scope, $http, $rootScope, o, userFactory);
         }
 
-        $scope.submit_trigger = function(triggers_parameters, is_form_valid, trigger_header) {
-            submit_trigger($scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header);
+        $scope.submit_trigger = function(triggers_parameters, is_form_valid, trigger_header, data_trigger) {
+            submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header, data_trigger);
         }
 
-        $scope.submit_action = function(actions_parameters, is_form_valid, action_header) {
-            submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header);
+        $scope.submit_action = function(actions_parameters, is_form_valid, action_header, data_action) {
+            submit_action($rootScope, $scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header, data_action);
         }
 
-        $scope.submit_recipe = function(recipe_description, userFactory) {
-            submit_recipe($scope, $window, $http, recipe_description);
+        $scope.submit_recipe = function(recipe_description) {
+            submit_recipe($rootScope, $scope, $window, $http, recipe_description, userFactory);
         }
     }
 ]);
@@ -51,6 +51,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
     console.log("You have choosen " + o.name);
     $scope.chosen_trigger_channel = o;
+    $rootScope.chosen_trigger_channel = o;
     $http({
         method: 'GET',
         url: $rootScope.ipServer+'/triggers/'+o.channelId,
@@ -131,6 +132,7 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
 function choose_action_channel($scope, $http, $rootScope, o, userFactory){
     console.log("You have choosen " + o.name);
     $scope.chosen_action_channel = o;
+    $rootScope.chosen_action_channel = o;
     $http({
         method: 'GET',
         url: $rootScope.ipServer+'/actions/'+o.channelId,
@@ -189,10 +191,11 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
 
 }
 
-function submit_trigger($scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header){
-    for(var i=0; i<parameters_parameters.length; i++){
-        console.log("Input data: " + parameters_parameters[i]);
+function submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header, data_trigger){
+    for(var i=0; i<triggers_parameters.length; i++){
+        console.log("Input data: " + triggers_parameters[i]);
     }
+    delete data_trigger.params;
     //OR
     //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
     if(is_form_valid) {
@@ -207,14 +210,16 @@ function submit_trigger($scope, triggers_parameters, is_form_valid, $location, $
             $anchorScroll();
         }
     }
-    $scope.chosen_trigger_job = trigger_header;
-    $scope.chose_trigger_parameters = triggers_parameters;
+    $rootScope.chosen_trigger_job = trigger_header;
+    $rootScope.chosen_trigger_parameters = triggers_parameters;
+    $rootScope.chosen_trigger_data = data_trigger;
 }
 
-function submit_action($scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header){
+function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header, data_action){
     for(var i=0; i<actions_parameters.length; i++){
         console.log("Input data: " + actions_parameters[i]);
     }
+    delete data_action.params;
     //OR
     //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
     if(is_form_valid) {
@@ -231,24 +236,40 @@ function submit_action($scope, actions_parameters, is_form_valid, $location, $an
     }
 
     $scope.chosen_action_job = action_header;
-    $scope.chose_action_parameters = actions_parameters;
+    $scope.chosen_action_parameters = actions_parameters;
+    $scope.chosen_action_data = data_action;
+    $rootScope.chosen_action_job = action_header;
+    $rootScope.chosen_action_parameters = actions_parameters;
+    $rootScope.chosen_action_data = data_action;
 
     //preparing data to POST (List<Recipe>) phase1
     var recipe_to_add = {};
-    recipe_to_add.id_action = chosen_action_channel.id;
+    recipe_to_add.data_action = data_action;
 
+    $scope.recipes_list = [];
     $scope.recipes_list.push(recipe_to_add);
+    $rootScope.recipes_list = $scope.recipes_list;
+
+    $scope.chosen_trigger_channel = $rootScope.chosen_trigger_channel;
+    $scope.chosen_action_channel = $rootScope.chosen_action_channel;
+    $scope.chosen_trigger_job = $rootScope.chosen_trigger_job;
+    $scope.chose_trigger_parameters = $rootScope.chose_trigger_parameters;
+    $scope.chosen_trigger_data = $rootScope.chosen_trigger_data;
+    $scope.recipe_description = "When " + $scope.chosen_trigger_job + " in " + $scope.chosen_trigger_channel.name + ", do " + $scope.chosen_action_job + "in " + $scope.chosen_action_channel.name;
 }
 
-function submit_recipe($scope, $window, $http, recipe_description, userFactory) {
+function submit_recipe($rootScope, $scope, $window, $http, recipe_description, userFactory) {
+    $scope.recipes_list = $rootScope.recipes_list;
     console.log("Submitting recipe");
     //preparing data to POST (List<Recipe>) phase2
-    for (var i = 0; i < $scope.recipes_list; i++) {
+    for (var i = 0; i < $scope.recipes_list.length; i++) {
         $scope.recipes_list[i].description = recipe_description;
+        $scope.recipes_list[i].trigger = $rootScope.chosen_trigger_data;
+        $scope.recipes_list[i].action = $rootScope.chosen_action_data;
+        $scope.recipes_list[i].trigger_ingredients = $rootScope.chosen_trigger_parameters;
+        $scope.recipes_list[i].action_ingredients = $rootScope.chosen_action_parameters;
         $scope.recipes_list[i].is_public = false;
         $scope.recipes_list[i].is_enabled = false;
-        //$scope.recipes_list[i].id_user = userFactory.getProfile().id;
-        $scope.recipes_list[i].id_trigger = chosen_trigger_channel.id;
     }
     if(userFactory.isAuthenticated()) {
         $http({

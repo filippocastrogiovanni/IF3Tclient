@@ -5,11 +5,9 @@
     <h2>Create a recipe</h2>
 </md-toolbar>
 
-<!--
 <style type = "text/css" scoped>
     body { overflow: hidden; }
 </style>
--->
 
 <!-- STEP 0 -->
 <div id="first_div">
@@ -162,7 +160,7 @@
                             <p>{{data_triggers.paragraph}}</p>
                             <br>
                             <br>
-                            <form name="triggerForm" novalidate ng-submit="submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header )">
+                            <form name="triggerForm" novalidate ng-submit="submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header, data_triggers )">
                                 <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
                                     <h4>{{same_id_trigger.unbinded_name}}</h4>
                                     <input type='{{same_id_trigger.type}}' name='{{same_id_trigger.name}}' ng-model="same_id_trigger.name" required>
@@ -353,7 +351,7 @@
                             <p>{{data_actions.paragraph}}</p>
 <br>
 <br>
-                            <form name="actionForm" novalidate ng-submit="submit_action( data_actions.params, actionForm.$valid, data_actions.header )">
+                            <form name="actionForm" novalidate ng-submit="submit_action( data_actions.params, actionForm.$valid, data_actions.header, data_actions )">
                                 <div ng-repeat="same_id_action in data_actions.params track by $index">
                                     <h4>{{same_id_action.unbinded_name}}</h4>
                                     <input type='{{same_id_action.type}}' name='{{same_id_action.name}}' ng-model="same_id_action.name" required>
@@ -405,13 +403,13 @@
                     <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
                 </md-content>
 <br>
-            <h3>Recipe title: </h3>
-                <textarea rows="4" cols="50" name="recipe_description" ng-model="recipe_description" form="submit_recipe">When {{ chosen_trigger_job }} in {{ chosen_trigger_channel.name }}, do {{ chosen_action_job }} in {{ chosen_action_channel.name }}
-                </textarea>
-<br>
-<br>
-            <form novalidate ng-submit='submit_recipe()' id="submit_recipe">
-                    <input aria-label="input" type="submit" class="btn btn-info btn-large" value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp" /> <!--ng-href="#/home"-->
+            <form novalidate ng-submit='submit_recipe(recipe_description)' id="submit_recipe">
+                <br>
+                <h3>Recipe title: </h3>
+                <textarea rows="4" cols="50" name="recipe_description" ng-model="recipe_description">{{recipe_description}}</textarea>
+                <br>
+
+                <input aria-label="input" type="submit" class="btn btn-info btn-large" value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp" /> <!--ng-href="#/home"-->
             </form>
         </div>
     </div>
