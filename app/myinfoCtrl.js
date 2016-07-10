@@ -10,14 +10,12 @@ if3tApp.controller('MyInfoController', ['messageFactory','userFactory', '$scope'
 
         $scope.user = userFactory.getProfile();
         
-        $scope.passwordChange = {currPass: "", newPass:"", confirmNewPass:""};
-        
-        $scope.callback = function(response){
+        $scope.callback = function(response, message){
             messageFactory.hideLoading();
             if(response)
                 messageFactory.showSuccessMsg("Profile successfully updated!");
             else
-                messageFactory.showDangerMsg("There was an error with the server, try again!");
+                messageFactory.showDangerMsg(message);
         };
         
         $scope.saveUserData = function(formValidity){
@@ -34,7 +32,9 @@ if3tApp.controller('MyInfoController', ['messageFactory','userFactory', '$scope'
         $scope.changePassword = function(form){
             if(form.$valid) {
                 messageFactory.showLoading();
-                userFactory.changePassword($scope.passwordChange, $scope.callback);
+                userFactory.changePassword({
+                    currentPassword : $scope.passwordChange.curPass,
+                    newPassword : $scope.passwordChange.newPass}, $scope.callback);
                 $scope.passwordChange = {};
                 form.$setPristine();
             }

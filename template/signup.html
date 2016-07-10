@@ -22,7 +22,7 @@
                                     class="form-control"
                                     id="getName"
                                     name="name"
-                                    ng-minlength="3"
+                                    ng-minlength="2"
                                     ng-maxlength="30"
                                     ng-pattern="/^[a-zA-Z \-\']*$/"
                                     ng-model="signupData.name"
@@ -35,7 +35,7 @@
                                     </div>
                                     <div ng-if="signupForm.name.$error.minlength || signupForm.name.$error.maxlength"
                                          class="help-block">
-                                        The name is not valid: must be 3-30 characters long
+                                        The name is not valid: must be 2-30 characters long
                                     </div>
                                     <div ng-if="signupForm.name.$error.pattern" class="help-block">
                                         The name is not valid: no special characters are allowed
@@ -60,7 +60,7 @@
                                     class="form-control"
                                     id="getSurname"
                                     name="surname"
-                                    ng-minlength="3"
+                                    ng-minlength="2"
                                     ng-maxlength="30"
                                     ng-pattern="/^[a-zA-Z \-\']*$/"
                                     ng-model="signupData.surname"
@@ -73,7 +73,7 @@
                                     </div>
                                     <div ng-if="signupForm.surname.$error.minlength || signupForm.surname.$error.maxlength"
                                          class="help-block">
-                                        The last name is not valid: must be 3-30 characters long
+                                        The last name is not valid: must be 2-30 characters long
                                     </div>
                                     <div ng-if="signupForm.surname.$error.pattern" class="help-block">
                                         The last name is not valid: no special characters are allowed
@@ -173,7 +173,7 @@
                                     name="password"
                                     ng-minlength="6"
                                     ng-maxlength="30"
-                                    ng-pattern="/^[a-zA-Z0-9,!\?.£\$%&;:\-=]*$/"
+                                    ng-pattern="/^[a-zA-Z0-9,!\?.£\%&;:\-=]*$/"
                                     ng-model="signupData.password"
                                     placeholder="Create a secure password"/>
                             <div ng-show="signupForm.$submitted || signupForm.password.$dirty">
@@ -187,7 +187,7 @@
                                         The password is not valid: must be 6-30 characters long
                                     </div>
                                     <div ng-if="signupForm.password.$error.pattern" class="help-block">
-                                        The password is not valid: only letters, digits and characters ,!?.£$=%&;:-
+                                        The password is not valid: only letters, digits and characters ,!?.£=%&;:-
                                         are allowed
                                     </div>
                                 </div>

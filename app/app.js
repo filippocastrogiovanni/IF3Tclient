@@ -79,14 +79,14 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
     $rootScope.signupRQ = function (formValidity) {
         if (formValidity) {
             $('#signup').modal('hide');
-            userFactory.signup($rootScope.signupData);
+            userFactory.signup($rootScope.signupData, $rootScope.signupRS);
         }
     };
-    $rootScope.signupRS = function (status) {
+    $rootScope.signupRS = function (status, message) {
         if (status) {
             messageFactory.showSuccessMsg("SignUp successful");
         } else {
-            messageFactory.showDangerMsg("SignUp failed");
+            messageFactory.showError("SignUp Error",message);
         }
     };
 
@@ -94,7 +94,7 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
         if (formValidity) {
             $('#login').modal('hide');
             messageFactory.showLoading();
-            userFactory.login($rootScope.loginData);
+            userFactory.login($rootScope.loginData, $rootScope.loginRS);
         }
     };
     $rootScope.loginRS = function (status) {
@@ -107,7 +107,7 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
         $rootScope.authenticated = userFactory.isAuthenticated();
     };
     $rootScope.logoutRQ = function () {
-        userFactory.logout();
+        userFactory.logout($rootScope.logoutRS);
     };
     $rootScope.logoutRS = function (status) {
         $rootScope.authenticated = userFactory.isAuthenticated();
@@ -334,17 +334,17 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
     };
     factory.authenticate();
 
-    factory.login = function (credentials) {
+    factory.login = function (credentials, callback) {
         factory.authenticate(credentials, function () {
             if (authenticated) {
-                $rootScope.loginRS(true);
+                callback && callback(true);
             } else {
-                $rootScope.loginRS(false);
+                callback && callback(false);
             }
         });
     };
 
-    factory.logout = function () {
+    factory.logout = function (callback) {
         $http({
             method: 'GET',
             dataType: 'json',
@@ -358,7 +358,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     if($cookies.get('remember')){
                         $rootScope.loginData = angular.fromJson($cookies.get('remember'));;
                     }
-                    $rootScope.logoutRS(true);
+                    callback && callback(true);
                 },
                 function errorCallback(response) {
                     authenticated = false;
@@ -367,11 +367,11 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     if($cookies.get('remember')){
                         $rootScope.loginData = angular.fromJson($cookies.get('remember'));;
                     }
-                    $rootScope.logoutRS(false);
+                    callback && callback(false);
                 });
     };
 
-    factory.signup = function (data) {
+    factory.signup = function (data, callback) {
         if (!authenticated) {
             var user = {};
             user.name = data.name;
@@ -392,14 +392,13 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                         $rootScope.loginData.username = user.username;
                         $rootScope.loginData.password = user.password;
                         factory.login($rootScope.loginData);
-                        $rootScope.signupRS(true);
+                        callback && callback(true);
                     },
                     function errorCallback(response) {
                         console.log("ERROR POST: signup");
-                        $rootScope.signupRS(false);
+                        console.log(response);
+                        callback && callback(false, response.data.message);
                     });
-        } else {
-            $rootScope.signupRS(false);
         }
     };
 
@@ -417,8 +416,9 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     callback && callback(true);
                 },
                 function errorCallback(response) {
-                    console.log("ERROR PUT: editProfile" + response);
-                    callback && callback(false);
+                    console.log("ERROR PUT: editProfile");
+                    console.log(response);
+                    callback && callback(false, response.data.message);
                 });
     };
 
@@ -434,8 +434,9 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     callback && callback(true);
                 },
                 function errorCallback(response) {
-                    callback && callback(false);
+                    callback && callback(false, response.data.message);
                     console.log("ERROR PUT: changePassword");
+                    console.log(response);
                 });
     };
 
