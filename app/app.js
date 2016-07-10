@@ -462,31 +462,34 @@ if3tApp.factory('messageFactory', function()
     };
 
     factory.showWarningMsg = function (message) {
+        $("#alert-warning").show();
         $('#alert-warning').html(message);
-        $("#alert-warning").fadeTo(2000, 500).fadeOut(500, function(){
-            $("#alert-warning").alert('close');
+        $("#alert-warning").fadeTo(800, 500).fadeOut(500, function(){
+            $("#alert-warning").hide();
         });
     };
 
     factory.showSuccessMsg = function (message) {
+        $("#alert-success").show();
         $('#alert-success').html(message);
-        $("#alert-success").fadeTo(2000, 500).fadeOut(500, function(){
-            $("#alert-success").alert('close');
+        $("#alert-success").fadeTo(800, 500).fadeOut(500, function(){
+            $("#alert-success").hide();
         });
-        $('#alert-success').hide();
     };
 
     factory.showInfoMsg = function (message) {
+        $("#alert-info").show();
         $('#alert-info').html(message);
-        $("#alert-info").fadeTo(2000, 500).fadeOut(500, function(){
-            $("#alert-info").alert('close');
+        $("#alert-info").fadeTo(800, 500).fadeOut(500, function(){
+            $("#alert-info").hide();
         });
     };
 
     factory.showDangerMsg = function (message) {
+        $("#alert-danger").show();
         $('#alert-danger').html(message);
-        $("#alert-danger").fadeTo(2000, 500).fadeOut(500, function(){
-            $("#alert-danger").alert('close');
+        $("#alert-danger").fadeTo(800, 500).fadeOut(500, function(){
+            $("#alert-danger").hide();
         });
     };
 
