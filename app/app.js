@@ -410,11 +410,11 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         }
     };
 
-    factory.editProfile = function (data) {
+    factory.editProfile = function (data, callback) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: $rootScope.ipServer + '/users',
+            url: $rootScope.ipServer + '/userinfo',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')},
             data: angular.toJson(data)
         })
@@ -424,10 +424,12 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     profile.surname = data.surname;
                     profile.email = data.email;
                     profile.timezone = data.timezone;
+                    callback && callback(true);
                     return true;
                 },
                 function errorCallback(response) {
-                    console.log("ERROR PUT: editProfile");
+                    console.log("ERROR PUT: editProfile" + response);
+                    callback && callback(false);
                     return false;
                 });
     };

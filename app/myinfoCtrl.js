@@ -1,8 +1,8 @@
 /**
  * Created by TheChuck on 07/07/2016.
  */
-if3tApp.controller('MyInfoController', ['userFactory', '$scope', '$rootScope', '$routeParams', '$location', '$http',
-    function (userFactory, $scope, $rootScope, $routeParams, $location, $http) {
+if3tApp.controller('MyInfoController', ['messageFactory','userFactory', '$scope', '$rootScope', '$routeParams', '$location', '$http',
+    function (messageFactory, userFactory, $scope, $rootScope, $routeParams, $location, $http) {
         $rootScope.curpage = "profile";
 
         if(!userFactory.isAuthenticated())
@@ -12,12 +12,19 @@ if3tApp.controller('MyInfoController', ['userFactory', '$scope', '$rootScope', '
         
         $scope.passwordChange = {currPass: "", newPass:"", confirmNewPass:""};
         
+        $scope.callback = function(response){
+            if(response)
+                messageFactory.showSuccessMsg("Information successfully modified!");
+            else
+                messageFactory.showDangerMsg("There was an error with the server, try again!");
+        };
+        
         $scope.saveUserData = function(){
             var currentUser = userFactory.getProfile();
             if(currentUser != $scope.user)
                 return;
             
-            userFactory.editProfile($scope.user);
+            userFactory.editProfile($scope.user, callback);
             console.log($scope.user);
         };
 
