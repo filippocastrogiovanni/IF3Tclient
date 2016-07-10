@@ -2,13 +2,11 @@
  * Created by TheChuck on 07/07/2016.
  */
 
-if3tApp.controller('ProfileController', ['$scope', '$rootScope', '$routeParams', '$window',
-    function ($scope, $rootScope, $routeParams, $window) {
+if3tApp.controller('ProfileController', ['userFactory', '$scope', '$rootScope', '$routeParams', '$window',
+    function (userFactory, $scope, $rootScope, $routeParams, $window) {
         $rootScope.curpage = "profile";
 
-        var authenticated = true;
-
-        if(!authenticated/*!userFactory.isAuthenticated()*/)
+        if(!userFactory.isAuthenticated())
             $window.location.href = "#/home";
 
         $scope.tabs = [

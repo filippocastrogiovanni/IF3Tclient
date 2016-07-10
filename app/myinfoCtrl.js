@@ -13,6 +13,7 @@ if3tApp.controller('MyInfoController', ['messageFactory','userFactory', '$scope'
         $scope.passwordChange = {currPass: "", newPass:"", confirmNewPass:""};
         
         $scope.callback = function(response){
+            messageFactory.hideLoading();
             if(response)
                 messageFactory.showSuccessMsg("Information successfully modified!");
             else
@@ -23,9 +24,9 @@ if3tApp.controller('MyInfoController', ['messageFactory','userFactory', '$scope'
             var currentUser = userFactory.getProfile();
             if(currentUser != $scope.user)
                 return;
-            
-            userFactory.editProfile($scope.user, callback);
-            console.log($scope.user);
+
+            messageFactory.showLoading();
+            userFactory.editProfile($scope.user, $scope.callback);
         };
 
         $scope.changePassword = function(){
