@@ -344,7 +344,7 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
             data: $scope.recipes_list
         }).then(function successCallback(response) {
             alert("You have create a recipe successfully!");
-            $window.location.href = ' #/myrecipes';
+            $window.location.href = '#/myrecipes';
         }, function errorCallback(response) {
             alert("You DIDN'T save the recipe");
         });
