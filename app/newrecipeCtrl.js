@@ -302,6 +302,8 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         parameter_trigger_element.id = $rootScope.chosen_trigger_parameters[i].id;
         parameter_trigger_element.channel = $rootScope.chosen_trigger_data.channel;
         parameter_trigger_element.trigger = $rootScope.chosen_trigger_data;
+        delete parameter_trigger_element.trigger.id;
+        delete parameter_trigger_element.trigger.channel.channelId;
         parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].unbinded_name;
         parameter_trigger_element.type = $rootScope.chosen_trigger_parameters[i].type;
         var trigger_ingredient_element = {};
@@ -315,6 +317,8 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         parameter_action_element.id = $rootScope.chosen_action_parameters[i].id;
         parameter_action_element.channel = $rootScope.chosen_action_data.channel;
         parameter_action_element.action = $rootScope.chosen_action_data;
+        delete parameter_action_element.action.id;
+        delete parameter_action_element.action.channel.channelId;
         parameter_action_element.name = $rootScope.chosen_action_parameters[i].unbinded_name;
         parameter_action_element.type = $rootScope.chosen_action_parameters[i].type;
         var action_ingredient_element = {};
@@ -325,8 +329,8 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
 
     element_recipe.trigger = $rootScope.chosen_trigger_data;
     element_recipe.action = $rootScope.chosen_action_data;
-    element_recipe.is_public = false;
-    element_recipe.is_enabled = false;
+    element_recipe.isPublic = false;
+    element_recipe.isEnabled = false;
     $scope.recipes_list.push(element_recipe);
     if(userFactory.isAuthenticated()) {
         $http({
