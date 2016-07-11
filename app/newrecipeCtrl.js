@@ -302,13 +302,14 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         parameter_trigger_element.id = $rootScope.chosen_trigger_parameters[i].id;
         parameter_trigger_element.channel = $rootScope.chosen_trigger_data.channel;
         parameter_trigger_element.trigger = $rootScope.chosen_trigger_data;
-        delete parameter_trigger_element.trigger.id;
-        delete parameter_trigger_element.trigger.channel.channelId;
+        //delete parameter_trigger_element.trigger.id;
+        //delete parameter_trigger_element.trigger.channel.channelId;
         parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].unbinded_name;
         parameter_trigger_element.type = $rootScope.chosen_trigger_parameters[i].type;
-        delete $rootScope.chosen_trigger_parameters[i].id;
+        //delete $rootScope.chosen_trigger_parameters[i].id;
         var trigger_ingredient_element = {};
         trigger_ingredient_element.param = parameter_trigger_element;
+        //delete trigger_ingredient_element.param.id;
         trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].name;
         element_recipe.trigger_ingredients.push(trigger_ingredient_element);
     }
@@ -318,13 +319,14 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         parameter_action_element.id = $rootScope.chosen_action_parameters[i].id;
         parameter_action_element.channel = $rootScope.chosen_action_data.channel;
         parameter_action_element.action = $rootScope.chosen_action_data;
-        delete parameter_action_element.action.id;
-        delete parameter_action_element.action.channel.channelId;
+        //delete parameter_action_element.action.id;
+        //delete parameter_action_element.action.channel.channelId;
         parameter_action_element.name = $rootScope.chosen_action_parameters[i].unbinded_name;
         parameter_action_element.type = $rootScope.chosen_action_parameters[i].type;
-        delete $rootScope.chosen_action_parameters[i].id;
+        //delete $rootScope.chosen_action_parameters[i].id;
         var action_ingredient_element = {};
         action_ingredient_element.param = parameter_action_element;
+        //delete action_ingredient_element.param.id;
         action_ingredient_element.value = $rootScope.chosen_action_parameters[i].name;
         element_recipe.action_ingredients.push(action_ingredient_element);
     }
@@ -342,7 +344,7 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
             data: $scope.recipes_list
         }).then(function successCallback(response) {
             alert("You have create a recipe successfully!");
-            $window.location.href = '/index.html#/myrecipes';
+            $window.location.href = ' #/myrecipes';
         }, function errorCallback(response) {
             alert("You DIDN'T save the recipe");
         });
