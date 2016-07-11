@@ -346,7 +346,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
 
     factory.logout = function (callback) {
         $http({
-            method: 'GET',
+            method: 'POST',
             dataType: 'json',
             url: $rootScope.ipServer + '/logout',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}

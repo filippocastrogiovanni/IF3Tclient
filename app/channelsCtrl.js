@@ -30,6 +30,25 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
 
         $scope.backToChannels = function(){
             $scope.showDetailChannel = false;
-        }
+        };
+
+        $scope.loadPage = function(url) {
+            $('#external-box').modal('show').find('.modal-body').load(url);
+        };
+
+        $scope.connect = function() {
+            $http({
+                method: 'GET',
+                dataType: 'json',
+                url: $rootScope.ipServer + '/gmail/auth',
+                headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
+            })
+                .then(function successCallback(response) {
+                        $scope.loadPage(response.data.message);
+                    },
+                    function errorCallback(response) {
+                        $scope.loadPage(response.data.message);
+                    });
+        };
     }
 ]);
