@@ -586,3 +586,23 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope)
 
     return factory;
 });
+
+var boolean_toggle_nav = false;
+function toggle_nav()
+{
+    if(!boolean_toggle_nav){
+        boolean_toggle_nav = true;
+    }
+    else {
+        boolean_toggle_nav = false;
+    }
+}
+
+function click_nav()
+{
+    console.log("BEFORE " + boolean_toggle_nav);
+    if(boolean_toggle_nav){
+        $("#id_nav_button").click();
+        boolean_toggle_nav = false;
+    }
+}

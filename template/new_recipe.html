@@ -5,9 +5,11 @@
     <h2>Create a recipe</h2>
 </md-toolbar>
 
+<!--
 <style type = "text/css" scoped>
     body { overflow: hidden; }
 </style>
+-->
 
 <!-- STEP 0 -->
 <div id="first_div">
@@ -146,6 +148,8 @@
 <br>
 <br>
     <!-- PART A -->
+    <br>
+    <br>
     <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
         <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(2/5)</h6>
     </md-content>
@@ -153,8 +157,6 @@
             <div div layout="row" layout-align="center"  style="min-height: 500px">
                 <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
                     <md-list>
-                        <br>
-                        <br>
                         <md-list-item  ng-repeat="data_triggers in chosen_trigger_channel.trigger_list track by $index" class="trigger-list_item" style="display: inline">
                             <h3>{{data_triggers.header}}</h3>
                             <p>{{data_triggers.paragraph}}</p>
