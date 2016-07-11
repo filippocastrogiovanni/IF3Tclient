@@ -306,7 +306,7 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         delete parameter_trigger_element.trigger.channel.channelId;
         parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].unbinded_name;
         parameter_trigger_element.type = $rootScope.chosen_trigger_parameters[i].type;
-        parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].id;
+        delete $rootScope.chosen_trigger_parameters[i].id;
         var trigger_ingredient_element = {};
         trigger_ingredient_element.param = parameter_trigger_element;
         trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].name;
@@ -322,7 +322,7 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         delete parameter_action_element.action.channel.channelId;
         parameter_action_element.name = $rootScope.chosen_action_parameters[i].unbinded_name;
         parameter_action_element.type = $rootScope.chosen_action_parameters[i].type;
-        parameter_action_element.name = $rootScope.chosen_action_parameters[i].id;
+        delete $rootScope.chosen_action_parameters[i].id;
         var action_ingredient_element = {};
         action_ingredient_element.param = parameter_action_element;
         action_ingredient_element.value = $rootScope.chosen_action_parameters[i].name;
