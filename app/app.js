@@ -112,8 +112,13 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
         userFactory.logout($rootScope.logoutRS);
     };
     $rootScope.logoutRS = function (status) {
+        if (status) {
+            messageFactory.showSuccessMsg("Logout successful");
+            $window.location.href = "#/home";
+        } else {
+            messageFactory.showDangerMsg("Logout failed");
+        }
         $rootScope.authenticated = userFactory.isAuthenticated();
-        $window.location.href = "#/home";
     };
 
     $rootScope.timeZones = [
@@ -348,11 +353,10 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
 
     factory.logout = function (callback) {
         $http({
-            method: 'POST',
+            method: 'GET',
             dataType: 'json',
-            url: $rootScope.ipServer + '/logout',
+            url: $rootScope.ipServer + '/login?logout',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
-            //data: angular.toJson($cookies)
         })
             .then(function successCallback(response) {
                     authenticated = false;
@@ -364,12 +368,6 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     callback && callback(true);
                 },
                 function errorCallback(response) {
-                    authenticated = false;
-                    $cookies.remove("authorization");
-                    $cookies.remove("user");
-                    if($cookies.get('remember')){
-                        $rootScope.loginData = angular.fromJson($cookies.get('remember'));;
-                    }
                     callback && callback(false);
                 });
     };
