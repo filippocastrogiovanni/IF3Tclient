@@ -2,8 +2,8 @@
  Created by Filippo on 24/05/2016.
  */
 
-if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams', '$location', '$http',
-    function ($scope, $rootScope, $routeParams, $location, $http) {
+if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams', '$window', '$http', 'userFactory',
+    function ($scope, $rootScope, $routeParams, $window, $http, userFactory) {
         $rootScope.curpage = "channels";
 
         $http.get($rootScope.ipServer + "/channels")
@@ -16,8 +16,21 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 }
             );
 
+        $scope.channelURL = "";
         $scope.showDetailChannel = false;
         $scope.selectChannel = function(channel){
+            $http({
+                method: 'GET',
+                dataType: 'json',
+                url: $rootScope.ipServer + '/gmail/auth',
+                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            })
+                .then(function successCallback(response) {
+                        $scope.channelURL = response.data.message;
+                    },
+                    function errorCallback(response) {
+                        console.log("Errore nel richiedere il channel URL");
+                    });
             if($scope.selectedChannel == null || $scope.selectedChannel == channel){
                 $scope.selectedChannel = channel;
                 $scope.showDetailChannel = !$scope.showDetailChannel;
@@ -26,29 +39,25 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
             $scope.showDetailChannel = false;
            $scope.selectedChannel = channel;
             $scope.showDetailChannel = true;
+
         };
 
         $scope.backToChannels = function(){
             $scope.showDetailChannel = false;
         };
 
-        $scope.loadPage = function(url) {
-            $('#external-box').modal('show').find('.modal-body').load(url);
+        $scope.loadPage = function(){
+            console.log($scope.channelURL);
+            $window.open($scope.channelURL,"_blank","location=no," +
+                "menubar=no," +
+                "toolbar=no," +
+                "scrollbars=no," +
+                "resizable=no," +
+                "status=no," +
+                "titlebar=no," +
+                "top=100,left=300," +
+                "width=550,height=550");
         };
 
-        $scope.connect = function() {
-            $http({
-                method: 'GET',
-                dataType: 'json',
-                url: $rootScope.ipServer + '/gmail/auth',
-                headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
-            })
-                .then(function successCallback(response) {
-                        $scope.loadPage(response.data.message);
-                    },
-                    function errorCallback(response) {
-                        $scope.loadPage(response.data.message);
-                    });
-        };
     }
 ]);

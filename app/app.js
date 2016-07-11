@@ -4,6 +4,7 @@
 var if3tApp = angular.module('if3tApp', ['ngRoute', 'ngSanitize', 'ngResource', 'ngMaterial', 'ngCookies']);
 
 if3tApp.config(['$routeProvider', function ($routeProvider) {
+
     $routeProvider.when('/home', {
         templateUrl: 'template/home.html',
         controller: 'HomeController'
@@ -28,6 +29,7 @@ if3tApp.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'template/profile.html',
         controller: 'ProfileController'
     });
+    
     $routeProvider.otherwise({redirectTo: '/home'});
 }]);
 
@@ -350,6 +352,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             dataType: 'json',
             url: $rootScope.ipServer + '/logout',
             headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
+            //data: angular.toJson($cookies)
         })
             .then(function successCallback(response) {
                     authenticated = false;

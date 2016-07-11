@@ -6,15 +6,15 @@
     <div class="row">
         <div ng-repeat="channel in channels" class="col-md-3" ng-show="!showDetailChannel">
             <md-button ng-click="selectChannel(channel)">
-                <img height="100" width="100" class="img-responsive" ng-src="{{ipServer + '/' + channel.image_url}}" />
+                <img aria-label="{{channel}}" height="100" width="100" class="img-responsive" ng-src="{{ipServer + '/' + channel.image_url}}" />
             </md-button>
         </div>
     </div>
 </div>
 
-<div id="channel" ng-show="showDetailChannel" align="center">
+<div id="channel" ng-if="showDetailChannel" align="center">
     <button ng-click="backToChannels()">Back to Channels</button>
     <img height="100" width="100" ng-src="{{ ipServer + '/' + selectedChannel.image_url }}">
     <span>{{selectedChannel.name}}</span>
-    <button ng-click="connect()">Connect</button>
+    <button ng-click="loadPage()">Connect</button>
 </div>
