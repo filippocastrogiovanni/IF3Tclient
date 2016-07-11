@@ -80,6 +80,7 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                     if(params[j].id_trigger == output_distinct[i]) {
                         var element_parameters_triggers = {};
                         element_parameters_triggers.name = params[j].name;
+                        element_parameters_triggers.id = params[j].id;
                         element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
                         element_parameters_triggers.type = params[j].type;
                         params_same_id_trigger.push(element_parameters_triggers);
@@ -161,6 +162,7 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                     if(params[j].id_action == output_distinct[i]) {
                         var element_parameters_actions = {};
                         element_parameters_actions.name = params[j].name;
+                        element_parameters_actions.id = params[j].id;
                         element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
                         element_parameters_actions.type = params[j].type;
                         params_same_id_action.push(element_parameters_actions);
@@ -211,6 +213,9 @@ function submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, 
         }
     }
     $rootScope.chosen_trigger_job = trigger_header;
+    for(var i=0; i<triggers_parameters.length; i++){
+        triggers_parameters[i].unbinded_name = triggers_parameters[i].unbinded_name.toLowerCase().replace(/ /g,"_");
+    }
     $rootScope.chosen_trigger_parameters = triggers_parameters;
     $rootScope.chosen_trigger_data = data_trigger;
 }
@@ -239,6 +244,9 @@ function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $l
     $scope.chosen_action_parameters = actions_parameters;
     $scope.chosen_action_data = data_action;
     $rootScope.chosen_action_job = action_header;
+    for(var i=0; i<actions_parameters.length; i++){
+        actions_parameters[i].unbinded_name = actions_parameters[i].unbinded_name.toLowerCase().replace(/ /g,"_");
+    }
     $rootScope.chosen_action_parameters = actions_parameters;
     $rootScope.chosen_action_data = data_action;
 
@@ -280,13 +288,43 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
     }
     */
     var element_recipe = {};
-    element_recipe.description = recipe_description;
+    if(recipe_description!=undefined && (new String(recipe_description.trim()))!= new String("")) {
+        element_recipe.description = recipe_description;
+    }
+    else{
+        element_recipe.description = "No title";
+    }
+
+    element_recipe.trigger_ingredients = [];
+    element_recipe.action_ingredients = [];
+    for(var i=0; i<$rootScope.chosen_trigger_parameters.length; i++){
+        var parameter_trigger_element = {};
+        parameter_trigger_element.id = $rootScope.chosen_trigger_parameters[i].id;
+        parameter_trigger_element.channel = $rootScope.chosen_trigger_data.channel;
+        parameter_trigger_element.trigger = $rootScope.chosen_trigger_data;
+        parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].unbinded_name;
+        parameter_trigger_element.type = $rootScope.chosen_trigger_parameters[i].type;
+        var trigger_ingredient_element = {};
+        trigger_ingredient_element.param = parameter_trigger_element;
+        trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].name;
+        element_recipe.trigger_ingredients.push(trigger_ingredient_element);
+    }
+
+    for(var i=0; i<$rootScope.chosen_action_parameters.length; i++){
+        var parameter_action_element = {};
+        parameter_action_element.id = $rootScope.chosen_action_parameters[i].id;
+        parameter_action_element.channel = $rootScope.chosen_action_data.channel;
+        parameter_action_element.action = $rootScope.chosen_action_data;
+        parameter_action_element.name = $rootScope.chosen_action_parameters[i].unbinded_name;
+        parameter_action_element.type = $rootScope.chosen_action_parameters[i].type;
+        var action_ingredient_element = {};
+        action_ingredient_element.param = parameter_action_element;
+        action_ingredient_element.value = $rootScope.chosen_action_parameters[i].name;
+        element_recipe.action_ingredients.push(action_ingredient_element);
+    }
+
     element_recipe.trigger = $rootScope.chosen_trigger_data;
     element_recipe.action = $rootScope.chosen_action_data;
-    element_recipe.trigger_ingredients = $rootScope.chosen_trigger_parameters;
-    element_recipe.action_ingredients = $rootScope.chosen_action_parameters;
-    delete element_recipe.trigger_ingredients.unbinded_name;
-    delete element_recipe.action_ingredients.unbinded_name;
     element_recipe.is_public = false;
     element_recipe.is_enabled = false;
     $scope.recipes_list.push(element_recipe);
