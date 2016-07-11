@@ -385,7 +385,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             $http({
                 method: 'POST',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/signin',
+                url: $rootScope.ipServer + '/signup',
                 headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(user)
             })
