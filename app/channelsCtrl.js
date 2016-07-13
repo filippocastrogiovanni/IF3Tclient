@@ -22,13 +22,14 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
             $http({
                 method: 'GET',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/gmail/auth',
+                url: $rootScope.ipServer + '/' + channel.keyword + '/auth',
                 headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
             })
                 .then(function successCallback(response) {
                         $scope.channelURL = response.data.message;
                     },
-                    function errorCallback(response) {
+                    function errorCallback(error) {
+                        console.log(error);
                         console.log("Errore nel richiedere il channel URL");
                     });
             if($scope.selectedChannel == null || $scope.selectedChannel == channel){

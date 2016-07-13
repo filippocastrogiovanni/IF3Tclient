@@ -3,7 +3,10 @@
  */
 var if3tApp = angular.module('if3tApp', ['ngRoute', 'ngSanitize', 'ngResource', 'ngMaterial', 'ngCookies']);
 
-if3tApp.config(['$routeProvider', function ($routeProvider) {
+if3tApp.config(function ($httpProvider, $routeProvider) {
+
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.withCredentials = true;
 
     $routeProvider.when('/home', {
         templateUrl: 'template/home.html',
@@ -31,7 +34,7 @@ if3tApp.config(['$routeProvider', function ($routeProvider) {
     });
     
     $routeProvider.otherwise({redirectTo: '/home'});
-}]);
+});
 
 if3tApp.directive('imageonload', function () {
     return {
@@ -78,6 +81,7 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
 
     $rootScope.authenticated = userFactory.isAuthenticated();
     $rootScope.signupData = {};
+    
     $rootScope.signupRQ = function (formValidity) {
         if (formValidity) {
             $('#signup').modal('hide');
@@ -272,6 +276,10 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         } else {
             return null;
         }
+    };
+    
+    factory.getXsrfCookie = function(){
+        return $cookies.get('XSRF-TOKEN');
     };
 
     factory.getAuthorization = function() {

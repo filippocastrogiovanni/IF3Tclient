@@ -12,7 +12,7 @@ if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$sco
         $http({
             method: 'GET',
             url: $rootScope.ipServer + '/user_recipes',
-            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            headers: {'Content-Type': 'application/json'}
         })
             .then(
                 function success(response){
@@ -33,8 +33,8 @@ if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$sco
             $http({
                 method: 'PUT',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/publish_recipe',
-                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()},
+                url: $rootScope.ipServer + '/publish_recipe?_csrf=' + userFactory.getXsrfCookie(),
+                headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(recipe)
             })
                 .then(
@@ -53,8 +53,8 @@ if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$sco
             $http({
                 method: 'PUT',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/enable_recipe',
-                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()},
+                url: $rootScope.ipServer + '/enable_recipe?_csrf=' + userFactory.getXsrfCookie(),
+                headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(recipe)
             })
                 .then(
@@ -64,9 +64,9 @@ if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$sco
                         recipe.isEnabled = !recipe.isEnabled;
                     },
                     function error(error){
+                        console.log(error);
                         $window.alert(error.data.message);
                         messageFactory.hideLoading();
-                        console.log(error);
                     }
                 );
         };
