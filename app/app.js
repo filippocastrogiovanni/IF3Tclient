@@ -316,7 +316,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 $http({
                     method: 'GET',
                     dataType: 'json',
-                    url: $rootScope.ipServer + '/login',
+                    url: $rootScope.ipServer + '/login?_csrf='+ factory.getXsrfCookie(),
                     headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
                 })
                     .then(function successCallback(response) {
@@ -364,15 +364,15 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         $http({
             method: 'GET',
             dataType: 'json',
-            url: $rootScope.ipServer + '/login?logout',
-            headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')}
+            url: $rootScope.ipServer + '/login?logout&_csrf='+ factory.getXsrfCookie(),
+            headers: {'Content-Type': 'application/json'}
         })
             .then(function successCallback(response) {
                     authenticated = false;
                     $cookies.remove("authorization");
                     $cookies.remove("user");
                     if($cookies.get('remember')){
-                        $rootScope.loginData = angular.fromJson($cookies.get('remember'));;
+                        $rootScope.loginData = angular.fromJson($cookies.get('remember'));
                     }
                     callback && callback(true);
                 },
@@ -394,7 +394,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             $http({
                 method: 'POST',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/signup',
+                url: $rootScope.ipServer + '/signup?_csrf=' + factory.getXsrfCookie(),
                 headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(user)
             })
@@ -415,8 +415,8 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: $rootScope.ipServer + '/userinfo',
-            headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')},
+            url: $rootScope.ipServer + '/userinfo?_csrf=' + factory.getXsrfCookie(),
+            headers: {'Content-Type': 'application/json'},
             data: angular.toJson(data)
         })
             .then(function successCallback(response) {
@@ -435,8 +435,8 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
         $http({
             method: 'PUT',
             dataType: 'json',
-            url: $rootScope.ipServer + '/userpassword',
-            headers: {'Content-Type': 'application/json', 'authorization': $cookies.get('authorization')},
+            url: $rootScope.ipServer + '/userpassword?_csrf=' + factory.getXsrfCookie(),
+            headers: {'Content-Type': 'application/json'},
             data: angular.toJson(data)
         })
             .then(function successCallback(response) {
