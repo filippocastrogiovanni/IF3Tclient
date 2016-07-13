@@ -164,13 +164,13 @@
                             <br>
                             <form name="triggerForm" novalidate ng-submit="submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header, data_triggers )">
                                 <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
-                                    <h4>{{same_id_trigger.unbinded_name}}</h4>
-                                    <input type='{{same_id_trigger.type}}' name='{{same_id_trigger.name}}' ng-model="same_id_trigger.name" required>
+                                    <h4 ng-if="!same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></h4>
+                                    <input type='{{same_id_trigger.type}}' name='{{same_id_trigger.name}}' ng-model="same_id_trigger.name" required><span ng-if="same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></span>
                                     <span ng-show="triggerForm.$dirty && triggerForm.same_id_trigger.name.$error.required">This is a required field</span>
                                     <br>
                                 </div>
 <br>
-                                <input type='submit' class='btn btn-info btn-large' style='float:left'
+                                <input type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$invalid"
                                        value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
                             </form>
                             <br>
@@ -356,7 +356,7 @@
                             <form name="actionForm" novalidate ng-submit="submit_action( data_actions.params, actionForm.$valid, data_actions.header, data_actions )">
                                 <div ng-repeat="same_id_action in data_actions.params track by $index">
                                     <h4>{{same_id_action.unbinded_name}}</h4>
-                                    <input type='{{same_id_action.type}}' name='{{same_id_action.name}}' ng-model="same_id_action.name" required>
+                                    <input type='{{same_id_action.type}}' name='{{same_id_action.name}}' ng-model="same_id_action.name" required><span ng-if="same_id_action.is_radio">{{ same_id_action.unbinded_name }}<br></span>
                                     <span ng-show="actionForm.$dirty && actionForm.same_id_action.name.$error.required">This is a required field</span>
 <br>
                                 </div>

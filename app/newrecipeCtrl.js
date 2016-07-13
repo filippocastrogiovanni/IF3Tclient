@@ -64,11 +64,17 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
             headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
         }).then(function successCallback(response) {
             var params = response.data; //List<ParametersTriggers>
-            var flags = [], output_distinct = [], l = params.length, i;
+            var output_distinct = [], l = params.length, i;
             for( i=0; i<l; i++) {
-                if (flags[params[i].id_trigger]) continue;
-                flags[params[i].id_trigger] = true;
-                output_distinct.push(params[i].id_trigger);
+                var present = false;
+                for(var j=0; j<output_distinct.length; j++){
+                    if(output_distinct[j] == params[i].trigger.id){
+                        present = true;
+                        break;
+                    }
+                }
+                if(!present)
+                    output_distinct.push(params[i].trigger.id);
             }
             //creating array_parameters_triggers_same_id_trigger
             for(var i=0; i<$scope.chosen_trigger_channel.trigger_list.length; i++) {
@@ -77,12 +83,18 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
             for(var i=0; i<output_distinct.length; i++) {
                 var params_same_id_trigger = [];
                 for(var j=0; j<params.length ; j++) {
-                    if(params[j].id_trigger == output_distinct[i]) {
+                    if(params[j].trigger.id == output_distinct[i]) {
                         var element_parameters_triggers = {};
                         element_parameters_triggers.name = params[j].name;
                         element_parameters_triggers.id = params[j].id;
                         element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
                         element_parameters_triggers.type = params[j].type;
+                        if(element_parameters_triggers.type.localeCompare("radio")==0 || element_parameters_triggers.type.localeCompare("checkbox")==0) {
+                            element_parameters_triggers.is_radio = true;
+                        }
+                        else {
+                            element_parameters_triggers.is_radio = false;
+                        }
                         params_same_id_trigger.push(element_parameters_triggers);
                     }
                 }
@@ -146,11 +158,17 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
             headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
         }).then(function successCallback(response) {
             var params = response.data; //List<ParametersTriggers>
-            var flags = [], output_distinct = [], l = params.length, i;
+            var output_distinct = [], l = params.length, i;
             for( i=0; i<l; i++) {
-                if (flags[params[i].id_action]) continue;
-                flags[params[i].id_action] = true;
-                output_distinct.push(params[i].id_action);
+                var present = false;
+                for(var j=0; j<output_distinct.length; j++){
+                    if(output_distinct[j] == params[i].action.id){
+                        present = true;
+                        break;
+                    }
+                }
+                if(!present)
+                    output_distinct.push(params[i].action.id);
             }
             //creating array_parameters_actions_same_id_action
             for(var i=0; i<$scope.chosen_action_channel.action_list.length; i++) {
@@ -159,12 +177,16 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
             for(var i=0; i<output_distinct.length; i++) {
                 var params_same_id_action = [];
                 for(var j=0; j<params.length ; j++) {
-                    if(params[j].id_action == output_distinct[i]) {
+                    if(params[j].action.id == output_distinct[i]) {
                         var element_parameters_actions = {};
                         element_parameters_actions.name = params[j].name;
                         element_parameters_actions.id = params[j].id;
                         element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
                         element_parameters_actions.type = params[j].type;
+                        if(element_parameters_actions.type.localeCompare("radio")==0 || element_parameters_actions.type.localeCompare("checkbox")==0)
+                            element_parameters_actions.is_radio = true;
+                        else
+                            element_parameters_actions.is_radio = false;
                         params_same_id_action.push(element_parameters_actions);
                     }
                 }
@@ -180,7 +202,7 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                     $scope.parameters_actions_couples += "<h4>" + array_parameters_actions[j].array_same_id_action[i].name + "</h4>";
                     $scope.parameters_actions_couples += "<input type='" + array_parameters_actions[j].array_same_id_action[i].type + "' name='" + array_parameters_actions[j].array_same_id_action[i].name + "' ng-model='" + array_parameters_actions[j].array_same_id_action[i].name + "' <br> ";
                 }
-                $scope.chosen_action_channel.action_list[j].extra_element = "<br><br><form novalidate ng-submit='submit_action(" + $scope.parameters_actions_names_list + ")'>" + $scope.parameters_actions_couples + " <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
+                $scope.chosen_action_channel.action_list[j].extra_element = "<br><br><form novalidate ng-submit='submit_action(" + $scope.parameters_actions_names_list + ")'>" + $scope.parameters_actions_couples + " <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create action&nbsp&nbsp&nbsp'></form>"
             }
             */
         }, function errorCallback(response) {
