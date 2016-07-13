@@ -87,6 +87,7 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
     $rootScope.signupRS = function (status, message) {
         if (status) {
             messageFactory.showSuccessMsg("SignUp successful");
+            $rootScope.loginRQ(true);
         } else {
             messageFactory.showError("SignUp Error",message);
         }
@@ -392,7 +393,6 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 .then(function successCallback(response) {
                         $rootScope.loginData.username = user.username;
                         $rootScope.loginData.password = user.password;
-                        factory.login($rootScope.loginData);
                         callback && callback(true);
                     },
                     function errorCallback(response) {

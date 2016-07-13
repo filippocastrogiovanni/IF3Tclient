@@ -1,20 +1,22 @@
-<md-toolbar layout="row"  >
-    <h2>Search for channels</h2>
-</md-toolbar>
-
 <div class="container">
+    <md-toolbar layout="row">
+        <h2 style="padding-left:50px;">Search for channels</h2>
+    </md-toolbar>
+    <br/>
+
     <div class="row">
-        <div ng-repeat="channel in channels" class="col-md-3" ng-show="!showDetailChannel">
-            <md-button ng-click="selectChannel(channel)">
-                <img aria-label="{{channel}}" height="100" width="100" class="img-responsive" ng-src="{{ipServer + '/' + channel.image_url}}" />
+        <div ng-repeat="channel in channels" class="col-lg-2" >
+            <md-button data-toggle="collapse" data-target="#channel" ng-click="selectChannel(channel)">
+                <img aria-label="{{channel.name}}" height="100" width="100" class="img-responsive"
+                     ng-src="{{ipServer + '/' + channel.image_url}}"/>
             </md-button>
         </div>
     </div>
-</div>
 
-<div id="channel" ng-if="showDetailChannel" align="center">
-    <button ng-click="backToChannels()">Back to Channels</button>
-    <img height="100" width="100" ng-src="{{ ipServer + '/' + selectedChannel.image_url }}">
-    <span>{{selectedChannel.name}}</span>
-    <button ng-click="loadPage()">Connect</button>
+    <div id="channel" class="collapse" ng-if="showDetailChannel" align="center">
+        <button ng-click="backToChannels()">Back to Channels</button>
+        <img height="100" width="100" ng-src="{{ ipServer + '/' + selectedChannel.image_url }}">
+        <span>{{selectedChannel.name}}</span>
+        <button ng-click="loadPage()">Connect</button>
+    </div>
 </div>
