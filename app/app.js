@@ -20,7 +20,7 @@ if3tApp.config(function ($httpProvider, $routeProvider) {
         templateUrl: 'template/my_recipes.html',
         controller: 'MyRecipesController'
     });
-    $routeProvider.when('/myrecipes/:id_recipe', {
+    $routeProvider.when('/myrecipes/:id', {
         templateUrl: 'template/edit_recipe.html',
         controller: 'EditRecipeController'
     });
@@ -520,15 +520,17 @@ if3tApp.factory('messageFactory', function()
 
 });
 
-if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope)
+if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFactory)
 {
+    //TODO controllare alla fine se sono stati aggiunti altri campi e rimuovere quelli non necessari
     var factory = {}
 
-    function Channel(id, name, image_url)
+    function Channel(id, name, image_url, keyword)
     {
         this.id = id;
         this.name = name;
         this.image_url = image_url;
+        this.keyword = keyword;
     }
 
     function Trigger(id, channel, header, paragraph)
@@ -547,9 +549,11 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope)
         this.paragraph = paragraph;
     }
 
-    function Recipe(id, groupId, description, isPublic, isEnabled, trigger, actions)
+    //TODO aggiungere campo title all'entity recipe
+    function Recipe(id, title, groupId, description, isPublic, isEnabled, trigger, actions)
     {
         this.id = id;
+        this.title = title;
         this.groupId = groupId;
         this.description = description;
         this.isPublic = isPublic;
@@ -557,38 +561,38 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope)
         this.trigger = trigger;
         this.actions = actions;
     }
-
-    factory.getRecipe = function(id)
+    
+    factory.getRecipe = function(id, callback)
     {
         $http({
             method: 'GET',
-            url: 'http://localhost:8181/recipe/' + id
+            url: 'http://localhost:8181/recipe/' + id,
+            headers: { 'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization() },
         }).then
         (
             function successCallback(resp)
             {
                 var actArray = [];
+                //TODO sto considernado così solo la prima ricetta ma in toeria ne possono arrivare di più
                 var r = resp.data[0];
                 var tri = r.trigger;
-                var chaTri = new Channel(tri.channel.channelId, tri.channel.name, tri.channel.image_url);
+                var chaTri = new Channel(tri.channel.channelId, tri.channel.name, tri.channel.image_url, tri.channel.keyword);
                 var trig = new Trigger(tri.id, chaTri, tri.header, tri.paragraph);
 
                 for (var i = 0; i < resp.data.length; i++)
                 {
                     var act = resp.data[i].action;
-                    var chaAct = new Channel(act.channel.channelId, act.channel.name, act.channel.image_url);
+                    var chaAct = new Channel(act.channel.channelId, act.channel.name, act.channel.image_url, act.channel.keyword);
 
                     actArray.push(new Action(act.id, chaAct, act.header, act.paragraph));
                 }
 
-                var rec = new Recipe(r.id, r.groupId, r.description, r.isPublic, r.isEnabled, trig, actArray);
-                console.log(rec);
-                $rootScope.recProva = rec;
-                return rec;
+                var rec = new Recipe(r.id, "Ricetta di prova", r.groupId, r.description, r.isPublic, r.isEnabled, trig, actArray);
+                callback && callback(rec);
             },
             function errorCallback(resp)
             {
-                alert("You DIDN'T get the recipe " + id);
+                alert("Error during request of recipe " + id);
             }
         );
     };

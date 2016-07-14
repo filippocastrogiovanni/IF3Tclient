@@ -1,57 +1,110 @@
 <md-toolbar layout="column" layout-padding>
-    <h2 class="recipe">Recipe ID {{ idRecipe }}</h2>
+    <h2 class="recipe">Recipe ID {{ savedRecipe.id }}</h2>
     <h5 class="recipe">
         <span class="glyphicon glyphicon-triangle-left " aria-hidden="true"/>
         <a class="recipe" href="#/myrecipes">&nbsp;Back to My Recipes</a>
     </h5>
 </md-toolbar>
-<div layout="row" layout-padding class="content">
-    <div flex="70" layout="row"  layout-wrap class="left">
-        <div flex="40" layout="row" class="div-if">
-            <span class="span-if">if</span><img src='{{ savedRecipe.urlTriggerImg }}' class="img-responsive img-thumbnail icon-if-then">
+<form id="editRecipe" role="form">
+    <div layout="row" class="content">
+        <div flex="70" layout="row" layout-wrap class="left">
+            <div flex="40" layout="row" class="div-if container" ng-class="savedRecipe.isEnabled ? '' : 'disabled'">
+                <span class="span-if">if</span>
+                <img src='{{ ipServer }}/{{ savedRecipe.trigger.urlImg }}' class="img-responsive icon-if-then" width="110" height="110">
+            </div>
+            <div flex="60" layout="row" class="div-then container" ng-class="savedRecipe.isEnabled ? '' : 'disabled'">
+                <span class="span-then">then</span>
+                <img src='{{ ipServer }}/{{ savedRecipe.action.urlImg }}' class="img-responsive icon-if-then" width="110" height="110">
+            </div>
+            <div flex="38" layout="row" class="descr descr-left">
+                {{ savedRecipe.trigger.header }} on "INSERIRE INGREDIENTE"
+            </div>
+            <div flex="60" layout="row" class="descr descr-right">
+                {{ savedRecipe.action.header }} to "INSERIRE INGREDIENTE"
+            </div>
         </div>
-        <div flex="60" layout="row" class="div-then">
-            <span class="span-then">then</span><img src='{{ savedRecipe.urlActionImg }}' class="img-responsive icon-if-then">
-        </div>
-        <div flex="60" layout="row" class="descr descr-left">
-            Esistono innumerevoli variazioni dei passaggi del Lorem Ipsum, ma la maggior parte hanno subito delle variazioni del tempo,
-            a causa dell’inserimento di passaggi ironici, o di sequenze casuali di caratteri palesemente poco verosimili. Se si decide di
-            utilizzare un passaggio del Lorem Ipsum, è bene essere certi che non contenga nulla di imbarazzante.
-        </div>
-        <div flex="39" layout="row" class="descr descr-right">
-            In genere, i generatori di testo segnaposto disponibili su internet tendono a ripetere paragrafi predefiniti, rendendo questo
-            il primo vero generatore automatico su intenet.
-        </div>
-        <div flex="100" layout=row" class="descr">
-            If event from search for 'Lezione' starts on sebastiano.gazze@gmail.com, then send an email from sebastiano.gazze@gmail.com
+        <div flex="30" layout="column"  class="right">
+            <button class="btn btn-default recipe-menu">
+                <i class="glyphicon glyphicon-off" aria-hidden="true"/>
+                <span>Turn {{ savedRecipe.isEnabled ? 'off' : 'on' }}</span>
+            </button>
+            <button class="btn btn-default recipe-menu">
+                <i class="glyphicon glyphicon-share" aria-hidden="true"/>
+                <span>Publish</span>
+            </button>
+            <button class="btn btn-default recipe-menu">
+                <i class="glyphicon glyphicon-check" aria-hidden="true"/>
+                <span>Check now</span>
+            </button>
+            <button class="btn btn-default recipe-menu">
+                <i class="glyphicon glyphicon-list" aria-hidden="true"/>
+                <span>Log</span>
+            </button>
+            <button class="btn btn-default recipe-menu">
+                <i class="glyphicon glyphicon-trash" aria-hidden="true"/>
+                <span>Delete</span>
+            </button>
+            <button class="btn btn-default recipe-menu">
+                <i class="glyphicon glyphicon-edit" aria-hidden="true"/>
+                <span>Update recipe</span>
+            </button>
         </div>
     </div>
-    <div flex="30" class="right">
-        <div layout="row" layout-margin layout-padding class="recipe-menu">
-            <span class="glyphicon glyphicon-off" aria-hidden="true"/>&nbsp;Turn off
-        </div>
-        <div layout="row" layout-margin layout-padding class="recipe-menu">
-            <span class="glyphicon glyphicon-share" aria-hidden="true"/>&nbsp;Publish
-        </div>
-        <div layout="row" layout-margin layout-padding class="recipe-menu">
-            <span class="glyphicon glyphicon-check" aria-hidden="true"/>&nbsp;Check now
-        </div>
-        <div layout="row" layout-margin layout-padding class="recipe-menu">
-            <span class="glyphicon glyphicon-list" aria-hidden="true"/>&nbsp;Log
-        </div>
-        <div layout="row" layout-margin layout-padding class="recipe-menu">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true"/>&nbsp;Delete
-        </div>
+    <div class="form-group">
+        <label for="title">Recipe title:</label>
+        <input class="form-control" id="title" value="{{ savedRecipe.title }}" placeholder="Insert a title">
     </div>
-</div>
-<md-toolbar layout="column" class="sub-title">
+    <md-toolbar layout="column" class="sub-title">
+        <h2>Trigger</h2>
+    </md-toolbar>
+    <div flex="100" layout="column" layout-wrap class="left">
+        <p class="header-recipe">{{ savedRecipe.trigger.header }}</p>
+        <p class="paragraph-recipe">{{ savedRecipe.trigger.paragraph }}</p>
+    </div>
+    <div class="form-group">
+        <div layout="row">
+            <img src='{{ ipServer }}/{{ savedRecipe.trigger.urlImg }}' width="25" height="25">
+            <label for="keywordPhrase">&nbsp;&nbsp;Keyword or phrase:</label>
+        </div>
+        <input class="form-control" id="keywordPhrase" value="{{ savedRecipe.keywordPhrase }}" placeholder="Insert a keyword or a phrase">
+    </div>
+    <md-toolbar layout="column" class="sub-title">
+        <h2>Action</h2>
+    </md-toolbar>
+    <div class="form-group">
+        <div layout="row">
+            <img src='{{ ipServer }}/{{ savedRecipe.action.urlImg }}' width="25" height="25">
+            <label for="toAddress">&nbsp;&nbsp;To address:</label>
+        </div>
+        <input class="form-control" id="toAddress" value="{{ savedRecipe.toMailAddress }}" placeholder="Insert a mail address">
+    </div>
+    <div class="form-group">
+        <div layout="row">
+            <img src='{{ ipServer }}/{{ savedRecipe.action.urlImg }}' width="25" height="25">
+            <label for="subject">&nbsp;&nbsp;Subject:</label>
+        </div>
+        <input class="form-control" id="subject" value="{{ savedRecipe.mailSubject }}" placeholder="Insert the subject of the mail">
+    </div>
+    <div class="form-group">
+        <div layout="row">
+            <img src='{{ ipServer }}/{{ savedRecipe.action.urlImg }}' width="25" height="25">
+            <label for="body">&nbsp;&nbsp;Body:</label>
+        </div>
+        <textarea class="form-control" id="body" rows="10" placeholder="Insert the body of the mail">{{ savedRecipe.mailBody }}</textarea>
+    </div>
+</form>
+<br>
+<br>
+<br>
+<br>
+<!--md-toolbar layout="column" class="sub-title">
     <h2>Trigger</h2>
 </md-toolbar>
 <div layout="column" layout-padding class="content">
     <h4>Event from search starts</h4>
     <p class="sub-descr">Descrizione del trigger</p>
     <div layout="row">
-        <img src='{{ savedRecipe.urlTriggerImg }}' class="icon-trig-act">
+        <img src='{{ savedRecipe.trigger.urlImg }}' class="icon-trig-act">
         <p>&nbsp;Keyword or phrase</p>
     </div>
     <div class="descr descr-unique">
@@ -66,21 +119,21 @@
     <h4>Send an email</h4>
     <p class="sub-descr">Descrizione dell'action</p>
     <div layout="row">
-        <img src='{{ savedRecipe.urlActionImg }}' class="icon-trig-act">
+        <img src='{{ savedRecipe.action.urlImg }}' class="icon-trig-act">
         <p>&nbsp;To address</p>
     </div>
     <div class="descr descr-unique">
         efegdgdhdh
     </div>
     <div layout="row">
-        <img src='{{ savedRecipe.urlActionImg }}' class="icon-trig-act">
+        <img src='{{ savedRecipe.action.urlImg }}' class="icon-trig-act">
         <p>&nbsp;Subject</p>
     </div>
     <div class="descr descr-unique">
         efegdgdhdh
     </div>
     <div layout="row">
-        <img src='{{ savedRecipe.urlActionImg }}' class="icon-trig-act">
+        <img src='{{ savedRecipe.action.urlImg }}' class="icon-trig-act">
         <p>&nbsp;Body</p>
     </div>
     <div class="descr descr-unique">
@@ -91,4 +144,4 @@
     <br>
     <br>
     <br>
-</div>
+</div-->

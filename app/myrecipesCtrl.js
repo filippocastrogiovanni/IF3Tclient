@@ -76,15 +76,38 @@ if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$sco
 if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', 'recipesFactory',
     function ($scope, $rootscope, $routeParams, $location, recipesFactory)
     {
-        $scope.idRecipe = $routeParams.id_recipe;
-        var recipe = recipesFactory.getRecipe(1);
-        console.log(recipe);
-        console.log($scope.recProva);
-
-        $scope.savedRecipe =
+        $rootscope.recipeCallback = function(rec)
         {
-            urlTriggerImg: "images/google_calendar_icon.png",
-            urlActionImg: "images/google_mail_icon.png"
+            $scope.savedRecipe =
+            {
+                //TODO controllare se servono altri campi qui omessi
+                id: rec.id,
+                title: rec.title,
+                isEnabled: rec.isEnabled,
+                trigger : 
+                {
+                    id: rec.trigger.id,
+                    header: rec.trigger.header,
+                    //FIXME
+                    paragraph: rec.trigger.paragraph ? rec.trigger.paragraph : "Questo è un paragrafo di prova",
+                    urlImg: rec.trigger.channel.image_url
+                },
+                action:
+                {
+                    //TODO sistemare per considerare più actions
+                    id: rec.actions[0].id,
+                    header: rec.actions[0].header,
+                    paragraph: rec.actions[0].paragraph,
+                    urlImg: rec.actions[0].channel.image_url
+                }
+            };
+        };
+
+        recipesFactory.getRecipe($routeParams.id, $rootscope.recipeCallback);
+
+        $scope.switchOnOff = function()
+        {
+            
         };
 
         $scope.reset = function()
