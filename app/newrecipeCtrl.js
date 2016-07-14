@@ -7,13 +7,12 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         $rootScope.curpage = "newrecipe";
 
-        //initialize_data($scope);
-        //fake waiting for data (alias progress dialog) by hiding the first div and wait for the response of the server to show it
+        //waiting for data (alias progress dialog) by hiding the first div and wait for the response of the server to show it
         $("#first_div").hide();
         $http({
             method: 'GET',
             url: $rootScope.ipServer+'/channels/',
-            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            headers: {'Content-Type': 'application/json' }
         }).then(function successCallback(response) {
             $scope.channels = response.data;
             for(var i=0; i<$scope.channels.length; i++){
@@ -21,7 +20,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             }
             $("#first_div").show();
         }, function errorCallback(response) {
-            alert("You DIDN'T get the channels list");
+            alert("Can not load channels list from Server");
         });
 
         //all functions handled by controller
@@ -55,13 +54,13 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
     $http({
         method: 'GET',
         url: $rootScope.ipServer+'/triggers/'+o.channelId,
-        headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+        headers: {'Content-Type': 'application/json'}
     }).then(function successCallback(response) {
         $scope.chosen_trigger_channel.trigger_list = response.data; //List<Trigger>
         $http({
             method: 'GET',
             url: $rootScope.ipServer+'/parameters_triggers/'+o.channelId,
-            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            headers: {'Content-Type': 'application/json'}
         }).then(function successCallback(response) {
             var params = response.data; //List<ParametersTriggers>
             var output_distinct = [], l = params.length, i;
@@ -82,6 +81,9 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
             }
             for(var i=0; i<output_distinct.length; i++) {
                 var params_same_id_trigger = [];
+                $scope.chosen_trigger_channel.trigger_list[i].contains_radio = false;
+                $scope.chosen_trigger_channel.trigger_list[i].contains_time = false;
+                $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = false;
                 for(var j=0; j<params.length ; j++) {
                     if(params[j].trigger.id == output_distinct[i]) {
                         var element_parameters_triggers = {};
@@ -91,9 +93,22 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                         element_parameters_triggers.type = params[j].type;
                         if(element_parameters_triggers.type.localeCompare("radio")==0 || element_parameters_triggers.type.localeCompare("checkbox")==0) {
                             element_parameters_triggers.is_radio = true;
+                            $scope.chosen_trigger_channel.trigger_list[i].contains_radio = true;
                         }
                         else {
                             element_parameters_triggers.is_radio = false;
+                        }
+                        if(element_parameters_triggers.type.localeCompare("time")==0) {
+                            $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
+                        }
+                        if(element_parameters_triggers.type.localeCompare("email")==0) {
+                            element_parameters_triggers.is_email = true;
+                        }
+                        else{
+                            element_parameters_triggers.is_email = false;
+                        }
+                        if(element_parameters_triggers.type.localeCompare("checkbox")==0) {
+                            $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = true;
                         }
                         params_same_id_trigger.push(element_parameters_triggers);
                     }
@@ -133,11 +148,11 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
             }
             */
         }, function errorCallback(response) {
-            alert("You DIDN'T get the triggers parameters list of trigger channel");
+            alert("You can not get the triggers parameters list of trigger channel from Server");
         });
 
     }, function errorCallback(response) {
-        alert("You DIDN'T get the triggers list of trigger channel");
+        alert("You can not get the triggers list of trigger channel from Server");
     });
 
 }
@@ -149,13 +164,13 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
     $http({
         method: 'GET',
         url: $rootScope.ipServer+'/actions/'+o.channelId,
-        headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+        headers: {'Content-Type': 'application/json'}
     }).then(function successCallback(response) {
         $scope.chosen_action_channel.action_list = response.data; //List<Trigger>
         $http({
             method: 'GET',
             url: $rootScope.ipServer+'/parameters_actions/'+o.channelId,
-            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            headers: {'Content-Type': 'application/json'}
         }).then(function successCallback(response) {
             var params = response.data; //List<ParametersTriggers>
             var output_distinct = [], l = params.length, i;
@@ -176,6 +191,9 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
             }
             for(var i=0; i<output_distinct.length; i++) {
                 var params_same_id_action = [];
+                $scope.chosen_action_channel.action_list[i].contains_radio = false;
+                $scope.chosen_action_channel.action_list[i].contains_time = false;
+                $scope.chosen_action_channel.action_list[i].contains_checkbox = false;
                 for(var j=0; j<params.length ; j++) {
                     if(params[j].action.id == output_distinct[i]) {
                         var element_parameters_actions = {};
@@ -183,10 +201,19 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                         element_parameters_actions.id = params[j].id;
                         element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
                         element_parameters_actions.type = params[j].type;
-                        if(element_parameters_actions.type.localeCompare("radio")==0 || element_parameters_actions.type.localeCompare("checkbox")==0)
+                        if(element_parameters_actions.type.localeCompare("radio")==0 || element_parameters_actions.type.localeCompare("checkbox")==0) {
                             element_parameters_actions.is_radio = true;
-                        else
+                            $scope.chosen_action_channel.action_list[i].contains_radio = true;
+                        }
+                        else {
                             element_parameters_actions.is_radio = false;
+                        }
+                        if(element_parameters_actions.type.localeCompare("time")==0) {
+                            $scope.chosen_action_channel.action_list[i].contains_time = true;
+                        }
+                        if(element_parameters_actions.type.localeCompare("checkbox")==0) {
+                            $scope.chosen_action_channel.action_list[i].contains_checkbox = true;
+                        }
                         params_same_id_action.push(element_parameters_actions);
                     }
                 }
@@ -206,11 +233,11 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
             }
             */
         }, function errorCallback(response) {
-            alert("You DIDN'T get the actions parameters list of action channel");
+            alert("You can not get the actions parameters list of action channel from Server");
         });
 
     }, function errorCallback(response) {
-        alert("You DIDN'T get the actions list of action channel");
+        alert("You can not get the actions list of action channel from Server");
     });
 
 }
@@ -220,20 +247,10 @@ function submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, 
         console.log("Input data: " + triggers_parameters[i]);
     }
     delete data_trigger.params;
-    //OR
-    //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
-    if(is_form_valid) {
-        var newHash = 'step_2_b';
-        if ($location.hash() !== newHash) {
-            // set the $location.hash to `newHash` and
-            // $anchorScroll will automatically scroll to it
-            $location.hash('step_2_b');
-        } else {
-            // call $anchorScroll() explicitly,
-            // since $location.hash hasn't changed
-            $anchorScroll();
-        }
-    }
+    $('html, body').animate({
+        scrollTop: $("#step_2_b").offset().top}, "slow"
+    );
+    //$("html, body").animate({ scrollTop: "300px" });
     $rootScope.chosen_trigger_job = trigger_header;
     for(var i=0; i<triggers_parameters.length; i++){
         triggers_parameters[i].unbinded_name = triggers_parameters[i].unbinded_name.toLowerCase().replace(/ /g,"_");
@@ -247,20 +264,9 @@ function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $l
         console.log("Input data: " + actions_parameters[i]);
     }
     delete data_action.params;
-    //OR
-    //for (var i=0; i<arguments.length; i++) console.log(arguments[i]);
-    if(is_form_valid) {
-        var newHash = 'step_5';
-        if ($location.hash() !== newHash) {
-            // set the $location.hash to `newHash` and
-            // $anchorScroll will automatically scroll to it
-            $location.hash('step_5');
-        } else {
-            // call $anchorScroll() explicitly,
-            // since $location.hash hasn't changed
-            $anchorScroll();
-        }
-    }
+    $('html, body').animate({
+        scrollTop: $("#step_5").offset().top}, "slow"
+    );
 
     $scope.chosen_action_job = action_header;
     $scope.chosen_action_parameters = actions_parameters;
@@ -285,7 +291,7 @@ function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $l
     $scope.chosen_trigger_job = $rootScope.chosen_trigger_job;
     $scope.chose_trigger_parameters = $rootScope.chose_trigger_parameters;
     $scope.chosen_trigger_data = $rootScope.chosen_trigger_data;
-    $scope.recipe_description = "When " + $scope.chosen_trigger_job + " in " + $scope.chosen_trigger_channel.name + ", do " + $scope.chosen_action_job + "in " + $scope.chosen_action_channel.name;
+    $scope.recipe_description = "When " + $scope.chosen_trigger_job + " in " + $scope.chosen_trigger_channel.name + ", do " + $scope.chosen_action_job + " in " + $scope.chosen_action_channel.name;
 }
 
 function submit_recipe($rootScope, $scope, $window, $http, recipe_description, userFactory) {
@@ -361,22 +367,23 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
     if(userFactory.isAuthenticated()) {
         $http({
             method: 'POST',
-            url: $rootScope.ipServer+'/add_recipe',
-            headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()},
+            url: $rootScope.ipServer+'/add_recipe?_csrf='+userFactory.getXsrfCookie(),
+            headers: {'Content-Type': 'application/json' },
+            xsrfCookieName: 'XSRF-TOKEN',
             data: $scope.recipes_list
         }).then(function successCallback(response) {
             alert("You have create a recipe successfully!");
             $window.location.href = '#/myrecipes';
         }, function errorCallback(response) {
-            alert("You DIDN'T save the recipe");
+            alert("You can not save the recipe on Server");
         });
     }
     else{
-        alert("You are noy logged so you CAN'T save the recipe");
+        alert("You are noy logged so you can not save the recipe on Server");
     }
 }
 
-function initialize_data($scope){
+    /*
     //define all the for 4 channels and put it in the array of the scope
     var channel_google_mail = {};
     channel_google_mail.name = "Google Mail";
@@ -394,7 +401,7 @@ function initialize_data($scope){
          paragraph: "This Trigger fires for every email attachment that arrives in your inbox. NOTE: Multiple attachments each fire separately." ,
          extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
          },
-         */
+         *//*
         {
             header: "New email in inbox from" ,
             paragraph: "This Trigger fires every time a new email arrives in your inbox from the address and with the subject you specify." ,
@@ -416,7 +423,7 @@ function initialize_data($scope){
          paragraph: "This Trigger fires every time a new email arrives in your inbox that matches the search query you specify." ,
          extra_element: "<br><h6 class='step_0_helper' style='padding-left: 0px'>Use Gmail’s <a href='http://support.google.com/mail/bin/answer.py?hl=en&answer=7190'>search operators</a> for advanced search</h6><br><br><form novalidate ng-submit='submit_trigger_google_mail6(trigger_list_channel)'><h4>Search for:</h4><input type='text' name='search_for'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
          }
-         */
+         *//*
     ];
     channel_google_mail.action_list = [
         {
@@ -443,7 +450,7 @@ function initialize_data($scope){
          extra_element: "<form novalidate ng-submit='submit_trigger_google_calendar2(trigger_list_channel)'><h4>Keyword or phrase:</h4><input type='text' name='keyword'><br><br><input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
          },
          */
-        {
+        {/*
             header: "A particular new event ith a given title or description added" ,
             paragraph: "" ,
             extra_element: "<form novalidate ng-submit='submit_trigger_google_calendar2()'><h4>Keyword or phrase:</h4><input scroll-on-click href='#step_2_b' type='text' name='keyword_or_phrase' ng-model='keyword_or_phrase'><br><br><input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
@@ -492,7 +499,7 @@ function initialize_data($scope){
          paragraph: "This Trigger fires every time you post on Facebook at a location you specify." ,
          extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_facebook1(trigger_list_channel)'>	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
          },
-         */
+         *//*
         {
             header: "New status message by you" ,
             paragraph: "This Trigger fires every time you create a new plain text status message on Facebook." ,
@@ -535,7 +542,7 @@ function initialize_data($scope){
          paragraph: "This Trigger fires every time you are tagged you in a new photo. NOTE: Facebook privacy settings may block IFTTT’s access to some photos you are tagged in." ,
          extra_element: "<div><br><a ng-click='choose_trigger_job(trigger_list_channel)' style='float:left' class='btn btn-info btn-large'>&nbsp&nbsp&nbspCreate Trigger&nbsp&nbsp&nbsp</a></div>"
          },
-         */
+         *//*
         {
             header: "Your profile changes" ,
             paragraph: "A Trigger that monitors changes in your Facebook profile information. It works with these Facebook profile fields: Name, Profile picture, Location." ,
@@ -558,7 +565,7 @@ function initialize_data($scope){
          paragraph: "This Action will upload a new photo, from the given URL, to a Facebook album you specify." ,
          extra_element: "<form novalidate ng-submit='submit_action_facebook3' id='text_form'> 	<h4>Link URL:</h4> 	<input type='text' name='link_url'> 	<br> 	<h4>Album name:</h4> 	<input type='text' name='album_name'> 	<br> 	<textarea rows='4' cols='50' name='recipe_title' form='text_form'> 		Text... 	</textarea> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
          },
-         */
+         *//*
     ];
 
     var channel_twitter = {};
@@ -617,7 +624,7 @@ function initialize_data($scope){
          paragraph: "This Trigger fires every time anyone posts a tweet at a location you specify. " ,
          extra_element: "(CONSENTI/BLOCCA) <form novalidate ng-submit='submit_trigger_twitter10(trigger_list_channel)'> 	<input autocapitalization='off' autocomplete='off' autocorrect='off' class='step_1_channels_search' 		   name='q' placeholder='Search Channels' type='text'> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
          },
-         */
+         *//*
     ];
     channel_twitter.action_list = [
         {
@@ -650,11 +657,11 @@ function initialize_data($scope){
          paragraph: "This Action will add a user to a Twitter list you specify. NOTE: Twitter allows 1000 lists per user and 5000 users per list." ,
          extra_element: "<form novalidate ng-submit='submit_action_twitter2' id='user_list_form'> 	<h4>User name:</h4> 	<input type='text' name='username'> 	<br> 	<textarea rows='4' cols='50' name='recipe_title' form='user_list_form'> 		Enter list of users separated by comma (,). 	</textarea> 	<br> 	<br> 	<input type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'> </form>"
          },
-         */
+         *//*
     ];
 
     $scope.channels = [channel_google_mail, channel_google_calendar, channel_weather, channel_facebook, channel_twitter];
-
+    */
 }
 
 if3tApp.directive('scrollOnClick', function() {
