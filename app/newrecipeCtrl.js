@@ -91,7 +91,7 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                         element_parameters_triggers.id = params[j].id;
                         element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
                         element_parameters_triggers.type = params[j].type;
-                        if(element_parameters_triggers.type.localeCompare("radio")==0 || element_parameters_triggers.type.localeCompare("checkbox")==0) {
+                        if(element_parameters_triggers.type.localeCompare("radio")==0) {
                             element_parameters_triggers.is_radio = true;
                             $scope.chosen_trigger_channel.trigger_list[i].contains_radio = true;
                         }
@@ -108,7 +108,11 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                             element_parameters_triggers.is_email = false;
                         }
                         if(element_parameters_triggers.type.localeCompare("checkbox")==0) {
+                            element_parameters_triggers.is_checkbox = true;
                             $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = true;
+                        }
+                        else{
+                            element_parameters_triggers.is_checkbox = false;
                         }
                         params_same_id_trigger.push(element_parameters_triggers);
                     }
@@ -201,7 +205,7 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                         element_parameters_actions.id = params[j].id;
                         element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
                         element_parameters_actions.type = params[j].type;
-                        if(element_parameters_actions.type.localeCompare("radio")==0 || element_parameters_actions.type.localeCompare("checkbox")==0) {
+                        if(element_parameters_actions.type.localeCompare("radio")==0) {
                             element_parameters_actions.is_radio = true;
                             $scope.chosen_action_channel.action_list[i].contains_radio = true;
                         }
@@ -212,7 +216,11 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                             $scope.chosen_action_channel.action_list[i].contains_time = true;
                         }
                         if(element_parameters_actions.type.localeCompare("checkbox")==0) {
+                            element_parameters_actions.is_checkbox = true;
                             $scope.chosen_action_channel.action_list[i].contains_checkbox = true;
+                        }
+                        else{
+                            element_parameters_actions.is_checkbox = false;
                         }
                         params_same_id_action.push(element_parameters_actions);
                     }
@@ -334,11 +342,35 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         //delete parameter_trigger_element.trigger.channel.channelId;
         parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].unbinded_name;
         parameter_trigger_element.type = $rootScope.chosen_trigger_parameters[i].type;
+        parameter_trigger_element.checked = $rootScope.chosen_trigger_parameters[i].checked;
         //delete $rootScope.chosen_trigger_parameters[i].id;
         var trigger_ingredient_element = {};
         trigger_ingredient_element.param = parameter_trigger_element;
         //delete trigger_ingredient_element.param.id;
-        trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].name;
+        if($rootScope.chosen_trigger_parameters[i].type.localeCompare("radio")==0) {
+            if($rootScope.chosen_trigger_parameters[i].radio_button_form!=undefined && $rootScope.chosen_trigger_parameters[i].radio_button_form!=null){
+                trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].radio_button_form;
+            }
+            else{
+                trigger_ingredient_element.value = "unchecked_radio_button";
+            }
+        }
+        else if($rootScope.chosen_trigger_parameters[i].type.localeCompare("checkbox")==0){
+            if($rootScope.chosen_trigger_parameters[i].checkbox_button_form!=null && $rootScope.chosen_trigger_parameters[i].checkbox_button_form!=undefined) {
+                if ($rootScope.chosen_trigger_parameters[i].checkbox_button_form == true) {
+                    trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].name;
+                }
+                else {
+                    trigger_ingredient_element.value = "unchecked_checkbox_button";
+                }
+            }
+            else {
+                trigger_ingredient_element.value = "unchecked_checkbox_button";
+            }
+        }
+        else {
+            trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].name;
+        }
         element_recipe.trigger_ingredients.push(trigger_ingredient_element);
     }
 
@@ -351,11 +383,35 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         //delete parameter_action_element.action.channel.channelId;
         parameter_action_element.name = $rootScope.chosen_action_parameters[i].unbinded_name;
         parameter_action_element.type = $rootScope.chosen_action_parameters[i].type;
+        parameter_action_element.checked = $rootScope.chosen_action_parameters[i].checked;
         //delete $rootScope.chosen_action_parameters[i].id;
         var action_ingredient_element = {};
         action_ingredient_element.param = parameter_action_element;
         //delete action_ingredient_element.param.id;
-        action_ingredient_element.value = $rootScope.chosen_action_parameters[i].name;
+        if($rootScope.chosen_action_parameters[i].type.localeCompare("radio")==0) {
+            if($rootScope.chosen_action_parameters[i].radio_button_form!=undefined && $rootScope.chosen_action_parameters[i].radio_button_form!=null){
+                action_ingredient_element.value = $rootScope.chosen_action_parameters[i].radio_button_form;
+            }
+            else{
+                action_ingredient_element.value = "unchecked_radio_button";
+            }
+        }
+        else if($rootScope.chosen_action_parameters[i].type.localeCompare("checkbox")==0){
+            if($rootScope.chosen_action_parameters[i].checkbox_button_form!=null && $rootScope.chosen_action_parameters[i].checkbox_button_form!=undefined) {
+                if ($rootScope.chosen_action_parameters[i].checkbox_button_form == true) {
+                    action_ingredient_element.value = $rootScope.chosen_action_parameters[i].name;
+                }
+                else {
+                    action_ingredient_element.value = "unchecked_checkbox_button";
+                }
+            }
+            else {
+                action_ingredient_element.value = "unchecked_checkbox_button";
+            }
+        }
+        else {
+            action_ingredient_element.value = $rootScope.chosen_action_parameters[i].name;
+        }
         element_recipe.action_ingredients.push(action_ingredient_element);
     }
 
@@ -375,7 +431,7 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
             alert("You have create a recipe successfully!");
             $window.location.href = '#/myrecipes';
         }, function errorCallback(response) {
-            alert("You can not save the recipe on Server");
+            alert(response.message);
         });
     }
     else{
