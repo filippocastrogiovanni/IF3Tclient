@@ -123,6 +123,10 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                             }
                             if (element_parameters_triggers.type.localeCompare("time") == 0) {
                                 $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
+                                element_parameters_triggers.is_time = true;
+                            }
+                            else{
+                                element_parameters_triggers.is_time = false;
                             }
                             if (element_parameters_triggers.type.localeCompare("email") == 0) {
                                 element_parameters_triggers.is_email = true;
@@ -261,6 +265,10 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                             }
                             if (element_parameters_actions.type.localeCompare("time") == 0) {
                                 $scope.chosen_action_channel.action_list[i].contains_time = true;
+                                element_parameters_actions.is_time = true;
+                            }
+                            else{
+                                element_parameters_actions.is_time = false;
                             }
                             if (element_parameters_actions.type.localeCompare("email") == 0) {
                                 element_parameters_actions.is_email = true;

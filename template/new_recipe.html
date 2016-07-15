@@ -171,9 +171,10 @@
                             <form id="triggerForm" name="triggerForm" novalidate ng-submit="triggerForm.$valid && submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header, data_triggers )">
                                 <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
                                     <h4 ng-if="!same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}</h4><br>
-                                    <input ng-if="!same_id_trigger.is_radio && !same_id_trigger.is_checkbox" type='{{same_id_action.type}}' name='field_name' ng-model="same_id_trigger.name" required>
+                                    <input ng-if="!same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time" type='{{same_id_action.type}}' name='field_name' ng-model="same_id_trigger.name" required>
                                     <input ng-if="same_id_trigger.is_radio" type='{{same_id_trigger.type}}' name='radio_button_form' value="{{same_id_trigger.name}}" ng-model="same_id_trigger.radio_button_form"><span ng-if="same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></span>
                                     <input ng-if="same_id_trigger.is_checkbox" type='{{same_id_trigger.type}}' name='radio_button_form' value="{{same_id_trigger.name}}" ng-model="same_id_trigger.checkbox_button_form">
+                                    <input ng-if="same_id_trigger.is_time" type="time" ng-model="same_id_trigger.name">
                                     <br>
                                 </div>
                                 <br>
@@ -373,9 +374,10 @@
                             <form name="actionForm" novalidate ng-submit="actionForm.$valid && submit_action( data_actions.params, actionForm.$valid, data_actions.header, data_actions )">
                                 <div ng-repeat="same_id_action in data_actions.params track by $index">
                                     <h4 ng-if="!same_id_action.is_radio">{{ same_id_action.unbinded_name }}</h4><br>
-                                    <input ng-if="!same_id_action.is_radio && !same_id_action.is_checkbox" type='{{same_id_action.type}}' name='field_name' ng-model="same_id_action.name" required>
+                                    <input ng-if="!same_id_action.is_radio && !same_id_action.is_checkbox && !same_id_action.is_time" type='{{same_id_action.type}}' name='field_name' ng-model="same_id_action.name" required>
                                     <input ng-if="same_id_action.is_radio" type='{{same_id_action.type}}' name='radio_button_form' value="{{same_id_action.name}}" ng-model="same_id_action.radio_button_form"><span ng-if="same_id_action.is_radio">{{ same_id_action.unbinded_name }}<br></span>
                                     <input ng-if="same_id_action.is_checkbox" type='{{same_id_action.type}}' name='radio_button_form' value="{{same_id_action.name}}" ng-model="same_id_action.checkbox_button_form">
+                                    <input ng-if="same_id_action.is_time" type="time" ng-model="same_id_trigger.name">
                                     <br>
                                 </div>
                                 <h4 ng-show="actionForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4>
