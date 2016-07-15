@@ -79,45 +79,69 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
             for(var i=0; i<$scope.chosen_trigger_channel.trigger_list.length; i++) {
                 $scope.chosen_trigger_channel.trigger_list[i].params = [];
             }
-            for(var i=0; i<output_distinct.length; i++) {
+            //normalize output_distinct in a new array
+            var normalized_array = [];
+            output_distinct.reverse();
+            for(var i=0; i<$scope.chosen_trigger_channel.trigger_list.length; i++) {
+                var contained = false;
+                for (var j = 0; j < params.length; j++) {
+                    if ($scope.chosen_trigger_channel.trigger_list[i].id == params[j].trigger.id) {
+                        contained = true;
+                        break;
+                    }
+                }
+                if(contained)
+                    normalized_array[i] = output_distinct.pop();
+            }
+            for(var i=0; i<$scope.chosen_trigger_channel.trigger_list.length; i++) {
                 var params_same_id_trigger = [];
                 $scope.chosen_trigger_channel.trigger_list[i].contains_radio = false;
                 $scope.chosen_trigger_channel.trigger_list[i].contains_time = false;
                 $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = false;
-                for(var j=0; j<params.length ; j++) {
-                    if(params[j].trigger.id == output_distinct[i]) {
-                        var element_parameters_triggers = {};
-                        element_parameters_triggers.name = params[j].name;
-                        element_parameters_triggers.id = params[j].id;
-                        element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
-                        element_parameters_triggers.type = params[j].type;
-                        if(element_parameters_triggers.type.localeCompare("radio")==0) {
-                            element_parameters_triggers.is_radio = true;
-                            $scope.chosen_trigger_channel.trigger_list[i].contains_radio = true;
-                        }
-                        else {
-                            element_parameters_triggers.is_radio = false;
-                        }
-                        if(element_parameters_triggers.type.localeCompare("time")==0) {
-                            $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
-                        }
-                        if(element_parameters_triggers.type.localeCompare("email")==0) {
-                            element_parameters_triggers.is_email = true;
-                        }
-                        else{
-                            element_parameters_triggers.is_email = false;
-                        }
-                        if(element_parameters_triggers.type.localeCompare("checkbox")==0) {
-                            element_parameters_triggers.is_checkbox = true;
-                            $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = true;
-                        }
-                        else{
-                            element_parameters_triggers.is_checkbox = false;
-                        }
-                        params_same_id_trigger.push(element_parameters_triggers);
+                //check if trigger is contained in ouput_distinct
+                var contained = false;
+                for (var j = 0; j < params.length; j++) {
+                    if ($scope.chosen_trigger_channel.trigger_list[i].id == params[j].trigger.id) {
+                        contained = true;
+                        break;
                     }
                 }
-                $scope.chosen_trigger_channel.trigger_list[i].params = params_same_id_trigger;
+                if(contained) {
+                    for (var j = 0; j < params.length; j++) {
+                        if (params[j].trigger.id == normalized_array[i]) {
+                            var element_parameters_triggers = {};
+                            element_parameters_triggers.name = params[j].name;
+                            element_parameters_triggers.id = params[j].id;
+                            element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
+                            element_parameters_triggers.type = params[j].type;
+                            if (element_parameters_triggers.type.localeCompare("radio") == 0) {
+                                element_parameters_triggers.is_radio = true;
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_radio = true;
+                            }
+                            else {
+                                element_parameters_triggers.is_radio = false;
+                            }
+                            if (element_parameters_triggers.type.localeCompare("time") == 0) {
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
+                            }
+                            if (element_parameters_triggers.type.localeCompare("email") == 0) {
+                                element_parameters_triggers.is_email = true;
+                            }
+                            else {
+                                element_parameters_triggers.is_email = false;
+                            }
+                            if (element_parameters_triggers.type.localeCompare("checkbox") == 0) {
+                                element_parameters_triggers.is_checkbox = true;
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = true;
+                            }
+                            else {
+                                element_parameters_triggers.is_checkbox = false;
+                            }
+                            params_same_id_trigger.push(element_parameters_triggers);
+                        }
+                    }
+                    $scope.chosen_trigger_channel.trigger_list[i].params = params_same_id_trigger;
+                }
             }
 
             /*
@@ -193,39 +217,69 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
             for(var i=0; i<$scope.chosen_action_channel.action_list.length; i++) {
                 $scope.chosen_action_channel.action_list[i].params = [];
             }
-            for(var i=0; i<output_distinct.length; i++) {
+            //normalize output_distinct in a new array
+            var normalized_array = [];
+            output_distinct.reverse();
+            for(var i=0; i<$scope.chosen_action_channel.action_list.length; i++) {
+                var contained = false;
+                for (var j = 0; j < params.length; j++) {
+                    if ($scope.chosen_action_channel.action_list[i].id == params[j].action.id) {
+                        contained = true;
+                        break;
+                    }
+                }
+                if(contained)
+                    normalized_array[i] = output_distinct.pop();
+            }
+            for(var i=0; i<$scope.chosen_action_channel.action_list.length; i++) {
                 var params_same_id_action = [];
                 $scope.chosen_action_channel.action_list[i].contains_radio = false;
                 $scope.chosen_action_channel.action_list[i].contains_time = false;
                 $scope.chosen_action_channel.action_list[i].contains_checkbox = false;
-                for(var j=0; j<params.length ; j++) {
-                    if(params[j].action.id == output_distinct[i]) {
-                        var element_parameters_actions = {};
-                        element_parameters_actions.name = params[j].name;
-                        element_parameters_actions.id = params[j].id;
-                        element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
-                        element_parameters_actions.type = params[j].type;
-                        if(element_parameters_actions.type.localeCompare("radio")==0) {
-                            element_parameters_actions.is_radio = true;
-                            $scope.chosen_action_channel.action_list[i].contains_radio = true;
-                        }
-                        else {
-                            element_parameters_actions.is_radio = false;
-                        }
-                        if(element_parameters_actions.type.localeCompare("time")==0) {
-                            $scope.chosen_action_channel.action_list[i].contains_time = true;
-                        }
-                        if(element_parameters_actions.type.localeCompare("checkbox")==0) {
-                            element_parameters_actions.is_checkbox = true;
-                            $scope.chosen_action_channel.action_list[i].contains_checkbox = true;
-                        }
-                        else{
-                            element_parameters_actions.is_checkbox = false;
-                        }
-                        params_same_id_action.push(element_parameters_actions);
+                //check if action is contained in ouput_distinct
+                var contained = false;
+                for (var j = 0; j < params.length; j++) {
+                    if ($scope.chosen_action_channel.action_list[i].id == params[j].action.id) {
+                        contained = true;
+                        break;
                     }
                 }
-                $scope.chosen_action_channel.action_list[i].params = params_same_id_action;
+                if(contained) {
+                    for (var j = 0; j < params.length; j++) {
+                        if (params[j].action.id == normalized_array[i]) {
+                            var element_parameters_actions = {};
+                            element_parameters_actions.name = params[j].name;
+                            element_parameters_actions.id = params[j].id;
+                            element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
+                            element_parameters_actions.type = params[j].type;
+                            if (element_parameters_actions.type.localeCompare("radio") == 0) {
+                                element_parameters_actions.is_radio = true;
+                                $scope.chosen_action_channel.action_list[i].contains_radio = true;
+                            }
+                            else {
+                                element_parameters_actions.is_radio = false;
+                            }
+                            if (element_parameters_actions.type.localeCompare("time") == 0) {
+                                $scope.chosen_action_channel.action_list[i].contains_time = true;
+                            }
+                            if (element_parameters_actions.type.localeCompare("email") == 0) {
+                                element_parameters_actions.is_email = true;
+                            }
+                            else {
+                                element_parameters_actions.is_email = false;
+                            }
+                            if (element_parameters_actions.type.localeCompare("checkbox") == 0) {
+                                element_parameters_actions.is_checkbox = true;
+                                $scope.chosen_action_channel.action_list[i].contains_checkbox = true;
+                            }
+                            else {
+                                element_parameters_actions.is_checkbox = false;
+                            }
+                            params_same_id_action.push(element_parameters_actions);
+                        }
+                    }
+                    $scope.chosen_action_channel.action_list[i].params = params_same_id_action;
+                }
             }
             //preparing parameters to pass to form
             /*
@@ -368,10 +422,18 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
                 trigger_ingredient_element.value = "unchecked_checkbox_button";
             }
         }
+        else if($rootScope.chosen_trigger_parameters[i].type.localeCompare("date")==0){
+            trigger_ingredient_element.value = moment($rootScope.chosen_trigger_parameters[i].name).format("DD/MM/YYYY");
+        }
+        else if($rootScope.chosen_trigger_parameters[i].type.localeCompare("time")==0){
+            trigger_ingredient_element.value = moment($rootScope.chosen_trigger_parameters[i].name).format("HH:mm");
+        }
         else {
             trigger_ingredient_element.value = $rootScope.chosen_trigger_parameters[i].name;
         }
-        element_recipe.trigger_ingredients.push(trigger_ingredient_element);
+        if( !(trigger_ingredient_element.value instanceof String) || (trigger_ingredient_element.value instanceof String && trigger_ingredient_element.value.localeCompare("unchecked_checkbox_button")!=0 && trigger_ingredient_element.value.localeCompare("unchecked_radio_button")!=0)) {
+            element_recipe.trigger_ingredients.push(trigger_ingredient_element);
+        }
     }
 
     for(var i=0; i<$rootScope.chosen_action_parameters.length; i++){
@@ -409,10 +471,18 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
                 action_ingredient_element.value = "unchecked_checkbox_button";
             }
         }
+        else if($rootScope.chosen_action_parameters[i].type.localeCompare("date")==0){
+            action_ingredient_element.value = moment($rootScope.chosen_action_parameters[i].name).format("DD/MM/YYYY");
+        }
+        else if($rootScope.chosen_action_parameters[i].type.localeCompare("time")==0){
+            action_ingredient_element.value = moment($rootScope.chosen_action_parameters[i].name).format("HH:mm");
+        }
         else {
             action_ingredient_element.value = $rootScope.chosen_action_parameters[i].name;
         }
-        element_recipe.action_ingredients.push(action_ingredient_element);
+        if( !(action_ingredient_element.value instanceof String) || (action_ingredient_element.value instanceof String && action_ingredient_element.value.localeCompare("unchecked_checkbox_button")!=0 && action_ingredient_element.value.localeCompare("unchecked_radio_button")!=0)) {
+            element_recipe.action_ingredients.push(action_ingredient_element);
+        }
     }
 
     element_recipe.trigger = $rootScope.chosen_trigger_data;
