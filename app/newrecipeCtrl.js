@@ -503,7 +503,6 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
             method: 'POST',
             url: $rootScope.ipServer+'/add_recipe?_csrf='+userFactory.getXsrfCookie(),
             headers: {'Content-Type': 'application/json' },
-            xsrfCookieName: 'XSRF-TOKEN',
             data: $scope.recipes_list
         }).then(function successCallback(response) {
             alert("You have create a recipe successfully!");
