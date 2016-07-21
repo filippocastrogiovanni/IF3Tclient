@@ -520,41 +520,40 @@ if3tApp.factory('messageFactory', function()
 
 });
 
-if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFactory)
+if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFactory, messageFactory)
 {
     //TODO controllare alla fine se sono stati aggiunti altri campi e rimuovere quelli non necessari
     var factory = {}
 
-    function Channel(id, name, image_url, keyword)
+    /*function Channel(id, name, image_url, keyword)
     {
         this.id = id;
         this.name = name;
         this.image_url = image_url;
         this.keyword = keyword;
-    }
+    }*/
 
-    function Trigger(id, channel, header, paragraph)
+    function Trigger(id, channel_image_url, header, paragraph, parameters)
     {
         this.id = id;
-        this.channel = channel;
+        this.channel_image_url = channel_image_url;
         this.header = header;
         this.paragraph = paragraph;
+        this.parameters = parameters;
     }
 
-    function Action(id, channel, header, paragraph)
+    function Action(id, channel_image_url, header, paragraph, parameters)
     {
         this.id = id;
-        this.channel = channel;
+        this.channel_image_url = channel_image_url;
         this.header = header;
         this.paragraph = paragraph;
+        this.parameters = parameters;
     }
-
-    //TODO aggiungere campo title all'entity recipe
-    function Recipe(id, title, groupId, description, isPublic, isEnabled, trigger, actions)
+    
+    function Recipe(id, description, isPublic, isEnabled, trigger, actions)
     {
         this.id = id;
-        this.title = title;
-        this.groupId = groupId;
         this.description = description;
         this.isPublic = isPublic;
         this.isEnabled = isEnabled;
@@ -564,36 +563,133 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
     
     factory.getRecipe = function(id, callback)
     {
+        messageFactory.showLoading();
+
         $http({
             method: 'GET',
-            url: 'http://localhost:8181/recipe/' + id,
-            headers: { 'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization() },
+            url: $rootScope.ipServer + '/recipe/' + id,
+            headers: { 'authorization': userFactory.getAuthorization() }
         }).then
         (
             function successCallback(resp)
             {
                 var actArray = [];
-                //TODO sto considernado così solo la prima ricetta ma in toeria ne possono arrivare di più
-                var r = resp.data[0];
+                var r = resp.data;
                 var tri = r.trigger;
-                var chaTri = new Channel(tri.channel.channelId, tri.channel.name, tri.channel.image_url, tri.channel.keyword);
-                var trig = new Trigger(tri.id, chaTri, tri.header, tri.paragraph);
+                //var chaTri = new Channel(tri.channel.channelId, tri.channel.name, tri.channel.image_url, tri.channel.keyword);
+                var trig = new Trigger(tri.id, tri.channel_image_url, tri.header, tri.paragraph, tri.parameters);
 
-                for (var i = 0; i < resp.data.length; i++)
+                for (var i = 0; i < r.actions.length; i++)
                 {
-                    var act = resp.data[i].action;
-                    var chaAct = new Channel(act.channel.channelId, act.channel.name, act.channel.image_url, act.channel.keyword);
-
-                    actArray.push(new Action(act.id, chaAct, act.header, act.paragraph));
+                    var act = r.actions[i];
+                    //var chaAct = new Channel(act.channel.channelId, act.channel.name, act.channel.image_url, act.channel.keyword);
+                    actArray.push(new Action(act.id, act.channel_image_url, act.header, act.paragraph, act.parameters));
                 }
 
-                var rec = new Recipe(r.id, "Ricetta di prova", r.groupId, r.description, r.isPublic, r.isEnabled, trig, actArray);
+                var rec = new Recipe(r.id, r.description, r.isPublic, r.isEnabled, trig, actArray);
+                //getTriggerFields(rec, callback);
+                //console.log(rec);
+                messageFactory.hideLoading();
                 callback && callback(rec);
             },
             function errorCallback(resp)
             {
-                alert("Error during request of recipe " + id);
+                messageFactory.hideLoading();
+                messageFactory.showError(resp.data.message);
             }
+        );
+    };
+
+    /*getTriggerFields = function(recipe, callback)
+    {
+        $http({
+            method: 'GET',
+            url: $rootScope.ipServer + '/parameters_triggers/' + recipe.trigger.id + '/' + recipe.trigger.channel.id,
+            headers: { 'authorization': userFactory.getAuthorization() }
+        }).then
+        (
+            function successCallback(resp)
+            {
+                console.log(recipe);
+                console.log(resp.data);
+
+
+                messageFactory.hideLoading();
+                callback && callback(recipe);
+            },
+            function errorCallback(resp)
+            {
+                messageFactory.hideLoading();
+                messageFactory.showError(resp.data.message);
+            }
+        );
+    };*/
+
+    //FIXME pagina myrecipes fatta da Andrea prima, che richiamava questa funzione messa in un altro posto
+    factory.toggleRecipeEnabled = function(recipe)
+    {
+        messageFactory.showLoading();
+
+        $http({
+            dataType: 'json',
+            method: 'PUT',
+            url: $rootScope.ipServer + '/enable_recipe/?_csrf=' + userFactory.getXsrfCookie(),
+            data: angular.toJson({ id: recipe.id })
+        }).then
+        (
+            function successCallback(resp)
+            {
+                //console.log(resp);
+                messageFactory.hideLoading();
+                recipe.isEnabled = !recipe.isEnabled;
+            },
+            function errorCallback(resp)
+            {
+                //console.log(resp);
+                messageFactory.hideLoading();
+                messageFactory.showError(resp.data.message);
+            }
+        );
+    };
+
+    //FIXME pagina myrecipes fatta da Andrea prima, che richiamava questa funzione messa in un altro posto
+    factory.toggleRecipePublic = function(recipe)
+    {
+        messageFactory.showLoading();
+        
+        $http({
+            dataType: 'json',
+            method: 'PUT',
+            url: $rootScope.ipServer + '/publish_recipe/?_csrf=' + userFactory.getXsrfCookie(),
+            data: angular.toJson({ id: recipe.id })
+        }).then
+        (
+            function successCallback(resp) 
+            {
+                //console.log(resp);
+                messageFactory.hideLoading();
+                recipe.isPublic = !recipe.isPublic;
+            },
+            function errorCallback(resp) 
+            {
+                //console.log(resp);
+                messageFactory.hideLoading();
+                messageFactory.showError(resp.data.message);
+            }
+        );
+    };
+
+    factory.updateRecipe = function(recipe)
+    {
+        messageFactory.showLoading();
+
+        $http({
+            dataType: 'json',
+            method: 'PUT',
+            url: $rootScope.ipServer + '/'
+        }).then
+        (
+
         );
     };
 

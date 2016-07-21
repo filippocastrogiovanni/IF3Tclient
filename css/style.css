@@ -231,7 +231,7 @@ div.descr
 {
     height: 36%;
     border: 1px solid lightgrey;
-    border-radius: 0.5em;
+    //border-radius: 0.5em;
     //padding: 0.5em;
     text-align: left;
     padding: 10px;
@@ -248,13 +248,15 @@ div.descr
 div.descr-right
 {
     width: 60%;
-    margin-left: 0.25em;
+    border-radius: 0 0.5em 0.5em 0;
+    //margin-left: 0.25em;
 }
 
 div.descr-left
 {
     width: 40%;
-    margin-right: 0.25em;
+    border-radius: 0.5em 0 0 0.5em;
+    //margin-right: 0.25em;
 }
 
 md-toolbar

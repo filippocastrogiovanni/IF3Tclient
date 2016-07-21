@@ -6,15 +6,69 @@
     </h5>
 </md-toolbar>
 <form id="editRecipe" role="form">
-    <div layout="row" class="content">
+    <div layout="row" layout-wrap class="content" ng-repeat="act in savedRecipe.actions">
+        <div flex="40" layout="row" class="div-if container" ng-class="savedRecipe.isEnabled ? '' : 'disabled'">
+            <span class="span-if">if</span>
+            <img src='{{ ipServer }}/{{ savedRecipe.trigger.channel_image_url }}' class="img-responsive icon-if-then" width="110" height="110">
+        </div>
+        <div flex="60" layout="row" class="div-then container" ng-class="savedRecipe.isEnabled ? '' : 'disabled'">
+            <span class="span-then">then</span>
+            <img src='{{ ipServer }}/{{ act.channel_image_url }}' class="img-responsive icon-if-then" width="110" height="110">
+        </div>
+        <div flex="39" layout="row" class="descr descr-left">
+            {{ savedRecipe.trigger.header }} on "INSERIRE INGREDIENTE"
+        </div>
+        <div flex="60" layout="row" class="descr descr-right">
+            {{ act.header }} to "INSERIRE INGREDIENTE"
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="title">Recipe title:</label>
+        <input class="form-control" id="title" value="{{ savedRecipe.description }}" placeholder="Insert a title">
+    </div>
+    <md-toolbar layout="column" class="sub-title">
+        <h2>Trigger</h2>
+    </md-toolbar>
+    <div flex="100" layout="column" layout-wrap class="left">
+        <p class="header-recipe">{{ savedRecipe.trigger.header }}</p>
+        <p class="paragraph-recipe">{{ savedRecipe.trigger.paragraph }}</p>
+    </div>
+    <div class="form-group" ng-repeat="par_tri in savedRecipe.trigger.parameters">
+        <div layout="row">
+            <img src='{{ ipServer }}/{{ savedRecipe.trigger.channel_image_url }}' width="25" height="25">
+            <label for="{{ getIdForForm(par_tri.name, par_tri.type, 'trig-') }}">&nbsp;&nbsp;{{ getLabel(par_tri.name) }}:</label>
+        </div>
+        <input ng-if="par_tri.type != 'textarea'" type="{{ par_tri.type }}" class="form-control" id="{{ getIdForForm(par_tri.name, 'input', 'trig-') }}" value="" placeholder="Insert {{ getLabel(par_tri.name) }}">
+        <textarea ng-if="par_tri.type == 'textarea'" rows="8" class="form-control" id="{{ getIdForForm(par_tri.name, par_tri.type, 'trig-') }}" placeholder="Insert {{ getLabel(par_tri.name) }}"></textarea>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--div layout="row" class="content">
         <div flex="70" layout="row" layout-wrap class="left">
             <div flex="40" layout="row" class="div-if container" ng-class="savedRecipe.isEnabled ? '' : 'disabled'">
                 <span class="span-if">if</span>
-                <img src='{{ ipServer }}/{{ savedRecipe.trigger.urlImg }}' class="img-responsive icon-if-then" width="110" height="110">
+                <img src='{{ ipServer }}/{{ savedRecipe.trigger.channel_image_url }}' class="img-responsive icon-if-then" width="110" height="110">
             </div>
             <div flex="60" layout="row" class="div-then container" ng-class="savedRecipe.isEnabled ? '' : 'disabled'">
                 <span class="span-then">then</span>
-                <img src='{{ ipServer }}/{{ savedRecipe.action.urlImg }}' class="img-responsive icon-if-then" width="110" height="110">
+                <img src='{{ ipServer }}/{{ savedRecipe.action.channel_image_url }}' class="img-responsive icon-if-then" width="110" height="110">
             </div>
             <div flex="38" layout="row" class="descr descr-left">
                 {{ savedRecipe.trigger.header }} on "INSERIRE INGREDIENTE"
@@ -24,19 +78,19 @@
             </div>
         </div>
         <div flex="30" layout="column"  class="right">
-            <button class="btn btn-default recipe-menu">
+            <button class="btn btn-default recipe-menu" ng-click="toggleEnabled(savedRecipe)">
                 <i class="glyphicon glyphicon-off" aria-hidden="true"/>
                 <span>Turn {{ savedRecipe.isEnabled ? 'off' : 'on' }}</span>
             </button>
-            <button class="btn btn-default recipe-menu">
+            <button class="btn btn-default recipe-menu" ng-click="togglePublic(savedRecipe)">
                 <i class="glyphicon glyphicon-share" aria-hidden="true"/>
-                <span>Publish</span>
-            </button>
-            <button class="btn btn-default recipe-menu">
+                <span>{{ savedRecipe.isPublic ? 'Unpublish' : 'Publish' }}</span>
+            </button-->
+            <!--button class="btn btn-default recipe-menu">
                 <i class="glyphicon glyphicon-check" aria-hidden="true"/>
                 <span>Check now</span>
-            </button>
-            <button class="btn btn-default recipe-menu">
+            </button-->
+            <!--button class="btn btn-default recipe-menu">
                 <i class="glyphicon glyphicon-list" aria-hidden="true"/>
                 <span>Log</span>
             </button>
@@ -44,7 +98,11 @@
                 <i class="glyphicon glyphicon-trash" aria-hidden="true"/>
                 <span>Delete</span>
             </button>
-            <button class="btn btn-default recipe-menu">
+            <button class="btn btn-default recipe-menu" ng-click="update(savedRecipe)">
+                <i class="glyphicon glyphicon-copy" aria-hidden="true"/>
+                <span>Reset fields</span>
+            </button>
+            <button class="btn btn-default recipe-menu" ng-click="update(savedRecipe)">
                 <i class="glyphicon glyphicon-edit" aria-hidden="true"/>
                 <span>Update recipe</span>
             </button>
@@ -52,7 +110,7 @@
     </div>
     <div class="form-group">
         <label for="title">Recipe title:</label>
-        <input class="form-control" id="title" value="{{ savedRecipe.title }}" placeholder="Insert a title">
+        <input class="form-control" id="title" value="{{ savedRecipe.description }}" placeholder="Insert a title">
     </div>
     <md-toolbar layout="column" class="sub-title">
         <h2>Trigger</h2>
@@ -63,7 +121,7 @@
     </div>
     <div class="form-group">
         <div layout="row">
-            <img src='{{ ipServer }}/{{ savedRecipe.trigger.urlImg }}' width="25" height="25">
+            <img src='{{ ipServer }}/{{ savedRecipe.trigger.channel_image_url }}' width="25" height="25">
             <label for="keywordPhrase">&nbsp;&nbsp;Keyword or phrase:</label>
         </div>
         <input class="form-control" id="keywordPhrase" value="{{ savedRecipe.keywordPhrase }}" placeholder="Insert a keyword or a phrase">
@@ -91,57 +149,9 @@
             <label for="body">&nbsp;&nbsp;Body:</label>
         </div>
         <textarea class="form-control" id="body" rows="10" placeholder="Insert the body of the mail">{{ savedRecipe.mailBody }}</textarea>
-    </div>
+    </div-->
 </form>
 <br>
 <br>
 <br>
 <br>
-<!--md-toolbar layout="column" class="sub-title">
-    <h2>Trigger</h2>
-</md-toolbar>
-<div layout="column" layout-padding class="content">
-    <h4>Event from search starts</h4>
-    <p class="sub-descr">Descrizione del trigger</p>
-    <div layout="row">
-        <img src='{{ savedRecipe.trigger.urlImg }}' class="icon-trig-act">
-        <p>&nbsp;Keyword or phrase</p>
-    </div>
-    <div class="descr descr-unique">
-        efegdgdhdh
-    </div>
-    <br>
-</div>
-<md-toolbar layout="column" class="sub-title">
-    <h2>Action</h2>
-</md-toolbar>
-<div layout="column" layout-padding class="content">
-    <h4>Send an email</h4>
-    <p class="sub-descr">Descrizione dell'action</p>
-    <div layout="row">
-        <img src='{{ savedRecipe.action.urlImg }}' class="icon-trig-act">
-        <p>&nbsp;To address</p>
-    </div>
-    <div class="descr descr-unique">
-        efegdgdhdh
-    </div>
-    <div layout="row">
-        <img src='{{ savedRecipe.action.urlImg }}' class="icon-trig-act">
-        <p>&nbsp;Subject</p>
-    </div>
-    <div class="descr descr-unique">
-        efegdgdhdh
-    </div>
-    <div layout="row">
-        <img src='{{ savedRecipe.action.urlImg }}' class="icon-trig-act">
-        <p>&nbsp;Body</p>
-    </div>
-    <div class="descr descr-unique">
-        efegdgdhdh
-    </div>
-    <br>
-    <button class="mybutton" ng-click="submit()">Update recipe</button>
-    <br>
-    <br>
-    <br>
-</div-->
