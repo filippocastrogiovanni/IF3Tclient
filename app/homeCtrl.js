@@ -5,16 +5,39 @@
 if3tApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$location', '$http', 'userFactory', '$window',
     function ($scope, $rootScope, $routeParams, $location, $http, userFactory, $window) {
         console.log("ciao");
-        $scope.myFunction = function() {
-            $window.open($scope.facebook_auth_url,"_blank","location=no," +
-                "menubar=no," +
-                "toolbar=no," +
-                "scrollbars=no," +
-                "resizable=no," +
-                "status=no," +
-                "titlebar=no," +
-                "top=100,left=300," +
-                "width=550,height=550");
+        $scope.facebookConnectFunction = function() {
+            $http({
+                method: 'GET',
+                url: $rootScope.ipServer+'/facebook/auth?_csrf='+userFactory.getXsrfCookie(),
+                headers: {'Content-Type': 'application/json'}
+            }).then(function successCallback(response) {
+                $scope.facebook_auth_url = response.data.message;
+                console.log("success");
+                console.log($scope.facebook_auth_url);
+                $window.open($scope.facebook_auth_url,"_blank","location=no," +
+                    "menubar=no," +
+                    "toolbar=no," +
+                    "scrollbars=no," +
+                    "resizable=no," +
+                    "status=no," +
+                    "titlebar=no," +
+                    "top=100,left=300," +
+                    "width=550,height=550");
+            }, function errorCallback(response) {
+                console.log("error");
+            });
+        }
+
+        $scope.facebookDisconnectFunction = function() {
+            $http({
+                method: 'GET',
+                url: $rootScope.ipServer+'/facebook/revokeauth?_csrf='+userFactory.getXsrfCookie(),
+                headers: {'Content-Type': 'application/json'}
+            }).then(function successCallback(response) {
+                console.log(response);
+            }, function errorCallback(response) {
+                console.log("error");
+            });
         }
         //including name="scope" value="user_posts"
         /*
@@ -33,19 +56,6 @@ if3tApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$
          });
          }
          */
-        $http({
-            method: 'GET',
-            url: $rootScope.ipServer+'/facebook/auth?_csrf='+userFactory.getXsrfCookie(),
-            headers: {'Content-Type': 'application/json'}
-        }).then(function successCallback(response) {
-            $scope.facebook_auth_url = response.data.message;
-            console.log("success");
-            console.log($scope.facebook_auth_url);
-        }, function errorCallback(response) {
-            console.log("error");
-        });
-
-
 
     }
 ]);
