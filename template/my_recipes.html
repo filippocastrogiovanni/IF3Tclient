@@ -10,12 +10,14 @@
                     <span>{{recipe.trigger.header}}</span>
                 </div>
                 <div>
+                    <!--Considerare la possibilità di più azioni-->
                     <label>Action:</label>
                     <img class="img-responsive" ng-src="{{recipe.action.channel.image_url}}"/><br>
                     <span>{{recipe.action.paragraph}}</span>
                     <span>{{recipe.action.header}}</span>
                 </div>
                 <br>
+                <button ng-click="toEditPage(recipe.id)">Edit</button>
                 <button ng-click="removeRecipe(recipe.id)">Delete</button>
                 <button ng-click="toggleRecipePublic(recipe)">{{ recipe.isPublic? "UnPublish" : "Publish"}}</button>
                 <button ng-click="toggleRecipeEnabled(recipe)">{{ recipe.isEnabled? "Disable" : "Enable"}}</button>
@@ -23,3 +25,6 @@
         </li>
     </ul>
 </div>
+<br>
+<br>
+<br>

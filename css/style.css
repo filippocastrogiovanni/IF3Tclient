@@ -96,11 +96,9 @@ h3.step_1, h6.step_1_helper{
 h2.recipe
 {
     margin-top: 0.5em;
-//margin-bottom: 0;
     padding: 0;
     margin-left: 19.6%;
     color: #eee;
-//border: 1px solid black;
 }
 
 h5.recipe
@@ -109,7 +107,6 @@ h5.recipe
     padding: 0;
     margin-left: 19.6%;
     margin-bottom: 0.5em;
-//border: 1px solid black;
 }
 
 a.recipe
@@ -127,30 +124,20 @@ button.recipe-menu
 {
     text-align: left;
     margin-top: 0.5em;
-    width: 85%;
-    margin-left: 15%;
+    min-width: 20%;
 }
 
 button.recipe-menu > span
 {
-    margin-left: 10px;
-    font-size: 120%;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    font-size: 1.15em;
 }
 
 button.recipe-menu > i
 {
-    margin-left: 10px;
+    margin-left: 0.2em;
 }
-
-/*div.recipe-menu
-{
-    border-radius: 0.5em;
-    border: 1px solid black;
-    display: block;
-    text-align: left;
-    padding: 0;
-    font-size: 120%;
-}*/
 
 form#editRecipe
 {
@@ -158,43 +145,15 @@ form#editRecipe
     margin-left: 20%;
 }
 
-div.content
+form#editRecipe div.div-label
 {
-    width: 100%;
-//margin-left: 19%;
-    padding: 0;
-    height: 20em;
-//border: 1px solid black;
+    margin-top: 1em;
+    margin-bottom: 0.25em;
 }
 
-div.left
+label.form-label
 {
-    text-align: center;
-//border: 1px solid black;
-}
-
-div.right
-{
-    text-align: center;
-//border: 1px solid black;
-}
-
-div.div-if
-{
-    background: dodgerblue;
-    border-radius: 0.5em 0 0 0.5em;
-    height: 50%;
-    text-align: right;
-    margin-top: 0.5em;
-}
-
-div.div-then
-{
-    background: royalblue;
-    border-radius: 0 0.5em 0.5em 0;
-    height: 50%;
-    text-align: left;
-    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 .disabled
@@ -203,90 +162,112 @@ div.div-then
     filter: grayscale(100%);
 }
 
-span.span-if, span.span-then
-{
-    font-size: 7em;
-    font-weight: bold;
-    color: lightgrey;
-    opacity:0.7;
-//vertical-align: middle;
-    margin-left: 0.2em;
-    margin-right: 0.2em;
-}
-
 img.icon-if-then
 {
-    max-height: 100%;
+    min-width: 30px;
+    min-height: 30px;
     margin-top: 1em;
     margin-bottom: 1em;
+    vertical-align: middle;
 }
 
-img.icon-trig-act
+img.text-if
 {
-    width: 4%;
-    height: 4%;
+    min-width: 24px;
+    min-height: 30px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    vertical-align: middle;
 }
 
-div.descr
+img.text-then
 {
-    height: 36%;
+    min-width: 75px;
+    min-height: 30px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    vertical-align: middle;
+}
+
+h2.title
+{
+    background: #3f51b5;
+    color: #eee;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 15px;
+    border-radius: 0.25em;
+}
+
+td.descr-left
+{
     border: 1px solid lightgrey;
-    //border-radius: 0.5em;
-    //padding: 0.5em;
+    border-radius: 0.5em 0 0 0.5em;
     text-align: left;
-    padding: 10px;
-    //margin-top: 0.5em;
+    vertical-align: text-top;
+    padding: 15px;
 }
 
-/*div.descr-unique
+td.descr-right
 {
-    width: 68%;
-    margin-left: 1%;
-    padding-left: 1.5%;
-}*/
-
-div.descr-right
-{
-    width: 60%;
+    border: 1px solid lightgrey;
     border-radius: 0 0.5em 0.5em 0;
-    //margin-left: 0.25em;
+    text-align: left;
+    vertical-align: text-top;
+    padding: 15px;
 }
 
-div.descr-left
+table.images-ext
+{
+    width: 100%;
+    margin-bottom: 1.5em;
+    border-collapse: separate;
+    border-spacing: 0px 8px;
+}
+
+table.images-ext td
+{
+    height: 60%;
+}
+
+table.images-ext td#left
 {
     width: 40%;
+    background: #3b579d;
     border-radius: 0.5em 0 0 0.5em;
-    //margin-right: 0.25em;
+}
+
+table.images-ext td#right
+{
+    width: 60%;
+    background: #23448b;
+    border-radius: 0 0.5em 0.5em 0;
+}
+
+table#images-int-left
+{
+    float: right;
+}
+
+table#images-int-left td, table#images-int-right td
+{
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
+td.left
+{
+    padding-right: 0!important;
+}
+
+table#images-int-right
+{
+    float: left;
 }
 
 md-toolbar
 {
     margin-bottom: 10px;
-}
-
-md-toolbar.sub-title
-{
-    //width: 60%;
-    //margin-left: 20%;
-    padding-bottom: 0.8%;
-    padding-left: 1.5%;
-    //background: #231d2b;
-    border-radius: 0.5em;
-}
-
-/*button.mybutton
-{
-    width: 68%;
-    margin-left: 1%;
-    background: dodgerblue;
-    border: 1px solid royalblue;
-    font-weight: bold;
-    font-size: 150%;
-}*/
-
-p.sub-descr
-{
-    color: darkgrey;
 }
 
 p.header-recipe

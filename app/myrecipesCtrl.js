@@ -24,13 +24,19 @@ if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$sco
                 }
             );
 
-        $scope.removeRecipe = function(recipeId){
+        //TODO da fare o cancellare perchè fatta nella edit page
+        $scope.removeRecipe = function(recipeId) {
 
         };
+
+        $scope.toEditPage = function(recipeId) {
+            $window.location.href = '#/myrecipes/' + recipeId;
+        }
     }
 ]);
 
 //TODO capire se curpage serve a qualcosa e casomai metterlo
+//FIXME far funzionare le checkboxes (dovrebbero ma è bene controllare)
 if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', 'recipesFactory',
     function ($scope, $rootscope, $routeParams, $location, recipesFactory)
     {
@@ -44,13 +50,13 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
         {   
             prefix += name;
             if (type == 'textarea') prefix += '-ta';
-            console.log(prefix);
             return prefix;
         };
 
         $rootscope.recipeCallback = function(rec)
         {
             $scope.savedRecipe = rec;
+            $scope.master = angular.copy($scope.savedRecipe);
         };
 
         recipesFactory.getRecipe($routeParams.id, $rootscope.recipeCallback);
@@ -60,7 +66,7 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
 
         $scope.reset = function()
         {
-            $scope.updatedRecipe = angular.copy($scope.savedRecipe);
+            $scope.savedRecipe = angular.copy($scope.master);
         };
     }
 ]);

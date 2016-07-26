@@ -600,31 +600,6 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
         );
     };
 
-    /*getTriggerFields = function(recipe, callback)
-    {
-        $http({
-            method: 'GET',
-            url: $rootScope.ipServer + '/parameters_triggers/' + recipe.trigger.id + '/' + recipe.trigger.channel.id,
-            headers: { 'authorization': userFactory.getAuthorization() }
-        }).then
-        (
-            function successCallback(resp)
-            {
-                console.log(recipe);
-                console.log(resp.data);
-
-
-                messageFactory.hideLoading();
-                callback && callback(recipe);
-            },
-            function errorCallback(resp)
-            {
-                messageFactory.hideLoading();
-                messageFactory.showError(resp.data.message);
-            }
-        );
-    };*/
-
     //FIXME pagina myrecipes fatta da Andrea prima, che richiamava questa funzione messa in un altro posto
     factory.toggleRecipeEnabled = function(recipe)
     {
