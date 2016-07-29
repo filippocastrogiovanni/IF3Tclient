@@ -123,12 +123,11 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                             else {
                                 element_parameters_triggers.is_radio = false;
                             }
-                            if (element_parameters_triggers.type.localeCompare("email") == 0) {
-                                element_parameters_triggers.is_email = true;
-                                $scope.chosen_trigger_channel.trigger_list[i].contains_email = true;
+                            if (element_parameters_triggers.type.localeCompare("number") == 0) {
+                                element_parameters_triggers.is_number = true;
                             }
                             else {
-                                element_parameters_triggers.is_radio = false;
+                                element_parameters_triggers.is_number = false;
                             }
                             if (element_parameters_triggers.type.localeCompare("time") == 0) {
                                 $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
@@ -275,12 +274,11 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                             element_parameters_actions.id = params[j].id;
                             element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
                             element_parameters_actions.type = params[j].type;
-                            if (element_parameters_actions.type.localeCompare("email") == 0) {
-                                element_parameters_actions.is_email = true;
-                                $scope.chosen_action_channel.action_list[i].contains_email = true;
+                            if (element_parameters_actions.type.localeCompare("number") == 0) {
+                                element_parameters_actions.is_number = true;
                             }
                             else {
-                                element_parameters_actions.is_email = false;
+                                element_parameters_actions.is_number = false;
                             }
                             if (element_parameters_actions.type.localeCompare("radio") == 0) {
                                 element_parameters_actions.is_radio = true;

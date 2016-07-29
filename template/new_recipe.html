@@ -171,22 +171,23 @@
                             <form id="triggerForm" name="triggerForm" novalidate ng-submit="triggerForm.$valid && submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header, data_triggers )">
                                 <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
                                     <h4 ng-if="!same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}</h4><br>
-                                    <input ng-if="!same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea && !same_id_trigger.is_email" type='{{same_id_trigger.type}}' name='field_name' ng-model="same_id_trigger.name" required>
+                                    <input ng-if="!same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea && !same_id_trigger.is_email && !same_id_trigger.is_number" type='{{same_id_trigger.type}}' name='field_name' ng-model="same_id_trigger.name" required>
                                     <input ng-if="same_id_trigger.is_email && !same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea" type='email' name='field_name' ng-model="same_id_trigger.name" ng-pattern="emailFormat" required>
-                                    <input ng-if="same_id_trigger.is_radio" type='{{same_id_trigger.type}}' name='radio_button_form' value="{{same_id_trigger.name}}" ng-model="same_id_trigger.radio_button_form"><span ng-if="same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></span>
+                                    <input ng-if="same_id_trigger.is_radio" type="radio" name='radio_button_form' value="{{same_id_trigger.name}}" ng-model="same_id_trigger.radio_button_form"><span ng-if="same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></span>
                                     <input ng-if="same_id_trigger.is_checkbox" type='{{same_id_trigger.type}}' name='radio_button_form' value="{{same_id_trigger.name}}" ng-model="same_id_trigger.checkbox_button_form">
                                     <input ng-if="same_id_trigger.is_time" type="time" ng-model="same_id_trigger.name" name="input_time" ng-required="true">
+                                    <input ng-if="same_id_trigger.is_number" type="number" ng-model="same_id_trigger.name" placeholder="0">
                                     <div ng-if="same_id_trigger.is_textarea"><textarea rows="2" cols="30" ng-model="same_id_trigger.name"></textarea></div>
                                     <br>
                                 </div>
-                                <div ng-if="!data_triggers.contains_textarea"><h4 ng-show="triggerForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
-                                <div ng-show="data_triggers.contains_textarea"><h4 ng-show="triggerForm.$pristine" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
+                                <div ng-if="!data_triggers.contains_textarea && !data_triggers.contains_radio"><h4 ng-show="triggerForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
+                                <div ng-show="data_triggers.contains_textarea && !data_triggers.contains_radio"><h4 ng-show="triggerForm.$pristine" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
                                 <br>
                                 <input ng-if="data_triggers.contains_checkbox" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$pristine"
                                        value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
                                 <input ng-if="data_triggers.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left'
                                        value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                <input ng-if="data_triggers.contains_radio && !data_triggers.contains_checkbox && !data_triggers.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$pristine && triggerForm.$invalid"
+                                <input ng-if="data_triggers.contains_radio" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$invalid || triggerForm.$pristine"
                                        value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
                                 <input ng-if="!data_triggers.contains_radio && data_triggers.contains_time && !data_triggers.contains_checkbox && !data_triggers.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$invalid"
                                        value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
@@ -384,11 +385,12 @@
                                     <input ng-if="same_id_action.is_radio" type='{{same_id_action.type}}' name='radio_button_form' value="{{same_id_action.name}}" ng-model="same_id_action.radio_button_form"><span ng-if="same_id_action.is_radio">{{ same_id_action.unbinded_name }}<br></span>
                                     <input ng-if="same_id_action.is_checkbox" type='{{same_id_action.type}}' name='radio_button_form' value="{{same_id_action.name}}" ng-model="same_id_action.checkbox_button_form">
                                     <input ng-if="same_id_action.is_time" type="time" ng-model="same_id_action.name" name="input_time" ng-required="true">
+                                    <input ng-if="same_id_action.is_number" type="number" ng-model="same_id_action.name" placeholder="0">
                                     <div ng-if="same_id_action.is_textarea"><textarea rows="2" cols="30" ng-model="same_id_action.name" required></textarea></div>
                                     <br>
                                 </div>
-                                <div ng-if="!data_actions.contains_textarea"><h4 ng-show="actionForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
-                                <div ng-if="data_actions.contains_textarea"><h4 ng-show="actionForm.$pristine" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
+                                <div ng-if="!data_actions.contains_textarea && !data_actions.contains_radio"><h4 ng-show="actionForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
+                                <div ng-show="data_actions.contains_textarea && !data_actions.contains_radio"><h4 ng-show="actionForm.$pristine" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
                                 <br>
                                 <input ng-if="data_actions.contains_checkbox" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="actionForm.$pristine"
                                        value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
