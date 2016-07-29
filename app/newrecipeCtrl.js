@@ -97,7 +97,9 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                 var params_same_id_trigger = [];
                 $scope.chosen_trigger_channel.trigger_list[i].contains_radio = false;
                 $scope.chosen_trigger_channel.trigger_list[i].contains_time = false;
+                $scope.chosen_trigger_channel.trigger_list[i].contains_email = false;
                 $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = false;
+                $scope.chosen_trigger_channel.trigger_list[i].contains_textarea = false;
                 //check if trigger is contained in ouput_distinct
                 var contained = false;
                 for (var j = 0; j < params.length; j++) {
@@ -121,12 +123,26 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                             else {
                                 element_parameters_triggers.is_radio = false;
                             }
+                            if (element_parameters_triggers.type.localeCompare("email") == 0) {
+                                element_parameters_triggers.is_email = true;
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_email = true;
+                            }
+                            else {
+                                element_parameters_triggers.is_radio = false;
+                            }
                             if (element_parameters_triggers.type.localeCompare("time") == 0) {
                                 $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
                                 element_parameters_triggers.is_time = true;
                             }
                             else{
                                 element_parameters_triggers.is_time = false;
+                            }
+                            if (element_parameters_triggers.type.localeCompare("textarea") == 0) {
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_textarea = true;
+                                element_parameters_triggers.is_textarea = true;
+                            }
+                            else{
+                                element_parameters_triggers.is_textarea = false;
                             }
                             if (element_parameters_triggers.type.localeCompare("email") == 0) {
                                 element_parameters_triggers.is_email = true;
@@ -179,6 +195,7 @@ function choose_trigger_channel($scope, $http, $rootScope, o, userFactory){
                 $scope.chosen_trigger_channel.trigger_list[j].extra_element = "<br><br><form novalidate ng-submit='submit_trigger(" +$scope.parameters_triggers_names_list[j] + ")'>" + $scope.parameters_triggers_couples + " <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
             }
             */
+            $scope.emailFormat = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
         }, function errorCallback(response) {
             alert("You can not get the triggers parameters list of trigger channel from Server");
         });
@@ -239,7 +256,9 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                 var params_same_id_action = [];
                 $scope.chosen_action_channel.action_list[i].contains_radio = false;
                 $scope.chosen_action_channel.action_list[i].contains_time = false;
+                $scope.chosen_action_channel.action_list[i].contains_email = false;
                 $scope.chosen_action_channel.action_list[i].contains_checkbox = false;
+                $scope.chosen_action_channel.action_list[i].contains_textarea = false;
                 //check if action is contained in ouput_distinct
                 var contained = false;
                 for (var j = 0; j < params.length; j++) {
@@ -256,6 +275,13 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                             element_parameters_actions.id = params[j].id;
                             element_parameters_actions.unbinded_name = element_parameters_actions.name.replace(/[_-]/g, " ").capitalize();
                             element_parameters_actions.type = params[j].type;
+                            if (element_parameters_actions.type.localeCompare("email") == 0) {
+                                element_parameters_actions.is_email = true;
+                                $scope.chosen_action_channel.action_list[i].contains_email = true;
+                            }
+                            else {
+                                element_parameters_actions.is_email = false;
+                            }
                             if (element_parameters_actions.type.localeCompare("radio") == 0) {
                                 element_parameters_actions.is_radio = true;
                                 $scope.chosen_action_channel.action_list[i].contains_radio = true;
@@ -269,6 +295,13 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory){
                             }
                             else{
                                 element_parameters_actions.is_time = false;
+                            }
+                            if (element_parameters_actions.type.localeCompare("textarea") == 0) {
+                                $scope.chosen_action_channel.action_list[i].contains_textarea = true;
+                                element_parameters_actions.is_textarea = true;
+                            }
+                            else{
+                                element_parameters_actions.is_textarea = false;
                             }
                             if (element_parameters_actions.type.localeCompare("email") == 0) {
                                 element_parameters_actions.is_email = true;
@@ -402,7 +435,12 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         parameter_trigger_element.trigger = $rootScope.chosen_trigger_data;
         //delete parameter_trigger_element.trigger.id;
         //delete parameter_trigger_element.trigger.channel.channelId;
-        parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].unbinded_name;
+        if($rootScope.chosen_trigger_parameters[i].type.localeCompare("textarea")==0) {
+            parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].name;
+        }
+        else {
+            parameter_trigger_element.name = $rootScope.chosen_trigger_parameters[i].unbinded_name;
+        }
         parameter_trigger_element.type = $rootScope.chosen_trigger_parameters[i].type;
         parameter_trigger_element.checked = $rootScope.chosen_trigger_parameters[i].checked;
         //delete $rootScope.chosen_trigger_parameters[i].id;
@@ -451,7 +489,12 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
         parameter_action_element.action = $rootScope.chosen_action_data;
         //delete parameter_action_element.action.id;
         //delete parameter_action_element.action.channel.channelId;
-        parameter_action_element.name = $rootScope.chosen_action_parameters[i].unbinded_name;
+        if($rootScope.chosen_action_parameters[i].type.localeCompare("textarea")==0) {
+            parameter_action_element.name = $rootScope.chosen_action_parameters[i].name;
+        }
+        else {
+            parameter_action_element.name = $rootScope.chosen_action_parameters[i].unbinded_name;
+        }
         parameter_action_element.type = $rootScope.chosen_action_parameters[i].type;
         parameter_action_element.checked = $rootScope.chosen_action_parameters[i].checked;
         //delete $rootScope.chosen_action_parameters[i].id;
