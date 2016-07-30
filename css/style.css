@@ -120,6 +120,12 @@ a.recipe:hover
     text-decoration: underline;
 }
 
+.form-radio-checkbox
+{
+    width:20px !important;
+    height:20px !important;
+}
+
 button.recipe-menu
 {
     text-align: left;

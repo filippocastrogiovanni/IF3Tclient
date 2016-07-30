@@ -517,21 +517,12 @@ if3tApp.factory('messageFactory', function()
     };
 
     return factory;
-
 });
 
 if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFactory, messageFactory)
 {
     //TODO controllare alla fine se sono stati aggiunti altri campi e rimuovere quelli non necessari
     var factory = {}
-
-    /*function Channel(id, name, image_url, keyword)
-    {
-        this.id = id;
-        this.name = name;
-        this.image_url = image_url;
-        this.keyword = keyword;
-    }*/
 
     function Trigger(id, channel_image_url, header, paragraph, parameters)
     {
@@ -551,12 +542,13 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
         this.parameters = parameters;
     }
     
-    function Recipe(id, description, isPublic, isEnabled, trigger, actions)
+    function Recipe(id, description, isPublic, isEnabled, username, trigger, actions)
     {
         this.id = id;
         this.description = description;
         this.isPublic = isPublic;
         this.isEnabled = isEnabled;
+        this.username = username;
         this.trigger = trigger;
         this.actions = actions;
     }
@@ -576,26 +568,22 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
                 var actArray = [];
                 var r = resp.data;
                 var tri = r.trigger;
-                //var chaTri = new Channel(tri.channel.channelId, tri.channel.name, tri.channel.image_url, tri.channel.keyword);
                 var trig = new Trigger(tri.id, tri.channel_image_url, tri.header, tri.paragraph, tri.parameters);
 
                 for (var i = 0; i < r.actions.length; i++)
                 {
                     var act = r.actions[i];
-                    //var chaAct = new Channel(act.channel.channelId, act.channel.name, act.channel.image_url, act.channel.keyword);
                     actArray.push(new Action(act.id, act.channel_image_url, act.header, act.paragraph, act.parameters));
                 }
 
-                var rec = new Recipe(r.id, r.description, r.isPublic, r.isEnabled, trig, actArray);
-                //getTriggerFields(rec, callback);
-                //console.log(rec);
+                var rec = new Recipe(r.id, r.description, r.isPublic, r.isEnabled, r.username, trig, actArray);
                 messageFactory.hideLoading();
                 callback && callback(rec);
             },
             function errorCallback(resp)
             {
                 messageFactory.hideLoading();
-                messageFactory.showError(resp.data.message);
+                messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
             }
         );
     };
@@ -614,15 +602,14 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
         (
             function successCallback(resp)
             {
-                //console.log(resp);
                 messageFactory.hideLoading();
                 recipe.isEnabled = !recipe.isEnabled;
+                messageFactory.showSuccessMsg(resp.data.message);
             },
             function errorCallback(resp)
             {
-                //console.log(resp);
                 messageFactory.hideLoading();
-                messageFactory.showError(resp.data.message);
+                messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
             }
         );
     };
@@ -639,32 +626,43 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
             data: angular.toJson({ id: recipe.id })
         }).then
         (
-            function successCallback(resp) 
+            function successCallback(resp)
             {
-                //console.log(resp);
                 messageFactory.hideLoading();
                 recipe.isPublic = !recipe.isPublic;
+                messageFactory.showSuccessMsg(resp.data.message);
             },
             function errorCallback(resp) 
             {
-                //console.log(resp);
                 messageFactory.hideLoading();
-                messageFactory.showError(resp.data.message);
+                messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
             }
         );
     };
 
     factory.updateRecipe = function(recipe)
     {
+        //FIXME to remove
+        //console.log(recipe);
         messageFactory.showLoading();
 
         $http({
             dataType: 'json',
             method: 'PUT',
-            url: $rootScope.ipServer + '/'
+            url: $rootScope.ipServer + '/update_recipe/?_csrf=' + userFactory.getXsrfCookie(),
+            data: angular.toJson(recipe)
         }).then
         (
-
+            function successCallback(resp)
+            {
+                messageFactory.hideLoading();
+                messageFactory.showSuccessMsg(resp.data.message);
+            },
+            function errorCallback(resp)
+            {
+                messageFactory.hideLoading();
+                messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+            }
         );
     };
 
@@ -672,9 +670,10 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
 });
 
 var boolean_toggle_nav = false;
+
 function toggle_nav()
 {
-    if(!boolean_toggle_nav){
+    if (!boolean_toggle_nav) {
         boolean_toggle_nav = true;
     }
     else {
@@ -684,7 +683,8 @@ function toggle_nav()
 
 function click_nav()
 {
-    console.log("BEFORE " + boolean_toggle_nav);
+    //FIXME to remove
+    //console.log("BEFORE " + boolean_toggle_nav);
     if(boolean_toggle_nav){
         $("#id_nav_button").click();
         boolean_toggle_nav = false;

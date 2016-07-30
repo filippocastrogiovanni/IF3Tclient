@@ -5,14 +5,14 @@
         <a class="recipe" href="#/myrecipes">Back to My Recipes</a>
     </h5>
 </md-toolbar>
-<form id="editRecipe" role="form">
+<form ng-submit="update(savedRecipe)" id="editRecipe" role="form">
     <table class="images-ext" ng-repeat="act in savedRecipe.actions">
         <tr ng-class="savedRecipe.isEnabled ? '' : 'disabled'">
             <td id="left">
                 <table id="images-int-left">
                     <tr>
                         <td class="left"><img src='{{ ipServer }}/images/if.png' class="img-responsive text-if"></td>
-                        <td><img src='{{ ipServer }}/{{ savedRecipe.trigger.channel_image_url }}' class="img-responsive icon-if-then"></td>
+                        <td><img ng-class="needThumbnail(savedRecipe.trigger.channel_image_url) ? 'img-thumbnail' : ''" src='{{ ipServer }}/{{ savedRecipe.trigger.channel_image_url }}' class="img-responsive icon-if-then"></td>
                     </tr>
                 </table>
             </td>
@@ -20,42 +20,54 @@
                 <table id="images-int-right">
                     <tr>
                         <td class="left"><img src='{{ ipServer }}/images/then.png' class="img-responsive text-then"></td>
-                        <td><img src='{{ ipServer }}/{{ act.channel_image_url }}' class="img-responsive icon-if-then"></td>
+                        <td><img ng-class="needThumbnail(act.channel_image_url) ? 'img-thumbnail' : ''" src='{{ ipServer }}/{{ act.channel_image_url }}' class="img-responsive icon-if-then"></td>
                     </tr>
                 </table>
             </td>
         </tr>
         <tr>
-            <td class="descr-left">{{ savedRecipe.trigger.header }} on "INSERIRE INGREDIENTE"</td>
-            <td class="descr-right">{{ act.header }} from "INSERIRE INGREDIENTE"</td>
+            <td class="descr-left">{{ savedRecipe.trigger.header }} on "INSERIRE INGREDIENTE (?)"</td>
+            <td class="descr-right">{{ act.header }} from "INSERIRE INGREDIENTE (?)"</td>
         </tr>
     </table>
     <div class="form-group">
         <label class="form-label" for="title">Recipe title:</label>
-        <input class="form-control" id="title" ng-model="savedRecipe.description" placeholder="Insert a title">
+        <input class="form-control" id="title" ng-model="savedRecipe.description" placeholder="Insert a title" required>
     </div>
     <h2 class="title">Trigger</h2>
     <div flex="100" layout="column" layout-wrap class="left">
         <p class="header-recipe">{{ savedRecipe.trigger.header }}</p>
-        <p class="paragraph-recipe">{{ savedRecipe.trigger.paragraph }}</p>
+        <p ng-if="savedRecipe.trigger.paragraph.length > 0" class="paragraph-recipe">{{ savedRecipe.trigger.paragraph }}</p>
     </div>
     <div class="form-group" ng-repeat="par_tri in savedRecipe.trigger.parameters">
         <div class="div-label" layout="row">
             <img src='{{ ipServer }}/{{ savedRecipe.trigger.channel_image_url }}' width="20" height="20">
-            <label for="{{ getIdForForm(par_tri.name, par_tri.type, 'trig-') }}">&nbsp;&nbsp;{{ getLabel(par_tri.name) }}:</label>
+            <label>&nbsp;&nbsp;{{ getLabel(par_tri.name) }}:</label>
         </div>
-        <input ng-if="par_tri.type != 'textarea'" type="{{ par_tri.type }}" class="form-control" id="{{ getIdForForm(par_tri.name, 'input', 'trig-') }}" value="" placeholder="Insert {{ getLabel(par_tri.name) }}">
-        <textarea ng-if="par_tri.type == 'textarea'" rows="8" class="form-control" id="{{ getIdForForm(par_tri.name, par_tri.type, 'trig-') }}" placeholder="Insert {{ getLabel(par_tri.name) }}"></textarea>
+        <input ng-if="par_tri.type == 'email'" ng-model="par_tri.value" type="email" class="form-control" placeholder="Insert {{ getLabel(par_tri.name) }}" required>
+        <input ng-if="par_tri.type == 'checkbox'" ng-model="par_tri.value" ng-true-value="'{{ par_tri.name }}'" ng-false-value="'unchecked_checkbox_button'" type="checkbox" class="checkbox form-radio-checkbox" value="{{ par_tri.name }}">
+        <input ng-if="par_tri.type == 'time'" ng-model="par_tri.value" type="time" class="form-control" placeholder="Insert {{ getLabel(par_tri.name) }} (HH:mm)" required>
+        <input ng-if="par_tri.type == 'date'" ng-model="par_tri.value" type="date" class="form-control" placeholder="Insert {{ getLabel(par_tri.name) }} (yyyy-MM-dd)" required>
+        <input ng-if="par_tri.type == 'number'" ng-model="par_tri.value" type="number" class="form-control" integer placeholder="Insert {{ getLabel(par_tri.name) }}" required>
+        <input ng-if="par_tri.type == 'radio'" name="radio_tri" ng-model="radio_tri.value" type="radio" class="radio form-radio-checkbox" value="{{ par_tri.name }}">
+        <input ng-if="par_tri.type == 'text'" ng-model="par_tri.value" type="text" class="form-control" placeholder="Insert {{ getLabel(par_tri.name) }}" required>
+        <textarea ng-if="par_tri.type == 'textarea'" ng-model="par_tri.value" rows="8" class="form-control" placeholder="Insert {{ getLabel(par_tri.name) }}" required></textarea>
     </div>
     <div ng-init="i = $index" ng-repeat="act in savedRecipe.actions">
         <h2 class="title">Action {{ i + 1 }}</h2>
         <div class="form-group" ng-repeat="par_act in act.parameters">
             <div class="div-label" layout="row">
                 <img src='{{ ipServer }}/{{ act.channel_image_url }}' width="20" height="20">
-                <label for="{{ getIdForForm(par_act.name, par_act.type, 'act-') }}">&nbsp;&nbsp;{{ getLabel(par_act.name) }}:</label>
+                <label>&nbsp;&nbsp;{{ getLabel(par_act.name) }}:</label>
             </div>
-            <input ng-if="par_act.type != 'textarea'" type="{{ par_act.type }}" class="form-control" id="{{ getIdForForm(par_act.name, 'input', 'act-') }}" value="" placeholder="Insert {{ getLabel(par_act.name) }}">
-            <textarea ng-if="par_act.type == 'textarea'" rows="8" class="form-control" id="{{ getIdForForm(par_act.name, par_act.type, 'act-') }}" placeholder="Insert {{ getLabel(par_act.name) }}"></textarea>
+            <input ng-if="par_act.type == 'email'" ng-model="par_act.value" type="email" class="form-control" placeholder="Insert {{ getLabel(par_act.name) }}" required>
+            <input ng-if="par_act.type == 'checkbox'" ng-model="par_tri.value" ng-true-value="'{{ par_act.name }}'" ng-false-value="'unchecked_checkbox_button'" type="checkbox" class="checkbox form-radio-checkbox" value="{{ par_act.name }}">
+            <input ng-if="par_act.type == 'time'" ng-model="par_act.value" type="time" class="form-control" placeholder="Insert {{ getLabel(par_act.name) }} (HH:mm)" required>
+            <input ng-if="par_act.type == 'date'" ng-model="par_act.value" type="date" class="form-control" placeholder="Insert {{ getLabel(par_act.name) }} (yyyy-MM-dd)" required>
+            <input ng-if="par_act.type == 'number'" ng-model="par_act.value" type="number" class="form-control" integer placeholder="Insert {{ getLabel(par_act.name) }}" required>
+            <!--radio mancante perchè da problemi gestirne più di uno nelle actions-->
+            <input ng-if="par_act.type == 'text'" ng-model="par_act.value" type="text" class="form-control" placeholder="Insert {{ getLabel(par_act.name) }}" required>
+            <textarea ng-if="par_act.type == 'textarea'" ng-model="par_act.value" rows="8" class="form-control" placeholder="Insert {{ getLabel(par_act.name) }}" required></textarea>
         </div>
     </div>
     <div layout="column" layout-gt-sm="row">
@@ -71,7 +83,7 @@
             <i class="glyphicon glyphicon-trash" aria-hidden="true"/>
             <span>Delete</span>
         </button>
-        <button class="btn btn-default recipe-menu" ng-click="update(savedRecipe)">
+        <button class="btn btn-default recipe-menu" ng-click="submit()">
             <i class="glyphicon glyphicon-edit" aria-hidden="true"/>
             <span>Update</span>
         </button>

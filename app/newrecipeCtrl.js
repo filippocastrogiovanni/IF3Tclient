@@ -546,10 +546,10 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
             headers: {'Content-Type': 'application/json' },
             data: $scope.recipes_list
         }).then(function successCallback(response) {
-            alert("You have create a recipe successfully!");
+            alert(response.data.message);
             $window.location.href = '#/myrecipes';
         }, function errorCallback(response) {
-            alert(response.message);
+            alert(response.data.message);
         });
     }
     else{
