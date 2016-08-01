@@ -1,7 +1,7 @@
 <div  class="container"  ng-controller="MyChannelsController">
     <ul>
         <li ng-repeat="channel in channels">
-            <img class="img-responsive" ng-src="{{channel.image_url}}"/>
+            <img class="img-responsive" ng-src="{{ ipServer }}/{{ channel.image_url }}"/>
             <button ng-click="disconnectChannel(channel)">Disconnect</button>
         </li>
     </ul>

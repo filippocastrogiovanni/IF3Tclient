@@ -2,7 +2,6 @@
  * Created by Filippo on 24/05/2016.
  */
 
-//TODO sta cosa si deve capire se toglierla o no a sto
 if3tApp.controller('MyRecipesController', ['$scope', '$rootScope', '$routeParams', '$window', 'messageFactory', 'userFactory', 'recipesFactory',
     function ($scope, $rootscope, $routeParams, $window, messageFactory, userFactory, recipesFactory)
     {
