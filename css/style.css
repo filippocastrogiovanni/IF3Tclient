@@ -276,6 +276,13 @@ md-toolbar
     margin-bottom: 10px;
 }
 
+md-toolbar.message
+{
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+}
+
 p.header-recipe
 {
     text-align: left;

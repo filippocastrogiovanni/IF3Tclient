@@ -1,26 +1,31 @@
-<div  class="container"  ng-controller="MyRecipesController">
+<div class="container" ng-controller="MyRecipesController">
+    <md-toolbar ng-if="recipes.length == 0" layout="column" layout-padding class="message">
+        The user currently hasn't any recipe
+    </md-toolbar>
     <ul>
         <li ng-repeat="recipe in recipes">
             <div class="container">
-                <label>{{recipe.description}}</label><br>
-                <div>
+                <label>{{ recipe.description }}</label>
+                <br>
+                <div ng-class="recipe.isEnabled ? '' : 'disabled'">
                     <label>Trigger:</label>
-                    <img class="img-responsive" ng-src="{{recipe.trigger.channel.image_url}}"/><br>
-                    <span>{{recipe.trigger.paragraph}}</span>
-                    <span>{{recipe.trigger.header}}</span>
-                </div>
-                <div>
+                    <img class="img-responsive" ng-src="{{ ipServer }}/{{ recipe.trigger.channel.image_url }}"/>
+                    <br>
+                    <span>{{ recipe.trigger.header }}</span>
+                    <br>
+                    <span>{{ recipe.trigger.paragraph }}</span>
+                </div><br>
+                <div ng-class="recipe.isEnabled ? '' : 'disabled'">
                     <!--Considerare la possibilità di più azioni-->
                     <label>Action:</label>
-                    <img class="img-responsive" ng-src="{{recipe.action.channel.image_url}}"/><br>
-                    <span>{{recipe.action.paragraph}}</span>
-                    <span>{{recipe.action.header}}</span>
+                    <img class="img-responsive" ng-src="{{ ipServer }}/{{ recipe.action.channel.image_url }}"/>
+                    <br>
+                    <span>{{ recipe.action.header }}</span>
+                    <br>
+                    <span>{{ recipe.action.paragraph }}</span>
                 </div>
                 <br>
-                <button ng-click="toEditPage(recipe.id)">Edit</button>
-                <button ng-click="removeRecipe(recipe.id)">Delete</button>
-                <button ng-click="toggleRecipePublic(recipe)">{{ recipe.isPublic? "UnPublish" : "Publish"}}</button>
-                <button ng-click="toggleRecipeEnabled(recipe)">{{ recipe.isEnabled? "Disable" : "Enable"}}</button>
+                <button ng-click="toEditPage(recipe.id)">Go to the edit page</button>
             </div>
         </li>
     </ul>

@@ -3,34 +3,24 @@
  */
 
 //TODO sta cosa si deve capire se toglierla o no a sto
-if3tApp.controller('MyRecipesController', ['messageFactory', 'userFactory','$scope', '$rootScope', '$routeParams', '$window', '$http',
-    function (messageFactory, userFactory, $scope, $rootScope, $routeParams, $window, $http)
+if3tApp.controller('MyRecipesController', ['$scope', '$rootScope', '$routeParams', '$window', 'messageFactory', 'userFactory', 'recipesFactory',
+    function ($scope, $rootscope, $routeParams, $window, messageFactory, userFactory, recipesFactory)
     {
-        $rootScope.curpage = "myrecipes";
+        $rootscope.curpage = "myrecipes";
 
         if (!userFactory.isAuthenticated()) {
             $window.location.href = "#/home";
         }
 
-        $http({
-            method: 'GET',
-            url: $rootScope.ipServer + '/user_recipes',
-            headers: {'Content-Type': 'application/json'}
-        }).then
-        (
-            function success(response)
-            {
-                $scope.recipes = response.data;
-                //console.log($scope.recipes);
-            },
-            function error(error) {
-                  console.log(error);
-            }
-        );
+        $rootscope.userRecipesCallback = function(recipes) {
+            $scope.recipes = recipes;
+        };
+
+        recipesFactory.getUserRecipes($rootscope.userRecipesCallback);
 
         $scope.toEditPage = function(recipeId) {
             $window.location.href = '#/myrecipes/' + recipeId;
-        }
+        };
     }
 ]);
 
@@ -47,7 +37,7 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
 
         $scope.needThumbnail = function(urlImage)
         {
-            return (urlImage.search('facebook') != -1) ? true : false;
+            return (urlImage.search('facebook') != -1);
         };
 
         $scope.getLabel = function(rawLabel)
@@ -75,17 +65,17 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
 
             if (tri_all_radios.length > 0)
             {
-                var tri_checked_radio = _.find(tri_all_radios, function (par) {
+                var tri_checked_radio = _.find(tri_all_radios, function(par) {
                     return par.name == $scope.radio_tri.value;
                 });
 
-                var tri_unchecked_radios = _.filter(tri_all_radios, function (par) {
+                var tri_unchecked_radios = _.filter(tri_all_radios, function(par) {
                     return par.name != tri_checked_radio.name;
                 });
 
                 tri_checked_radio.value = $scope.radio_tri.value;
 
-                _.forEach(tri_unchecked_radios, function (par) {
+                _.forEach(tri_unchecked_radios, function(par) {
                     par.value = 'unchecked_radio_button';
                 });
             }
@@ -198,26 +188,27 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
 
         $scope.toggleEnabled = recipesFactory.toggleRecipeEnabled;
         $scope.togglePublic = recipesFactory.toggleRecipePublic;
+        $scope.delete = recipesFactory.deleteRecipe;
 
-        $scope.update = function(recipe)
+        $scope.update = function(recipe, isFormValid)
         {
-            prepareDataFormToBeSent(recipe);
+            if (isFormValid)
+            {
+                prepareDataFormToBeSent(recipe);
 
-            //FIXME forzo dei campi a null per vedere quanto il server è robusto
-            /*_.forEach(recipe.trigger.parameters, function(par) {
-                par.value = null;
-            });
-            _.forEach(recipe.actions, function(act) {
-                _.forEach(act.parameters, function(par) {
-                    par.id = null;
-                });
-            });*/
+                //FIXME forzo dei campi a null per vedere quanto il server è robusto
+                /*_.forEach(recipe.trigger.parameters, function(par) {
+                 par.value = null;
+                 });
+                 _.forEach(recipe.actions, function(act) {
+                 _.forEach(act.parameters, function(par) {
+                 par.id = null;
+                 });
+                 });*/
 
-            recipesFactory.updateRecipe(recipe);
-        }
-
-        //FIXME
-        //$scope.delete = recipesFactory.deleteRecipe;
+                recipesFactory.updateRecipe(recipe);
+            }
+        };
 
         $scope.reset = function()
         {

@@ -156,24 +156,9 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
         {id: 27, daylight_time: 0, timezone_value: -1, name: "(GMT-01:00) Cape Verde Is."},
         {id: 28, daylight_time: 1, timezone_value: -1, name: "(GMT-01:00) Azores"},
         {id: 29, daylight_time: 0, timezone_value: 0, name: "(GMT+00:00) Casablanca, Monrovia, Reykjavik"},
-        {
-            id: 30,
-            daylight_time: 1,
-            timezone_value: 0,
-            name: "(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"
-        },
-        {
-            id: 31,
-            daylight_time: 1,
-            timezone_value: 1,
-            name: "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-        },
-        {
-            id: 32,
-            daylight_time: 1,
-            timezone_value: 1,
-            name: "(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague"
-        },
+        {id: 30, daylight_time: 1, timezone_value: 0, name: "(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"},
+        {id: 31, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"},
+        {id: 32, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague"},
         {id: 33, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Brussels, Copenhagen, Madrid, Paris"},
         {id: 34, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb"},
         {id: 35, daylight_time: 1, timezone_value: 1, name: "(GMT+01:00) West Central Africa"},
@@ -182,12 +167,7 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
         {id: 38, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Beirut"},
         {id: 39, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Cairo"},
         {id: 40, daylight_time: 0, timezone_value: 2, name: "(GMT+02:00) Harare, Pretoria"},
-        {
-            id: 41,
-            daylight_time: 1,
-            timezone_value: 2,
-            name: "(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius"
-        },
+        {id: 41, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius"},
         {id: 42, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Jerusalem"},
         {id: 43, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Minsk"},
         {id: 44, daylight_time: 1, timezone_value: 2, name: "(GMT+02:00) Windhoek"},
@@ -249,8 +229,10 @@ if3tApp.run(function ($rootScope, userFactory, $window, messageFactory) {
     }
     var valZone = new Date().getTimezoneOffset();
     valZone = (valZone / 60) * (-1) - dst;
-    for (i in $rootScope.timeZones) {
-        opt = $rootScope.timeZones[i];
+    //FIXME messo var danti a i
+    for (var i in $rootScope.timeZones) {
+        //FIXME messo var davanti a opt
+        var opt = $rootScope.timeZones[i];
         if (opt.timezone_value == valZone) {
             $rootScope.signupData.timezone = {
                 id: opt.id,
@@ -337,7 +319,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                             }
                             callback && callback();
                         },
-                        function errorCallback(response) {
+                        function errorCallback() {
                             authenticated = false;
                             profile = {};
                             $cookies.remove("authorization");
@@ -367,7 +349,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             url: $rootScope.ipServer + '/login?logout&_csrf='+ factory.getXsrfCookie(),
             headers: {'Content-Type': 'application/json'}
         })
-            .then(function successCallback(response) {
+            .then(function successCallback() {
                     authenticated = false;
                     $cookies.remove("authorization");
                     $cookies.remove("user");
@@ -376,7 +358,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                     }
                     callback && callback(true);
                 },
-                function errorCallback(response) {
+                function errorCallback() {
                     callback && callback(false);
                 });
     };
@@ -398,7 +380,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
                 headers: {'Content-Type': 'application/json'},
                 data: angular.toJson(user)
             })
-                .then(function successCallback(response) {
+                .then(function successCallback() {
                         $rootScope.loginData.username = user.username;
                         $rootScope.loginData.password = user.password;
                         callback && callback(true);
@@ -419,7 +401,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             headers: {'Content-Type': 'application/json'},
             data: angular.toJson(data)
         })
-            .then(function successCallback(response) {
+            .then(function successCallback() {
                     profile = data;
                     $cookies.put('user', angular.toJson(profile));
                     callback && callback(true);
@@ -439,7 +421,7 @@ if3tApp.factory('userFactory', function ($http, $cookies, $rootScope) {
             headers: {'Content-Type': 'application/json'},
             data: angular.toJson(data)
         })
-            .then(function successCallback(response) {
+            .then(function successCallback() {
                     callback && callback(true);
                 },
                 function errorCallback(response) {
@@ -519,39 +501,9 @@ if3tApp.factory('messageFactory', function()
     return factory;
 });
 
-if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFactory, messageFactory)
+if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, $window, userFactory, messageFactory)
 {
-    //TODO controllare alla fine se sono stati aggiunti altri campi e rimuovere quelli non necessari
-    var factory = {}
-
-    function Trigger(id, channel_image_url, header, paragraph, parameters)
-    {
-        this.id = id;
-        this.channel_image_url = channel_image_url;
-        this.header = header;
-        this.paragraph = paragraph;
-        this.parameters = parameters;
-    }
-
-    function Action(id, channel_image_url, header, paragraph, parameters)
-    {
-        this.id = id;
-        this.channel_image_url = channel_image_url;
-        this.header = header;
-        this.paragraph = paragraph;
-        this.parameters = parameters;
-    }
-    
-    function Recipe(id, description, isPublic, isEnabled, username, trigger, actions)
-    {
-        this.id = id;
-        this.description = description;
-        this.isPublic = isPublic;
-        this.isEnabled = isEnabled;
-        this.username = username;
-        this.trigger = trigger;
-        this.actions = actions;
-    }
+    var factory = {};
     
     factory.getRecipe = function(id, callback)
     {
@@ -559,26 +511,13 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
 
         $http({
             method: 'GET',
-            url: $rootScope.ipServer + '/recipe/' + id,
-            headers: { 'authorization': userFactory.getAuthorization() }
+            url: $rootScope.ipServer + '/recipe/' + id + '?_csrf=' + userFactory.getXsrfCookie()
         }).then
         (
             function successCallback(resp)
             {
-                var actArray = [];
-                var r = resp.data;
-                var tri = r.trigger;
-                var trig = new Trigger(tri.id, tri.channel_image_url, tri.header, tri.paragraph, tri.parameters);
-
-                for (var i = 0; i < r.actions.length; i++)
-                {
-                    var act = r.actions[i];
-                    actArray.push(new Action(act.id, act.channel_image_url, act.header, act.paragraph, act.parameters));
-                }
-
-                var rec = new Recipe(r.id, r.description, r.isPublic, r.isEnabled, r.username, trig, actArray);
                 messageFactory.hideLoading();
-                callback && callback(rec);
+                callback && callback(resp.data);
             },
             function errorCallback(resp)
             {
@@ -588,7 +527,28 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
         );
     };
 
-    //FIXME pagina myrecipes fatta da Andrea prima, che richiamava questa funzione messa in un altro posto
+    factory.getUserRecipes = function(callback)
+    {
+        messageFactory.showLoading();
+
+        $http({
+            method: 'GET',
+            url: $rootScope.ipServer + '/user_recipes/?_csrf=' + userFactory.getXsrfCookie()
+        }).then
+        (
+            function success(resp)
+            {
+                messageFactory.hideLoading();
+                callback && callback(resp.data)
+            },
+            function error(resp)
+            {
+                messageFactory.hideLoading();
+                messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+            }
+        );
+    };
+
     factory.toggleRecipeEnabled = function(recipe)
     {
         messageFactory.showLoading();
@@ -614,7 +574,6 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
         );
     };
 
-    //FIXME pagina myrecipes fatta da Andrea prima, che richiamava questa funzione messa in un altro posto
     factory.toggleRecipePublic = function(recipe)
     {
         messageFactory.showLoading();
@@ -640,10 +599,31 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, userFac
         );
     };
 
+    factory.deleteRecipe = function(id)
+    {
+        messageFactory.showLoading();
+
+        $http({
+            method: 'DELETE',
+            url: $rootScope.ipServer + '/delete_recipe/' + id + '?_csrf=' + userFactory.getXsrfCookie()
+        }).then
+        (
+            function successCallback(resp)
+            {
+                messageFactory.hideLoading();
+                messageFactory.showSuccessMsg(resp.data.message);
+                $window.location.href = '#/myrecipes';
+            },
+            function errorCallback(resp)
+            {
+                messageFactory.hideLoading();
+                messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+            }
+        );
+    };
+
     factory.updateRecipe = function(recipe)
     {
-        //FIXME to remove
-        //console.log(recipe);
         messageFactory.showLoading();
 
         $http({
@@ -684,7 +664,7 @@ function toggle_nav()
 function click_nav()
 {
     //FIXME to remove
-    //console.log("BEFORE " + boolean_toggle_nav);
+    console.log("BEFORE " + boolean_toggle_nav);
     if(boolean_toggle_nav){
         $("#id_nav_button").click();
         boolean_toggle_nav = false;
