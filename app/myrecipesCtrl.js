@@ -198,11 +198,11 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
 
                 //FIXME forzo dei campi a null per vedere quanto il server è robusto
                 /*_.forEach(recipe.trigger.parameters, function(par) {
-                    par.value = null;
+                    par.id = 34342;
                 });
                 _.forEach(recipe.actions, function(act) {
                     _.forEach(act.parameters, function(par) {
-                        par.id = null;
+                        par.id = 123;
                     });
                 });*/
 
