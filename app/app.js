@@ -599,6 +599,7 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, $window
         );
     };
 
+    //FIXME capire perchè al redirect la pagina caricata è "diabilitata"
     factory.deleteRecipe = function(id)
     {
         messageFactory.showLoading();

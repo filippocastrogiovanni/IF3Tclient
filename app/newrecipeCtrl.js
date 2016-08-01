@@ -2,6 +2,7 @@
  * Created by Filippo on 24/05/2016.
  */
 
+//FIXME la add con Firefox non funziona. Cliccando su this non succede nulla
 if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window', '$http', 'userFactory', '$anchorScroll',
     function ($scope, $rootScope, $routeParams, $location, $window, $http, userFactory, $anchorScroll) {
 

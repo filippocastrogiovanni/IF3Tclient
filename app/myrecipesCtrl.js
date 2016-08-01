@@ -24,12 +24,12 @@ if3tApp.controller('MyRecipesController', ['$scope', '$rootScope', '$routeParams
     }
 ]);
 
-//FIXME far funzionare le checkboxes (dovrebbero ma è bene controllare)
 //FIXME togliere 'paragrafo di prova' dal db
 //FIXME aggiornare db under-below
 //FIXME timezones?
-if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$location', 'userFactory', 'recipesFactory',
-    function ($scope, $rootscope, $routeParams, $location, userFactory, recipesFactory)
+//FIXME capire perchè dopo aver visualizzato un messaggio di errore il contenuto della pagina si sposta a sinistra di un po'
+if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$window', '$location', 'userFactory', 'recipesFactory',
+    function ($scope, $rootscope, $routeParams, $window, $location, userFactory, recipesFactory)
     {
         if (!userFactory.isAuthenticated()) {
             $window.location.href = "#/home";
@@ -198,13 +198,13 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
 
                 //FIXME forzo dei campi a null per vedere quanto il server è robusto
                 /*_.forEach(recipe.trigger.parameters, function(par) {
-                 par.value = null;
-                 });
-                 _.forEach(recipe.actions, function(act) {
-                 _.forEach(act.parameters, function(par) {
-                 par.id = null;
-                 });
-                 });*/
+                    par.value = null;
+                });
+                _.forEach(recipe.actions, function(act) {
+                    _.forEach(act.parameters, function(par) {
+                        par.id = null;
+                    });
+                });*/
 
                 recipesFactory.updateRecipe(recipe);
             }
