@@ -7,16 +7,20 @@
     <div class="row">
         <div ng-repeat="channel in channels" class="col-lg-2" >
             <md-button data-toggle="collapse" data-target="#channel" ng-click="selectChannel(channel)">
-                <img aria-label="{{channel.name}}" height="100" width="100" class="img-responsive"
-                     ng-src="{{ipServer + '/' + channel.image_url}}"/>
+                <img aria-label="{{ channel.name }}" height="100" width="100" class="img-responsive" ng-src="{{ ipServer + '/' + channel.image_url }}"/>
             </md-button>
         </div>
     </div>
-
+    <br>
+    <br>
     <div id="channel" class="collapse" ng-if="showDetailChannel" align="center">
-        <button ng-click="backToChannels()">Back to Channels</button>
-        <img height="100" width="100" ng-src="{{ ipServer + '/' + selectedChannel.image_url }}">
-        <span>{{selectedChannel.name}}</span>
-        <button ng-click="loadPage()">Connect</button>
+        <div><b>{{ selectedChannel.name }}</b></div>
+        <img ng-src="{{ ipServer + '/' + selectedChannel.image_url }}">
+        <div>
+            <button style="width: 140px" ng-click="loadPage()">Connect to channel</button>
+        </div>
+        <div>
+            <button style="width: 140px" ng-click="backToChannels()">Back to menu</button>
+        </div>
     </div>
 </div>
