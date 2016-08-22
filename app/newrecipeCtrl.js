@@ -864,14 +864,14 @@ if3tApp.directive('scrollOnClick', function() {
         restrict: 'A',
         link: function(scope, $elm, attrs) {
             var idToScroll = attrs.href;
-                    $elm.on('click', function () {
+                    $elm.on('click', function (event) {
                         var $target;
                         if (idToScroll) {
                             $target = $(idToScroll);
                         } else {
                             $target = $elm;
                         }
-                        $("body").animate({scrollTop: $target.offset().top}, "slow");
+                        $("body,html").stop(true,true).animate({scrollTop: $target.offset().top}, "slow");
                     });
                 }
             }
@@ -892,7 +892,7 @@ if3tApp.directive('scrollOnClickAndChooseTriggerChannel', function() {
                 } else {
                     $target = $elm;
                 }
-                $("body").animate({scrollTop: $target.offset().top}, "slow");
+                $("body,html").stop(true,true).animate({scrollTop: $target.offset().top}, "slow");
             });
         }
     }
@@ -913,7 +913,7 @@ if3tApp.directive('scrollOnClickAndChooseActionChannel', function() {
                 } else {
                     $target = $elm;
                 }
-                $("body").animate({scrollTop: $target.offset().top}, "slow");
+                $("body,html").stop(true,true).animate({scrollTop: $target.offset().top}, "slow");
             });
         }
     }
