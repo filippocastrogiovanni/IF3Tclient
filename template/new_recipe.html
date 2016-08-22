@@ -377,7 +377,7 @@
                             <p>{{data_actions.paragraph}}</p>
 <br>
 <br>
-                            <form name="actionForm" novalidate ng-submit="actionForm.$valid && submit_action( data_actions.params, actionForm.$valid, data_actions.header, data_actions )">
+                            <form name="actionForm" novalidate ng-submit="actionForm.$valid && submit_action( data_actions.params, actionForm.$valid, data_actions.header, data_actions, possible_parameters_keyword )">
                                 <div ng-repeat="same_id_action in data_actions.params track by $index">
                                     <h4 ng-if="!same_id_action.is_radio">{{ same_id_action.unbinded_name }}</h4><br>
                                     <input ng-if="!same_id_action.is_radio && !same_id_action.is_checkbox && !same_id_action.is_time && !same_id_action.is_textarea && !same_id_action.is_email" type='{{same_id_action.type}}' name='field_name' ng-model="same_id_action.name" required>
@@ -388,6 +388,9 @@
                                     <input ng-if="same_id_action.is_number" type="number" ng-model="same_id_action.name" placeholder="0">
                                     <div ng-if="same_id_action.is_textarea"><textarea rows="2" cols="30" ng-model="same_id_action.name" required></textarea></div>
                                     <br>
+                                </div>
+                                <div ng-repeat="possible_parameters_keyword in possible_parameters_keyword">
+                                    <input type='checkbox' name='parameters_keyword' ng-model="possible_parameters_keyword.parameters_keyword" value="{{possible_parameters_keyword.name}}"><span>Possible parameter keyword: {{ possible_parameters_keyword.unbinded_name }}<br></span>
                                 </div>
                                 <div ng-if="!data_actions.contains_textarea && !data_actions.contains_radio"><h4 ng-show="actionForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
                                 <div ng-show="data_actions.contains_textarea && !data_actions.contains_radio"><h4 ng-show="actionForm.$pristine" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>

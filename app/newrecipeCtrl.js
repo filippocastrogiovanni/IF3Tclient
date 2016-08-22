@@ -37,8 +37,8 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header, data_trigger);
         }
 
-        $scope.submit_action = function(actions_parameters, is_form_valid, action_header, data_action) {
-            submit_action($rootScope, $scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header, data_action);
+        $scope.submit_action = function(actions_parameters, is_form_valid, action_header, data_action, parameters_keyword) {
+            submit_action($rootScope, $scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header, data_action, parameters_keyword);
         }
 
         $scope.submit_recipe = function(recipe_description) {
@@ -348,6 +348,11 @@ function submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, 
     for(var i=0; i<triggers_parameters.length; i++){
         console.log("Input data: " + triggers_parameters[i]);
     }
+    //save parameters for showing them later in parameters' keyword section
+    $rootScope.possible_parameters_keyword = [];
+    for(var i=0; i<data_trigger.params.length; i++){
+        $rootScope.possible_parameters_keyword.push(data_trigger.params[i]);
+    }
     delete data_trigger.params;
     $('html, body').animate({
         scrollTop: $("#step_2_b").offset().top}, "slow"
@@ -361,7 +366,7 @@ function submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, 
     $rootScope.chosen_trigger_data = data_trigger;
 }
 
-function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header, data_action){
+function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header, data_action, parameters_keyword){
     for(var i=0; i<actions_parameters.length; i++){
         console.log("Input data: " + actions_parameters[i]);
     }
@@ -379,7 +384,7 @@ function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $l
     }
     $rootScope.chosen_action_parameters = actions_parameters;
     $rootScope.chosen_action_data = data_action;
-
+    $rootScope.chosen_parameters_keyword = parameters_keyword;
     //preparing data to POST (List<Recipe>) phase1
     var recipe_to_add = {};
     //recipe_to_add.action = data_action;
@@ -539,6 +544,21 @@ function submit_recipe($rootScope, $scope, $window, $http, recipe_description, u
     element_recipe.action = $rootScope.chosen_action_data;
     element_recipe.isPublic = false;
     element_recipe.isEnabled = false;
+
+    element_recipe.parameters_keyword = [];
+    for(var i=0; i<$rootScope.chosen_parameters_keyword.length; i++){
+        element_keyword = {};
+        element_keyword.value = $rootScope.chosen_parameters_keyword[i].name;
+        element_keyword.name = $rootScope.chosen_parameters_keyword[i].unbinded_name;
+        if($rootScope.chosen_parameters_keyword[i].parameters_keyword == true){
+            element_keyword.selected = true;
+        }
+        else{
+            element_keyword.selected = false;
+        }
+        element_recipe.parameters_keyword.push(element_keyword);
+    }
+
     $scope.recipes_list.push(element_recipe);
     if(userFactory.isAuthenticated()) {
         $http({
