@@ -21,12 +21,28 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
             }
         );
-        
+
         $scope.channelDetail = [];
+
+        $scope.visibleChannel = function(channel)
+        {
+            if($scope.channelDetail[channel.channelId]) {
+                console.log("qui entra");
+                return $scope.channelDetail[channel.channelId].visible;
+            }
+            return false;
+        };
 
         $scope.selectChannel = function(channel)
         {
             $scope.channelDetail[channel.channelId] = {};
+            $scope.channelDetail.forEach(function(entry) {
+                entry.visible = false;
+            });
+            $scope.channelDetail[channel.channelId].visible = true;
+            $scope.channelDetail[channel.channelId].url = "";
+
+
             $http({
                 method: 'GET',
                 dataType: 'json',
@@ -37,10 +53,13 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 function successCallback(resp)
                 {
                     $scope.channelDetail[channel.channelId].url = resp.data.message;
+                    $scope.channelDetail[channel.channelId].visible = true;
                 },
                 function errorCallback(resp)
                 {
                     messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+                    $scope.channelDetail[channel.channelId].visible = false;
+                    $scope.channelDetail[channel.channelId].url = "";
                 }
             );
 
