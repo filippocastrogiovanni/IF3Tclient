@@ -27,8 +27,15 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
         $scope.visibleChannel = function(channel)
         {
             if($scope.channelDetail[channel.channelId]) {
-                console.log("qui entra");
                 return $scope.channelDetail[channel.channelId].visible;
+            }
+            return false;
+        };
+
+        $scope.connectedChannel = function(channel)
+        {
+            if($scope.channelDetail[channel.channelId]) {
+                return $scope.channelDetail[channel.channelId].connected;
             }
             return false;
         };
@@ -40,6 +47,7 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 entry.visible = false;
             });
             $scope.channelDetail[channel.channelId].visible = true;
+            $scope.channelDetail[channel.channelId].connected = false;
             $scope.channelDetail[channel.channelId].url = "";
 
 
