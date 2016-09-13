@@ -21,12 +21,12 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
             }
         );
-
-        $scope.channelURL = "";
-        $scope.showDetailChannel = false;
+        
+        $scope.channelDetail = [];
 
         $scope.selectChannel = function(channel)
         {
+            $scope.channelDetail[channel.channelId] = {};
             $http({
                 method: 'GET',
                 dataType: 'json',
@@ -36,7 +36,7 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
             (
                 function successCallback(resp)
                 {
-                    $scope.channelURL = resp.data.message;
+                    $scope.channelDetail[channel.channelId].url = resp.data.message;
                 },
                 function errorCallback(resp)
                 {
@@ -44,26 +44,11 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 }
             );
 
-            if ($scope.selectedChannel == null || $scope.selectedChannel == channel)
-            {
-                $scope.selectedChannel = channel;
-                $scope.showDetailChannel = !$scope.showDetailChannel;
-                return;
-            }
-
-            $scope.showDetailChannel = false;
-            $scope.selectedChannel = channel;
-            $scope.showDetailChannel = true;
-
         };
 
-        $scope.backToChannels = function() {
-            $scope.showDetailChannel = false;
-        };
-
-        $scope.loadPage = function()
+        $scope.loadPage = function(channel)
         {
-            $window.open($scope.channelURL,"_blank","location=no," +
+            $window.open($scope.channelDetail[channel.channelId].url,"_blank","location=no," +
                 "menubar=no," +
                 "toolbar=no," +
                 "scrollbars=no," +
