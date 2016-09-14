@@ -11,8 +11,8 @@
                     <img aria-label="{{ channel.name }}" height="100" width="100" class="img-responsive" ng-src="{{ ipServer + '/' + channel.image_url }}"/>
                 </md-button>
                 <div id="channel_{{ channel.channelId }}" class="collapse" align="center" ng-if="visibleChannel(channel)">
-                    <button ng-if="!connectedChannel(channel)" type="button" class="btn btn-primary" ng-click="loadPage(channel)">Connect</button>
-                    <button ng-if="connectedChannel(channel)" type="button" class="btn btn-warning">Disconnect</button>
+                    <button ng-if="!connectedChannel(channel)" type="button" class="btn btn-primary" ng-click="connect(channel)">Connect</button>
+                    <button ng-if="connectedChannel(channel)" type="button" class="btn btn-warning" ng-click="disconnect(channel)">Disconnect</button>
                 </div>
             </div>
         </div>

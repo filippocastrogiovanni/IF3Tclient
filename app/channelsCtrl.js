@@ -3,20 +3,17 @@
  */
 
 if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams', '$window', '$http', 'userFactory', 'messageFactory',
-    function ($scope, $rootScope, $routeParams, $window, $http, userFactory, messageFactory)
-    {
+    function ($scope, $rootScope, $routeParams, $window, $http, userFactory, messageFactory) {
         $rootScope.curpage = "channels";
         messageFactory.showLoading();
 
         $http.get($rootScope.ipServer + "/channels").then
         (
-            function success(resp)
-            {
+            function success(resp) {
                 messageFactory.hideLoading();
                 $scope.channels = resp.data;
             },
-            function error(resp)
-            {
+            function error(resp) {
                 messageFactory.hideLoading();
                 messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
             }
@@ -24,26 +21,23 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
 
         $scope.channelDetail = [];
 
-        $scope.visibleChannel = function(channel)
-        {
-            if($scope.channelDetail[channel.channelId]) {
+        $scope.visibleChannel = function (channel) {
+            if ($scope.channelDetail[channel.channelId]) {
                 return $scope.channelDetail[channel.channelId].visible;
             }
             return false;
         };
 
-        $scope.connectedChannel = function(channel)
-        {
-            if($scope.channelDetail[channel.channelId]) {
+        $scope.connectedChannel = function (channel) {
+            if ($scope.channelDetail[channel.channelId]) {
                 return $scope.channelDetail[channel.channelId].connected;
             }
             return false;
         };
 
-        $scope.selectChannel = function(channel)
-        {
+        $scope.selectChannel = function (channel) {
             $scope.channelDetail[channel.channelId] = {};
-            $scope.channelDetail.forEach(function(entry) {
+            $scope.channelDetail.forEach(function (entry) {
                 entry.visible = false;
             });
             $scope.channelDetail[channel.channelId].visible = true;
@@ -55,16 +49,22 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 method: 'GET',
                 dataType: 'json',
                 url: $rootScope.ipServer + '/' + channel.keyword + '/auth',
-                headers: { 'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization() }
+                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
             }).then
             (
-                function successCallback(resp)
-                {
+                function successCallback(resp) {
+                    console.log(resp);
+                    if (resp.data.code == 200) {
+                        //channel connected
+                        $scope.channelDetail[channel.channelId].connected = true;
+                    } else {
+                        //channel not yet connected
+                        $scope.channelDetail[channel.channelId].connected = false;
+                    }
                     $scope.channelDetail[channel.channelId].url = resp.data.message;
                     $scope.channelDetail[channel.channelId].visible = true;
                 },
-                function errorCallback(resp)
-                {
+                function errorCallback(resp) {
                     messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
                     $scope.channelDetail[channel.channelId].visible = false;
                     $scope.channelDetail[channel.channelId].url = "";
@@ -73,9 +73,9 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
 
         };
 
-        $scope.loadPage = function(channel)
-        {
-            $window.open($scope.channelDetail[channel.channelId].url,"_blank","location=no," +
+        $scope.connect = function (channel) {
+            $scope.channelDetail[channel.channelId].visible = false;
+            $window.open($scope.channelDetail[channel.channelId].url, "_blank", "location=no," +
                 "menubar=no," +
                 "toolbar=no," +
                 "scrollbars=no," +
@@ -84,6 +84,31 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 "titlebar=no," +
                 "top=100,left=300," +
                 "width=550,height=550");
+        };
+
+        $scope.disconnect = function (channel) {
+            $scope.channelDetail[channel.channelId].visible = false;
+            $http({
+                method: 'GET',
+                dataType: 'json',
+                url: $rootScope.ipServer + $scope.channelDetail[channel.channelId].url,
+                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            }).then
+            (
+                function successCallback(resp) {
+                    if (resp.data.code == 200) {
+                        //channel disconnected
+                        $scope.channelDetail[channel.channelId].connected = false;
+                        factory.showSuccessMsg("Channel succesfully disconnected");
+                    } else {
+                        factory.showWarningMsg("Channel not disconnected yet");
+                        $scope.channelDetail[channel.channelId].connected = true;
+                    }
+                },
+                function errorCallback(resp) {
+                    messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+                }
+            );
         };
     }
 ]);
