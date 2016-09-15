@@ -53,7 +53,6 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
             }).then
             (
                 function successCallback(resp) {
-                    console.log(resp);
                     if (resp.data.code == 200) {
                         //channel connected
                         $scope.channelDetail[channel.channelId].connected = true;
@@ -99,9 +98,9 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                     if (resp.data.code == 200) {
                         //channel disconnected
                         $scope.channelDetail[channel.channelId].connected = false;
-                        factory.showSuccessMsg("Channel succesfully disconnected");
+                        messageFactory.showSuccessMsg("Channel succesfully disconnected");
                     } else {
-                        factory.showWarningMsg("Channel not disconnected yet");
+                        messageFactory.showWarningMsg("Channel not disconnected yet");
                         $scope.channelDetail[channel.channelId].connected = true;
                     }
                 },
