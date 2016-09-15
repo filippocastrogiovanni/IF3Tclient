@@ -2,17 +2,35 @@
     <md-toolbar layout="row">
         <h2 style="padding-left:50px;">Search for channels</h2>
     </md-toolbar>
+
+    <div class="row">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-4">
+            <div class="inner-addon right-addon">
+                <i class="glyphicon glyphicon-search"></i>
+                <input placeholder="Search for..." type="text" class="form-control" ng-model="search.name">
+            </div>
+        </div>
+    </div>
+
     <br/>
 
     <div class="row">
-        <div ng-repeat="channel in channels" class="col-lg-2" >
+        <div ng-repeat="channel in channels | orderBy:'name' | filter : search" class="col-lg-2">
             <div align="center">
-                <md-button data-toggle="collapse" data-target="#channel_{{ channel.channelId }}" ng-click="selectChannel(channel)">
-                    <img aria-label="{{ channel.name }}" height="100" width="100" class="img-responsive" ng-src="{{ ipServer + '/' + channel.image_url }}"/>
+                <md-button data-toggle="collapse" data-target="#channel_{{ channel.channelId }}"
+                           ng-click="selectChannel(channel)">
+                    <img aria-label="{{ channel.name }}" height="100" width="100" class="img-responsive"
+                         ng-src="{{ ipServer + '/' + channel.image_url }}"/>
                 </md-button>
-                <div id="channel_{{ channel.channelId }}" class="collapse" align="center" ng-if="visibleChannel(channel)">
-                    <button ng-if="!connectedChannel(channel)" type="button" class="btn btn-primary" ng-click="connect(channel)">Connect</button>
-                    <button ng-if="connectedChannel(channel)" type="button" class="btn btn-warning" ng-click="disconnect(channel)">Disconnect</button>
+                <div id="channel_{{ channel.channelId }}" class="collapse" align="center"
+                     ng-if="visibleChannel(channel)">
+                    <button ng-if="!connectedChannel(channel)" type="button" class="btn btn-primary"
+                            ng-click="connect(channel)">Connect
+                    </button>
+                    <button ng-if="connectedChannel(channel)" type="button" class="btn btn-warning"
+                            ng-click="disconnect(channel)">Disconnect
+                    </button>
                 </div>
             </div>
         </div>
