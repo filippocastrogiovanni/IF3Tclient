@@ -4,12 +4,7 @@
 
 if3tApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$location', '$http', 'userFactory', '$window',
     function ($scope, $rootScope, $routeParams, $location, $http, userFactory, $window) {
-        $rootScope.curpage = "channels";
-
-
-
-
-
+        $rootScope.curpage = "home";
 
         /*
         $scope.facebookConnectFunction = function() {
