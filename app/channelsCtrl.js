@@ -44,6 +44,10 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
             $scope.channelDetail[channel.channelId].connected = false;
             $scope.channelDetail[channel.channelId].url = "";
 
+            if(!userFactory.isAuthenticated()) {
+                $scope.channelDetail[channel.channelId].visible = false;
+                return;
+            }
 
             $http({
                 method: 'GET',

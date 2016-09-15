@@ -16,7 +16,7 @@
     <br/>
 
     <div class="row">
-        <div ng-repeat="channel in channels | orderBy:'name' | filter : search" class="col-lg-2">
+        <div ng-repeat="channel in channels | orderBy:'name' | filter : search" class="col-sm-2">
             <div align="center">
                 <md-button data-toggle="collapse" data-target="#channel_{{ channel.channelId }}"
                            ng-click="selectChannel(channel)">
