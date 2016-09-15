@@ -11,7 +11,7 @@ if3tApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$
 
 
 
-        
+        /*
         $scope.facebookConnectFunction = function() {
             $http({
                 method: 'GET',
@@ -46,23 +46,6 @@ if3tApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$
                 console.log("error");
             });
         }
-        //including name="scope" value="user_posts"
-        /*
-         var facebook_data =  {
-         scope: "user_posts"
-         };
-         $http({
-         method: 'POST',
-         url: $rootScope.ipServer+'/connect/facebook?_csrf='+userFactory.getXsrfCookie(),
-         data: angular.toJson(facebook_data),
-         headers: {'Content-Type': 'application/json' }
-         }).then(function successCallback(response) {
-         console.log("success");
-         }, function errorCallback(response) {
-         console.log("error");
-         });
-         }
-         */
-
+        */
     }
 ]);
