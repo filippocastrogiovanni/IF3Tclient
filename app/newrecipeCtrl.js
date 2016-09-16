@@ -8,6 +8,21 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         $rootScope.curpage = "newrecipe";
 
+        $('#noscroll').on('scroll touchmove mousewheel', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        
+        
+        
+        
+        
+        
+        
+        
+
         //waiting for data (alias progress dialog) by hiding the first div and wait for the response of the server to show it
         $("#first_div").hide();
         $http({

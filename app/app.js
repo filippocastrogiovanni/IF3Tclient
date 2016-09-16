@@ -1,13 +1,13 @@
 /**
  * Created by Filippo on 18/05/2016.
  */
-var if3tApp = angular.module('if3tApp', ['ngRoute', 'ngSanitize', 'ngResource', 'ngMaterial', 'ngCookies']);
+var if3tApp = angular.module('if3tApp', ['ngRoute', 'ngSanitize', 'ngResource', 'ngMaterial', 'ngCookies', 'ngAnimate']);
 
 if3tApp.config(function ($httpProvider, $routeProvider) {
 
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
-
+    
     $routeProvider.when('/home', {
         templateUrl: 'template/home.html',
         controller: 'HomeController'

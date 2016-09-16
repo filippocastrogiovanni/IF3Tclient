@@ -1,77 +1,56 @@
-<!--
-<body ng-app="NewRecipeController" layout="column">
--->
-<md-toolbar layout="row" >
-    <h2>Create a recipe</h2>
-</md-toolbar>
-
-<!--
-<style type = "text/css" scoped>
-    body { overflow: hidden; }
-</style>
--->
+<div id="noscroll">
 
 <!-- STEP 0 -->
-<div id="first_div">
-    <div class="flexbox-parent">
-        <div layout="row" layout-align="center center"  style="min-height: 500px">
-            <md-content>
-                <h3 class="step_0">if</h3>
-                <span class="step_0_anchor" scroll-on-click href="#step_1_a">this</span> <!--ng-href="#/newrecipe#step_1_a"-->
-                <h3 class="step_0">then</h3>
-                <h3 class="step_0">that</h3>
-                <br>
-                <h6 class="step_0_helper" style="padding-left: 110px;">Click "this" to get started.</h6>
-            </md-content>
-         </div>
-    </div>
+<div id="step_0" style="height:500px">
+    <md-content flex layout-padding class="flexbox-parent">
+        <div layout="row" layout-align="center start" >
+            <div  class="step_0">if&nbsp;</div>
+            <div layout-align="center" align="center">
+                <span class="step_0_anchor" scroll-on-click href="#step_1_a">this</span>
+                <br/>
+                <h6 class="step_0_helper">Click "this" to get started.</h6>
+            </div>
+            <div  class="step_0">&nbsp;then that</div>
+        </div>
+    </md-content>
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<hr>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 <!-- STEP 1 -->
-    <!-- PART A -->
+<!-- PART A -->
 <div id="step_1_a">
     <div class="flexbox-parent">
-        <div layout="row" layout-align="center center"  style="min-height: 500px">
+        <div layout="row" layout-align="center center" style="min-height: 500px">
             <div ng-cloak class="md-inline-form">
-<br>
-<br>
-<br>
-<br>
+                <br>
+                <br>
+                <br>
+                <br>
                 <md-content flex md-theme="docs-dark" layout-align="center">
-                    <h3 class="step_1">Choose </h3><h3 class="step_1">Trigger </h3><h3 class="step_1">Channel</h3>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<h6 class="step_1_helper">(1/5)</h6>
-<br>
-<br>
-<br>
+                    <h3 class="step_1">Choose </h3>
+                    <h3 class="step_1">Trigger </h3>
+                    <h3 class="step_1">Channel</h3>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<h6
+                        class="step_1_helper">(1/5)</h6>
+                    <br>
+                    <br>
+                    <br>
                     <div>
                         <form>
                             <md-input-container>
                                 <input aria-label="input" autocapitalization="off" class="step_1_channels_search"
-                                   placeholder="Search Channels" type="text"
-                                   ng-model="searchBox1.name"
+                                       placeholder="Search Channels" type="text"
+                                       ng-model="searchBox1.name"
                                 />
                             </md-input-container>
                         </form>
                     </div>
-<br>
-                    <md-list >
+                    <br>
+                    <md-list>
                         <md-list-item data-ng-repeat="channel in channels | filter:searchBox1" style="display: inline">
                             <span class="loading"> <img src="images/loading.gif"/></span>
-                                <img class="spinner" imageonload style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-trigger-channel callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
+                            <img class="spinner" imageonload style="cursor: pointer" src="{{ channel.image_url }}"
+                                 alt="{{ channel.name }}" height="100" width="100"
+                                 scroll-on-click-and-choose-trigger-channel
+                                 callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
                         </md-list-item>
                     </md-list>
                 </md-content>
@@ -99,28 +78,35 @@
 
 <!-- PART B -->
 <div id="step_1_b">
-<br>
-<br>
-<br>
+    <br>
+    <br>
+    <br>
     <div class="flexbox-parent">
-        <div layout="row" layout-align="center center" >
+        <div layout="row" layout-align="center center">
             <div ng-show="chosen_trigger_channel">
                 <md-content flex md-theme="docs-dark">
                     <br>
                     <br>
-                    <h3 class="step_1">To make the recipe work you will later need to authorize the app to use the {{ chosen_trigger_channel.name }} channel</h3>
-<br>
+                    <h3 class="step_1">To make the recipe work you will later need to authorize the app to use the {{
+                        chosen_trigger_channel.name }} channel</h3>
+                    <br>
                     <h6 class="step_0_helper">You'll only have to do this once.</h6>
                 </md-content>
-<br>
-<br>
+                <br>
+                <br>
                 <div>
-                    <img style="margin-left: 25px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
+                    <img style="margin-left: 25px;" src="{{ chosen_trigger_channel.image_url }}"
+                         alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
                     <!--<a > <!--ng-href="#/newrecipe#step_2_a"-->
-                        <button scroll-on-click style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Continue to the next step"><span class="ng-scope" href="#step_2_a">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span></button>
+                    <button scroll-on-click style="margin-left: 25px;"
+                            class="md-raised md-primary md-button md-ink-ripple" type="button"
+                            aria-label="Continue to the next step"><span class="ng-scope" href="#step_2_a">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span>
+                    </button>
                     <!--</a>
                     <a > <!--ng-href="#/newrecipe#step_1_a"-->
-                        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_a" type="button" aria-label="Back">Back</button>
+                    <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                            href="#step_1_a" type="button" aria-label="Back">Back
+                    </button>
                     <!--</a>-->
                 </div>
             </div>
@@ -146,10 +132,10 @@
 <br>
 <br>
 <!-- STEP 2 -->
-<div id="step_2_a" div layout="row" layout-align="space-around center"  style="min-height: 500px">
-<br>
-<br>
-<br>
+<div id="step_2_a" div layout="row" layout-align="space-around center" style="min-height: 500px">
+    <br>
+    <br>
+    <br>
     <br>
     <!-- PART A -->
     <br>
@@ -157,55 +143,83 @@
     <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
         <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(2/5)</h6>
     </md-content>
-        <div div layout="column">
-            <div div layout="row" layout-align="center"  style="min-height: 500px" ng-show="chosen_trigger_channel">
-                <br>
-                <br>
-                <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                    <md-list>
-                        <md-list-item  ng-repeat="data_triggers in chosen_trigger_channel.trigger_list track by $index" class="trigger-list_item" style="display: inline">
-                            <h3>{{data_triggers.header}}</h3>
-                            <p>{{data_triggers.paragraph}}</p>
-                            <br>
-                            <br>
-                            <form id="triggerForm" name="triggerForm" novalidate ng-submit="triggerForm.$valid && submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header, data_triggers )">
-                                <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
-                                    <h4 ng-if="!same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}</h4><br>
-                                    <input ng-if="!same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea && !same_id_trigger.is_email && !same_id_trigger.is_number" type='{{same_id_trigger.type}}' name='field_name' ng-model="same_id_trigger.name" required>
-                                    <input ng-if="same_id_trigger.is_email && !same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea" type='email' name='field_name' ng-model="same_id_trigger.name" ng-pattern="emailFormat" required>
-                                    <input ng-if="same_id_trigger.is_radio" type="radio" name='radio_button_form' value="{{same_id_trigger.name}}" ng-model="same_id_trigger.radio_button_form"><span ng-if="same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></span>
-                                    <input ng-if="same_id_trigger.is_checkbox" type='{{same_id_trigger.type}}' name='radio_button_form' value="{{same_id_trigger.name}}" ng-model="same_id_trigger.checkbox_button_form">
-                                    <input ng-if="same_id_trigger.is_time" type="time" ng-model="same_id_trigger.name" name="input_time" ng-required="true">
-                                    <input ng-if="same_id_trigger.is_number" type="number" ng-model="same_id_trigger.name" placeholder="0">
-                                    <div ng-if="same_id_trigger.is_textarea"><textarea rows="2" cols="30" ng-model="same_id_trigger.name"></textarea></div>
-                                    <br>
+    <div div layout="column">
+        <div div layout="row" layout-align="center" style="min-height: 500px" ng-show="chosen_trigger_channel">
+            <br>
+            <br>
+            <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+                <md-list>
+                    <md-list-item ng-repeat="data_triggers in chosen_trigger_channel.trigger_list track by $index"
+                                  class="trigger-list_item" style="display: inline">
+                        <h3>{{data_triggers.header}}</h3>
+                        <p>{{data_triggers.paragraph}}</p>
+                        <br>
+                        <br>
+                        <form id="triggerForm" name="triggerForm" novalidate
+                              ng-submit="triggerForm.$valid && submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header, data_triggers )">
+                            <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
+                                <h4 ng-if="!same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}</h4><br>
+                                <input ng-if="!same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea && !same_id_trigger.is_email && !same_id_trigger.is_number"
+                                       type='{{same_id_trigger.type}}' name='field_name' ng-model="same_id_trigger.name"
+                                       required>
+                                <input ng-if="same_id_trigger.is_email && !same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea"
+                                       type='email' name='field_name' ng-model="same_id_trigger.name"
+                                       ng-pattern="emailFormat" required>
+                                <input ng-if="same_id_trigger.is_radio" type="radio" name='radio_button_form'
+                                       value="{{same_id_trigger.name}}"
+                                       ng-model="same_id_trigger.radio_button_form"><span
+                                    ng-if="same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></span>
+                                <input ng-if="same_id_trigger.is_checkbox" type='{{same_id_trigger.type}}'
+                                       name='radio_button_form' value="{{same_id_trigger.name}}"
+                                       ng-model="same_id_trigger.checkbox_button_form">
+                                <input ng-if="same_id_trigger.is_time" type="time" ng-model="same_id_trigger.name"
+                                       name="input_time" ng-required="true">
+                                <input ng-if="same_id_trigger.is_number" type="number" ng-model="same_id_trigger.name"
+                                       placeholder="0">
+                                <div ng-if="same_id_trigger.is_textarea"><textarea rows="2" cols="30"
+                                                                                   ng-model="same_id_trigger.name"></textarea>
                                 </div>
-                                <div ng-if="!data_triggers.contains_textarea && !data_triggers.contains_radio"><h4 ng-show="triggerForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
-                                <div ng-show="data_triggers.contains_textarea && !data_triggers.contains_radio"><h4 ng-show="triggerForm.$pristine" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
                                 <br>
-                                <input ng-if="data_triggers.contains_checkbox" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$pristine"
-                                       value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                <input ng-if="data_triggers.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left'
-                                       value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                <input ng-if="data_triggers.contains_radio" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$invalid || triggerForm.$pristine"
-                                       value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                <input ng-if="!data_triggers.contains_radio && data_triggers.contains_time && !data_triggers.contains_checkbox && !data_triggers.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$invalid"
-                                       value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                <input ng-if="!data_triggers.contains_radio && !data_triggers.contains_time && !data_triggers.contains_checkbox && !data_triggers.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="triggerForm.$invalid"
-                                       value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                            </form>
+                            </div>
+                            <div ng-if="!data_triggers.contains_textarea && !data_triggers.contains_radio"><h4
+                                    ng-show="triggerForm.$invalid" style="color: red; font-size:small;">Your input has
+                                errors, please try again!</h4></div>
+                            <div ng-show="data_triggers.contains_textarea && !data_triggers.contains_radio"><h4
+                                    ng-show="triggerForm.$pristine" style="color: red; font-size:small;">Your input has
+                                errors, please try again!</h4></div>
                             <br>
-                            <br>
-                        </md-list-item>
-                    </md-list>
-                </md-content>
-            </div>
-            <div ng-show="!chosen_trigger_channel">
-                <h3>You have to choose a trigger channel to select a trigger event</h3>
-            </div>
+                            <input ng-if="data_triggers.contains_checkbox" type='submit' class='btn btn-info btn-large'
+                                   style='float:left' ng-disabled="triggerForm.$pristine"
+                                   value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
+                            <input ng-if="data_triggers.contains_textarea" type='submit' class='btn btn-info btn-large'
+                                   style='float:left'
+                                   value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
+                            <input ng-if="data_triggers.contains_radio" type='submit' class='btn btn-info btn-large'
+                                   style='float:left' ng-disabled="triggerForm.$invalid || triggerForm.$pristine"
+                                   value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
+                            <input ng-if="!data_triggers.contains_radio && data_triggers.contains_time && !data_triggers.contains_checkbox && !data_triggers.contains_textarea"
+                                   type='submit' class='btn btn-info btn-large' style='float:left'
+                                   ng-disabled="triggerForm.$invalid"
+                                   value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
+                            <input ng-if="!data_triggers.contains_radio && !data_triggers.contains_time && !data_triggers.contains_checkbox && !data_triggers.contains_textarea"
+                                   type='submit' class='btn btn-info btn-large' style='float:left'
+                                   ng-disabled="triggerForm.$invalid"
+                                   value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
+                        </form>
+                        <br>
+                        <br>
+                    </md-list-item>
+                </md-list>
+            </md-content>
         </div>
+        <div ng-show="!chosen_trigger_channel">
+            <h3>You have to choose a trigger channel to select a trigger event</h3>
+        </div>
+    </div>
     <a style="float:right"> <!--ng-href="#/newrecipe#step_1_b"-->
-        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_b" type="button" aria-label="Back">Back</button>
+        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click href="#step_1_b"
+                type="button" aria-label="Back">Back
+        </button>
     </a>
 </div>
 <br>
@@ -227,7 +241,7 @@
 <!-- PART B -->
 <div id="step_2_b">
     <div class="flexbox-parent">
-        <div layout="row" layout-align="center center"  style="min-height: 500px">
+        <div layout="row" layout-align="center center" style="min-height: 500px">
             <div>
                 <md-content>
                     <!--
@@ -235,7 +249,8 @@
                     <h6 class="step_0_anchor">{{ chosen_trigger_channel.header }}</h6>
                     -->
                     <h3 class="step_0">then</h3>
-                    <span class="step_0_anchor" scroll-on-click href="#step_3_a">that</span>  <!--ng-href="#/newrecipe#step_3_a"-->
+                    <span class="step_0_anchor" scroll-on-click href="#step_3_a">that</span>
+                    <!--ng-href="#/newrecipe#step_3_a"-->
                 </md-content>
             </div>
         </div>
@@ -259,41 +274,44 @@
 
 <!-- STEP 3 -->
 <div id="step_3_a">
-<br>
-<br>
-<br>
-<div class="flexbox-parent">
-    <div layout="row" layout-align="center center"  style="min-height: 500px">
-        <div id="step_3" ng-cloak class="md-inline-form">
-            <!-- PART A -->
-            <md-content flex md-theme="docs-dark" >
-                <h3 class="step_1">Choose Action Channel</h3>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<h6 class="step_1_helper">(3/5)</h6>
-<br>
-<br>
-                <div>
-                    <form>
-                        <md-input-container>
-                            <input aria-label="input" autocapitalization="off" class="step_1_channels_search"
-                                   placeholder="Search Channels" type="text"
-                                   ng-model="searchBox2.name"
-                            />
-                        </md-input-container>
-                    </form>
-                </div>
-<br>
-                <md-list >
-                    <md-list-item data-ng-repeat="channel in channels | filter:searchBox2" style="display: inline">
+    <br>
+    <br>
+    <br>
+    <div class="flexbox-parent">
+        <div layout="row" layout-align="center center" style="min-height: 500px">
+            <div id="step_3" ng-cloak class="md-inline-form">
+                <!-- PART A -->
+                <md-content flex md-theme="docs-dark">
+                    <h3 class="step_1">Choose Action Channel</h3>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<h6
+                        class="step_1_helper">(3/5)</h6>
+                    <br>
+                    <br>
+                    <div>
+                        <form>
+                            <md-input-container>
+                                <input aria-label="input" autocapitalization="off" class="step_1_channels_search"
+                                       placeholder="Search Channels" type="text"
+                                       ng-model="searchBox2.name"
+                                />
+                            </md-input-container>
+                        </form>
+                    </div>
+                    <br>
+                    <md-list>
+                        <md-list-item data-ng-repeat="channel in channels | filter:searchBox2" style="display: inline">
 
-                        <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}" height="100" width="100" scroll-on-click-and-choose-action-channel callback-fn="choose_action_channel(channel)" href="#step_3_b"/>
+                            <img style="cursor: pointer" src="{{ channel.image_url }}" alt="{{ channel.name }}"
+                                 height="100" width="100" scroll-on-click-and-choose-action-channel
+                                 callback-fn="choose_action_channel(channel)" href="#step_3_b"/>
 
-                    </md-list-item>
-                </md-list>
-            </md-content>
-<br>
-<br>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+                <br>
+                <br>
+            </div>
         </div>
     </div>
-</div>
 </div>
 <br>
 <br>
@@ -311,30 +329,37 @@
 <br>
 <br>
 
-    <!-- PART B -->
+<!-- PART B -->
 <div id="step_3_b">
     <div class="flexbox-parent">
-        <div layout="row" layout-align="center center"  style="min-height: 500px">
+        <div layout="row" layout-align="center center" style="min-height: 500px">
             <div ng-show="chosen_action_channel">
                 <md-content flex md-theme="docs-dark">
-                    <h3 class="step_1">To make the recipe work you will later need to authorize the app to use the {{ chosen_action_channel.name }} channel</h3>
-<br>
+                    <h3 class="step_1">To make the recipe work you will later need to authorize the app to use the {{
+                        chosen_action_channel.name }} channel</h3>
+                    <br>
                     <h6 class="step_0_helper">You'll only have to do this once.</h6>
                 </md-content>
-<br>
-<br>
+                <br>
+                <br>
                 <div>
-                    <img style="margin-left: 25px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
+                    <img style="margin-left: 25px;" src="{{ chosen_action_channel.image_url }}"
+                         alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
 
                     <!--<a id="channel_to_connect_2_anchor" > <!--ng-href="#/newrecipe#step_4_a"-->
-                        <button scroll-on-click href="#step_4_a" style="margin-left: 25px;" class="md-raised md-primary md-button md-ink-ripple" type="button" aria-label="Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span></button>
+                    <button scroll-on-click href="#step_4_a" style="margin-left: 25px;"
+                            class="md-raised md-primary md-button md-ink-ripple" type="button"
+                            aria-label="Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span>
+                    </button>
                     <!--</a>
 
                     <a > <!--ng-href="#/newrecipe#step_3_a"-->
-                        <button scroll-on-click href="#step_3_a" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</button>
+                    <button scroll-on-click href="#step_3_a" aria-label="md-button"
+                            class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back
+                    </button>
                     <!--</a>-->
-                    </div>
-             </div>
+                </div>
+            </div>
             <div ng-show="!chosen_action_channel">
                 <h3>You have to choose a action channel first</h3>
             </div>
@@ -358,58 +383,87 @@
 <br>
 
 <!-- STEP 4 -->
-<div id="step_4_a" div layout="row" layout-align="space-around center"  style="min-height: 500px">
-<br>
-<br>
-<br>
+<div id="step_4_a" div layout="row" layout-align="space-around center" style="min-height: 500px">
+    <br>
+    <br>
+    <br>
     <!-- PART A -->
-        <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-            <h3 class="step_1">Choose </h3><h3 class="step_1">an </h3><h3 class="step_1">Action</h3><h6 class="step_1_helper">(4/5)</h6>
-        </md-content>
-        <div layout="column">
-            <div div layout="row" layout-align="center"  style="min-height: 500px">
-                <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                    <md-list>
+    <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+        <h3 class="step_1">Choose </h3>
+        <h3 class="step_1">an </h3>
+        <h3 class="step_1">Action</h3><h6 class="step_1_helper">(4/5)</h6>
+    </md-content>
+    <div layout="column">
+        <div div layout="row" layout-align="center" style="min-height: 500px">
+            <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
+                <md-list>
+                    <br>
+                    <br>
+                    <md-list-item ng-repeat="data_actions in chosen_action_channel.action_list track by $index"
+                                  class="trigger-list_item" style="display: inline">
+                        <h3>{{data_actions.header}}</h3>
+                        <p>{{data_actions.paragraph}}</p>
                         <br>
                         <br>
-                        <md-list-item  ng-repeat="data_actions in chosen_action_channel.action_list track by $index" class="trigger-list_item" style="display: inline">
-                            <h3>{{data_actions.header}}</h3>
-                            <p>{{data_actions.paragraph}}</p>
-<br>
-<br>
-                            <form name="actionForm" novalidate ng-submit="actionForm.$valid && submit_action( data_actions.params, actionForm.$valid, data_actions.header, data_actions, possible_parameters_keyword )">
-                                <div ng-repeat="same_id_action in data_actions.params track by $index">
-                                    <h4 ng-if="!same_id_action.is_radio">{{ same_id_action.unbinded_name }}</h4><br>
-                                    <input ng-if="!same_id_action.is_radio && !same_id_action.is_checkbox && !same_id_action.is_time && !same_id_action.is_textarea && !same_id_action.is_email" type='{{same_id_action.type}}' name='field_name' ng-model="same_id_action.name" required>
-                                    <input ng-if="same_id_action.is_email && !same_id_action.is_radio && !same_id_action.is_checkbox && !same_id_action.is_time && !same_id_action.is_textarea" type='email' name='field_name' ng-model="same_id_action.name" ng-pattern="emailFormat" required>
-                                    <input ng-if="same_id_action.is_radio" type='{{same_id_action.type}}' name='radio_button_form' value="{{same_id_action.name}}" ng-model="same_id_action.radio_button_form"><span ng-if="same_id_action.is_radio">{{ same_id_action.unbinded_name }}<br></span>
-                                    <input ng-if="same_id_action.is_checkbox" type='{{same_id_action.type}}' name='radio_button_form' value="{{same_id_action.name}}" ng-model="same_id_action.checkbox_button_form">
-                                    <input ng-if="same_id_action.is_time" type="time" ng-model="same_id_action.name" name="input_time" ng-required="true">
-                                    <input ng-if="same_id_action.is_number" type="number" ng-model="same_id_action.name" placeholder="0">
-                                    <div ng-if="same_id_action.is_textarea"><textarea rows="2" cols="30" ng-model="same_id_action.name" required></textarea></div>
-                                    <br>
-                                </div>
-                                <div ng-repeat="possible_parameters_keyword in possible_parameters_keyword">
-                                    <input type='checkbox' name='parameters_keyword' ng-model="possible_parameters_keyword.parameters_keyword" value="{{possible_parameters_keyword.name}}"><span>Possible parameter keyword: {{ possible_parameters_keyword.unbinded_name }}<br></span>
-                                </div>
-                                <div ng-if="!data_actions.contains_textarea && !data_actions.contains_radio"><h4 ng-show="actionForm.$invalid" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
-                                <div ng-show="data_actions.contains_textarea && !data_actions.contains_radio"><h4 ng-show="actionForm.$pristine" style="color: red; font-size:small;">Your input has errors, please try again!</h4></div>
+                        <form name="actionForm" novalidate
+                              ng-submit="actionForm.$valid && submit_action( data_actions.params, actionForm.$valid, data_actions.header, data_actions, possible_parameters_keyword )">
+                            <div ng-repeat="same_id_action in data_actions.params track by $index">
+                                <h4 ng-if="!same_id_action.is_radio">{{ same_id_action.unbinded_name }}</h4><br>
+                                <input ng-if="!same_id_action.is_radio && !same_id_action.is_checkbox && !same_id_action.is_time && !same_id_action.is_textarea && !same_id_action.is_email"
+                                       type='{{same_id_action.type}}' name='field_name' ng-model="same_id_action.name"
+                                       required>
+                                <input ng-if="same_id_action.is_email && !same_id_action.is_radio && !same_id_action.is_checkbox && !same_id_action.is_time && !same_id_action.is_textarea"
+                                       type='email' name='field_name' ng-model="same_id_action.name"
+                                       ng-pattern="emailFormat" required>
+                                <input ng-if="same_id_action.is_radio" type='{{same_id_action.type}}'
+                                       name='radio_button_form' value="{{same_id_action.name}}"
+                                       ng-model="same_id_action.radio_button_form"><span
+                                    ng-if="same_id_action.is_radio">{{ same_id_action.unbinded_name }}<br></span>
+                                <input ng-if="same_id_action.is_checkbox" type='{{same_id_action.type}}'
+                                       name='radio_button_form' value="{{same_id_action.name}}"
+                                       ng-model="same_id_action.checkbox_button_form">
+                                <input ng-if="same_id_action.is_time" type="time" ng-model="same_id_action.name"
+                                       name="input_time" ng-required="true">
+                                <input ng-if="same_id_action.is_number" type="number" ng-model="same_id_action.name"
+                                       placeholder="0">
+                                <div ng-if="same_id_action.is_textarea"><textarea rows="2" cols="30"
+                                                                                  ng-model="same_id_action.name"
+                                                                                  required></textarea></div>
                                 <br>
-                                <input ng-if="data_actions.contains_checkbox" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="actionForm.$pristine"
-                                       value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
-                                <input ng-if="data_actions.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left'
-                                       value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
-                                <input ng-if="data_actions.contains_radio && !data_actions.contains_checkbox" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="actionForm.$invalid"
-                                       value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
-                                <input ng-if="!data_actions.contains_radio && !data_actions.contains_time && !data_actions.contains_checkbox && !data_actions.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left'
-                                       value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
-                                <input ng-if="!data_actions.contains_radio && data_actions.contains_time && !data_actions.contains_checkbox && !data_actions.contains_textarea" type='submit' class='btn btn-info btn-large' style='float:left' ng-disabled="actionForm.$invalid"
-                                       value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
-                            </form>
-<br>
-<br>
-                        </md-list-item>
-                    </md-list>
+                            </div>
+                            <div ng-repeat="possible_parameters_keyword in possible_parameters_keyword">
+                                <input type='checkbox' name='parameters_keyword'
+                                       ng-model="possible_parameters_keyword.parameters_keyword"
+                                       value="{{possible_parameters_keyword.name}}"><span>Possible parameter keyword: {{ possible_parameters_keyword.unbinded_name }}<br></span>
+                            </div>
+                            <div ng-if="!data_actions.contains_textarea && !data_actions.contains_radio"><h4
+                                    ng-show="actionForm.$invalid" style="color: red; font-size:small;">Your input has
+                                errors, please try again!</h4></div>
+                            <div ng-show="data_actions.contains_textarea && !data_actions.contains_radio"><h4
+                                    ng-show="actionForm.$pristine" style="color: red; font-size:small;">Your input has
+                                errors, please try again!</h4></div>
+                            <br>
+                            <input ng-if="data_actions.contains_checkbox" type='submit' class='btn btn-info btn-large'
+                                   style='float:left' ng-disabled="actionForm.$pristine"
+                                   value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
+                            <input ng-if="data_actions.contains_textarea" type='submit' class='btn btn-info btn-large'
+                                   style='float:left'
+                                   value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
+                            <input ng-if="data_actions.contains_radio && !data_actions.contains_checkbox" type='submit'
+                                   class='btn btn-info btn-large' style='float:left' ng-disabled="actionForm.$invalid"
+                                   value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
+                            <input ng-if="!data_actions.contains_radio && !data_actions.contains_time && !data_actions.contains_checkbox && !data_actions.contains_textarea"
+                                   type='submit' class='btn btn-info btn-large' style='float:left'
+                                   value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
+                            <input ng-if="!data_actions.contains_radio && data_actions.contains_time && !data_actions.contains_checkbox && !data_actions.contains_textarea"
+                                   type='submit' class='btn btn-info btn-large' style='float:left'
+                                   ng-disabled="actionForm.$invalid"
+                                   value='&nbsp;&nbsp;&nbsp;Create Action&nbsp&nbsp&nbsp'>
+                        </form>
+                        <br>
+                        <br>
+                    </md-list-item>
+                </md-list>
             </md-content>
         </div>
     </div>
@@ -417,7 +471,9 @@
         <h3>You have to choose an action channel to select an action event</h3>
     </div>
     <a style="float:right"> <!--ng-href="#/newrecipe#step_3_b"-->
-        <button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back</button>
+        <button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple"
+                type="button" aria-label="Back">Back
+        </button>
     </a>
 </div>
 
@@ -443,19 +499,22 @@
     <br>
     <br>
     <div ng-show="chosen_trigger_channel && chosen_action_channel" class="flexbox-parent">
-        <div layout="column" layout-align="center center"  style="min-height: 500px">
-                <md-content>
-                    <h3 class="step_0">if</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_trigger_channel.image_url }}" alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
-                    <h3 class="step_0">&emsp;then</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}" alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
-                </md-content>
-<br>
+        <div layout="column" layout-align="center center" style="min-height: 500px">
+            <md-content>
+                <h3 class="step_0">if</h3>
+                <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_trigger_channel.image_url }}"
+                     alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
+                <h3 class="step_0">&emsp;then</h3>
+                <img style="margin-left: 25px; margin-bottom: 40px;" src="{{ chosen_action_channel.image_url }}"
+                     alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
+            </md-content>
+            <br>
             <form novalidate ng-submit='submit_recipe(recipe_description)' id="submit_recipe">
                 <br>
                 <h3>Recipe title: </h3>
                 <textarea rows="4" cols="50" name="recipe_description" ng-model="recipe_description">{{recipe_description}}</textarea>
-                <input aria-label="input" type="submit" class="btn btn-info btn-large" value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp" /> <!--ng-href="#/home"-->
+                <input aria-label="input" type="submit" class="btn btn-info btn-large"
+                       value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp"/> <!--ng-href="#/home"-->
             </form>
             <br>
             <br>
@@ -463,7 +522,7 @@
             <br>
         </div>
     </div>
-    <div ng-show="!chosen_trigger_channel || !chosen_action_channel"  layout="column" layout-align="center center">
+    <div ng-show="!chosen_trigger_channel || !chosen_action_channel" layout="column" layout-align="center center">
         <h3>You have to choose a trigger event and an action event to create a recipe</h3>
     </div>
 </div>
@@ -482,6 +541,7 @@
 <br>
 <br>
 <br>
-    <!--
+<!--
 </body>
 -->
+</div>

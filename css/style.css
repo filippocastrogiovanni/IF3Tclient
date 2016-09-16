@@ -21,23 +21,23 @@
 
 
 /*************************************************Create a recipe - START**********************************************/
+
 /*STEP_0*/
 .step_0 {
     font-weight: bold;
-    font-size: 1000%;
+    font-size: 10em;
 }
 
 .step_0_anchor { /*class section tag anchor*/
     cursor: pointer;
     font-weight: bold;
-    font-size: 1000%;
+    font-size: 10em;
     color:lightseagreen;
-    /*border-bottom: 10px solid lightseagreen;*/
     text-decoration: underline; /*or none*/
     text-decoration-color: lightseagreen;
 }
-a.step_0_anchor:hover {
-    color: lightseagreen;
+.step_0_anchor:hover {
+    font-style: italic;
 }
 
 .step_0, .step_0_anchor {
