@@ -1,8 +1,39 @@
-<div  class="container"  ng-controller="MyChannelsController">
-    <ul>
-        <li ng-repeat="channel in channels">
-            <img class="img-responsive" ng-src="{{ ipServer }}/{{ channel.image_url }}"/>
-            <button ng-click="disconnectChannel(channel)">Disconnect</button>
-        </li>
-    </ul>
+<div class="container" ng-controller="MyChannelsController">
+    <md-toolbar ng-if="channels.length == 0" layout="column" layout-padding class="message">
+        No channels connected yet
+    </md-toolbar>
+
+    <div ng-if="channels.length > 0">
+        <div class="row">
+            <div class="col-sm-8"></div>
+            <div class="col-sm-4">
+                <div class="inner-addon right-addon">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input placeholder="Search for..." type="text" class="form-control" ng-model="search.name">
+                </div>
+            </div>
+        </div>
+
+        <br/>
+
+        <div class="row">
+            <div ng-repeat="channel in channels | orderBy:'name' | filter : search" class="col-sm-2">
+                <div align="center">
+                    <md-button data-toggle="collapse" data-target="#channel_{{ channel.channelId }}"
+                               ng-click="selectChannel(channel)">
+                        <img aria-label="{{ channel.name }}" height="100" width="100" class="img-responsive"
+                             ng-src="{{ ipServer + '/' + channel.image_url }}"/>
+                    </md-button>
+                    <div id="channel_{{ channel.channelId }}" class="collapse" align="center"
+                         ng-if="visibleChannel(channel)">
+                        <button type="button" class="btn btn-warning"
+                                ng-click="disconnect(channel)">Disconnect
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
