@@ -21,7 +21,7 @@
     <!-- STEP 1 -->
     <!-- PART A -->
     <div id="step_1_a" style="height:1000px;padding-top:10%">
-        <md-content flex layout-padding class="flexbox-parent">
+        <md-content flex layout-padding class="flexbox-parent" ng-if="step_1">
             <div layout="column" layout-align="center center">
                 <div>
                     <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
@@ -54,7 +54,7 @@
                     <md-list>
                         <md-list-item data-ng-repeat="channel in channels | orderBy:'name' | filter:searchBox1"
                                       style="display: inline">
-                            <img class="step_1_image" imageonload style="cursor: pointer" src="{{ channel.image_url }}"
+                            <img class="step_1_image" imageonload style="cursor: pointer" src="{{ipServer}}/{{ channel.image_url }}"
                                  alt="{{ channel.name }}" height="100" width="100"
                                  scroll-on-click-and-choose-trigger-channel
                                  callback-fn="choose_trigger_channel(channel)" href="#step_1_b"/>
@@ -580,7 +580,11 @@
     <br>
     <br>
     <br>
-    <!--
-    </body>
-    -->
+
+
+
+
+
+
+
 </div>
