@@ -46,7 +46,7 @@
 
 
 h6.step_0_helper {
-    color: lightgrey;
+    color: darkgrey;
     font-size: large;
     clear: left;
 }
@@ -57,7 +57,7 @@ h3.step_1 {
     font-size: xx-large;
 }
 h6.step_1_helper {
-    color: lightgrey;
+    color: darkgrey;
     font-size: medium;
 }
 h3.step_1, h6.step_1_helper{
