@@ -6,8 +6,11 @@ if3tApp.controller('ProfileController', ['userFactory', '$scope', '$rootScope', 
     function (userFactory, $scope, $rootScope, $routeParams, $window) {
         $rootScope.curpage = "profile";
 
-        if(!userFactory.isAuthenticated())
+        if (!userFactory.isAuthenticated()) {
             $window.location.href = "#/home";
+        }
+
+        $("body").css("overflow", "auto");
 
         $scope.tabs = [
             {

@@ -7,59 +7,125 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
     '$window', '$http', 'userFactory', '$anchorScroll', 'messageFactory',
     function ($scope, $rootScope, $routeParams, $location, $window, $http, userFactory, $anchorScroll, messageFactory) {
 
+        $rootScope.curpage = "newrecipe";
+
         if (!userFactory.isAuthenticated()) {
             $window.location.href = "#/home";
         }
 
-        $rootScope.curpage = "newrecipe";
+        $("body").css("overflow", "hidden");
+
         $scope.channelsDetail = [];
-        $scope.step_1 = false;
+        $scope.stepsEnabled = [];
+        $scope.totalSteps = 5;
+
+        $scope.stepNext = function (nr) {
+            for (i = 0; i < $scope.totalSteps; i++) {
+                if (i <= nr) {
+                    $scope.stepsEnabled[i] = true;
+                } else {
+                    $scope.stepsEnabled[i] = false;
+                }
+            }
+        };
+
+        $scope.stepNext(0);
 
         messageFactory.showLoading();
         $http.get($rootScope.ipServer + "/channels")
             .then(
                 function success(resp) {
-                    console.log(resp);
                     messageFactory.hideLoading();
                     $scope.channels = resp.data;
-                    $scope.step_1 = true;
+                    $scope.stepNext(1);
                 },
                 function error(resp) {
                     messageFactory.hideLoading();
                     messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
-                    $scope.step_1 = false;
+                    $scope.stepNext(0);
                 }
             );
 
         $scope.choose_trigger_channel = function (channel) {
 
+            $scope.chosen_trigger_channel = channel;
+
             $scope.channelsDetail[channel.channelId] = {};
             $scope.channelsDetail[channel.channelId].connected = false;
             $scope.channelsDetail[channel.channelId].url = "";
 
-            $http({
-                method: 'GET',
-                dataType: 'json',
-                url: $rootScope.ipServer + '/' + channel.keyword + '/auth',
-                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
-            }).then(
-                function successCallback(resp) {
-                    console.log(resp);
-                    if (resp.data.code == 200) {
-                        //channel connected
-                        $scope.channelsDetail[channel.channelId].connected = true;
-                    } else {
-                        //channel not yet connected
+            $scope.stepNext(2);
+
+            if (channel.isNeededAuth) {
+                $http({
+                    method: 'GET',
+                    dataType: 'json',
+                    url: $rootScope.ipServer + '/' + channel.keyword + '/auth',
+                    headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+                }).then(
+                    function successCallback(resp) {
+                        if (resp.data.code == 200) {
+                            //channel connected
+                            $scope.channelsDetail[channel.channelId].connected = true;
+                        } else {
+                            //channel not yet connected
+                            $scope.channelsDetail[channel.channelId].connected = false;
+                            $scope.channelsDetail[channel.channelId].url = resp.data.message;
+                        }
+                    },
+                    function errorCallback(resp) {
+                        $scope.stepNext(1);
+                        messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+                        $scope.channelsDetail[channel.channelId].connected = false;
+                        $scope.channelsDetail[channel.channelId].url = "";
+                    }
+                );
+            } else {
+                $scope.channelsDetail[channel.channelId].connected = true;
+            }
+        };
+
+        $scope.connectChannel = function (channel) {
+            $window.open($scope.channelsDetail[channel.channelId].url, "_blank", "location=no," +
+                "menubar=no," +
+                "toolbar=no," +
+                "scrollbars=no," +
+                "resizable=no," +
+                "status=no," +
+                "titlebar=no," +
+                "top=100,left=300," +
+                "width=550,height=550");
+            $scope.channelsDetail[channel.channelId].connected = true;
+        };
+
+        $scope.isTriggerChannelAuthorized = function (channel) {
+            if (channel.isNeededAuth) {
+                $http({
+                    method: 'GET',
+                    dataType: 'json',
+                    url: $rootScope.ipServer + '/' + channel.keyword + '/auth',
+                    headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+                }).then(
+                    function successCallback(resp) {
+                        if (resp.data.code == 200) {
+                            //channel connected
+                            $scope.channelsDetail[channel.channelId].connected = true;
+                            $scope.stepNext(3);
+                        } else {
+                            //channel not yet connected
+                            $scope.channelsDetail[channel.channelId].connected = false;
+                            $scope.stepNext(2);
+                        }
+                    },
+                    function errorCallback(resp) {
+                        $scope.stepNext(2);
+                        messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
                         $scope.channelsDetail[channel.channelId].connected = false;
                     }
-                    $scope.channelDetail[channel.channelId].url = resp.data.message;
-                },
-                function errorCallback(resp) {
-                    messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
-                    $scope.channelsDetail[channel.channelId].connected = false;
-                    $scope.channelDetail[channel.channelId].url = "";
-                }
-            );
+                );
+            } else {
+                $scope.stepNext(3);
+            }
 
 
 
@@ -70,7 +136,6 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
 
 
-            $scope.chosen_trigger_channel = channel;
             $rootScope.chosen_trigger_channel = channel;
 
             $http({
@@ -224,7 +289,15 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             }, function errorCallback(response) {
                 alert("You can not get the triggers list of trigger channel from Server");
             });
+
+
+
+
+
+
         };
+
+
 
 
         //all functions handled by controller

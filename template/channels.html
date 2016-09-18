@@ -16,7 +16,7 @@
             <div align="center">
                 <md-button data-toggle="collapse" data-target="#channel_{{ channel.channelId }}"
                            ng-click="selectChannel(channel)">
-                    <img aria-label="{{ channel.name }}" height="100" width="100" class="img-responsive"
+                    <img aria-label="{{ channel.name }}" height="100" width="100" class="img-responsive channel_image"
                          ng-src="{{ ipServer + '/' + channel.image_url }}"/>
                 </md-button>
                 <div id="channel_{{ channel.channelId }}" class="collapse" align="center"

@@ -5,8 +5,9 @@
 if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams', '$window', '$http', 'userFactory', 'messageFactory',
     function ($scope, $rootScope, $routeParams, $window, $http, userFactory, messageFactory) {
         $rootScope.curpage = "channels";
-        messageFactory.showLoading();
+        $("body").css("overflow", "auto");
 
+        messageFactory.showLoading();
         $http.get($rootScope.ipServer + "/channels").then
         (
             function success(resp) {
