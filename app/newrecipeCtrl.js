@@ -56,6 +56,8 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
             $scope.stepNext(2);
 
+            $scope.getChannelTriggers(channel);
+
             if (channel.isNeededAuth) {
                 $http({
                     method: 'GET',
@@ -83,6 +85,201 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             } else {
                 $scope.channelsDetail[channel.channelId].connected = true;
             }
+        };
+
+        $scope.getChannelTriggers = function (channel) {
+            $scope.channelTriggersData = false;
+            $http({
+                method: 'GET',
+                dataType: 'json',
+                url: $rootScope.ipServer + '/triggers/' + channel.channelId,
+                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            }).then(
+                function successCallback(response) {
+                    $scope.chosen_trigger_channel.trigger_list = response.data;
+
+                    $http({
+                        method: 'GET',
+                        dataType: 'json',
+                        url: $rootScope.ipServer + '/parameters_triggers/' + channel.channelId,
+                        headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+                    }).then(
+                        function successCallback(response) {
+                            var params = response.data; //List<ParametersTriggers>
+                            var i,j,counter,radioNr,checkboxNr;
+
+                            //creating array_parameters_triggers_same_id_trigger
+                            for (i = 0; i < $scope.chosen_trigger_channel.trigger_list.length; i++) {
+                                $scope.chosen_trigger_channel.trigger_list[i].params = [];
+                                $scope.chosen_trigger_channel.trigger_list[i].radios = [];
+                                $scope.chosen_trigger_channel.trigger_list[i].checkboxes = [];
+                                counter = 0;
+                                radioNr = 0;
+                                checkboxNr = 0;
+                                $scope.chosen_trigger_channel.trigger_list[i].radio_value = "";
+                                for(j = 0; j < params.length; j++) {
+                                    if($scope.chosen_trigger_channel.trigger_list[i].id == params[j].trigger.id) {
+                                        if(params[j].type != "radio" && params[j].type != "checkbox") {
+                                            $scope.chosen_trigger_channel.trigger_list[i].params[counter] = params[j];
+
+                                            $scope.chosen_trigger_channel.trigger_list[i].params[counter]
+                                                .unbinded_name = $scope.chosen_trigger_channel.trigger_list[i].params[counter]
+                                                .name.replace(/[_-]/g, " ").capitalize();
+                                            $scope.chosen_trigger_channel.trigger_list[i].params[counter].value = "";
+                                            counter++;
+                                        }
+
+                                        if(params[j].type == "radio") {
+                                            $scope.chosen_trigger_channel.trigger_list[i].radios[radioNr] = params[j];
+
+                                            $scope.chosen_trigger_channel.trigger_list[i].radios[radioNr]
+                                                .unbinded_name = $scope.chosen_trigger_channel.trigger_list[i].radios[radioNr]
+                                                .name.replace(/[_-]/g, " ").capitalize();
+                                            if($scope.chosen_trigger_channel.trigger_list[i].radio_value == "") {
+                                                $scope
+                                                    .chosen_trigger_channel
+                                                    .trigger_list[i]
+                                                    .radio_value = $scope
+                                                    .chosen_trigger_channel
+                                                    .trigger_list[i]
+                                                    .radios[radioNr]
+                                                    .name;
+                                            }
+
+                                            radioNr++;
+                                        }
+
+                                        if(params[j].type == "checkbox") {
+                                            $scope.chosen_trigger_channel.trigger_list[i].checkboxes[checkboxNr] = params[j];
+
+                                            $scope.chosen_trigger_channel.trigger_list[i].checkboxes[checkboxNr]
+                                                .unbinded_name = $scope.chosen_trigger_channel.trigger_list[i].checkboxes[checkboxNr]
+                                                .name.replace(/[_-]/g, " ").capitalize();
+                                            $scope.chosen_trigger_channel.trigger_list[i].checkboxes[checkboxNr].value = false;
+                                            checkboxNr++;
+                                        }
+
+                                    }
+                                }
+                            }
+
+/*
+                            //get list of triggers id
+                            var output_distinct = [];
+                            var l = params.length;
+
+
+                            for (i = 0; i < l; i++) {
+                                var present = false;
+                                for (j = 0; j < output_distinct.length; j++) {
+                                    if (output_distinct[j] == params[i].trigger.id) {
+                                        present = true;
+                                        break;
+                                    }
+                                }
+                                if (!present)
+                                    output_distinct.push(params[i].trigger.id);
+                            }
+
+
+
+                            //normalize output_distinct in a new array
+                            var normalized_array = [];
+                            output_distinct.reverse();
+                            for (i = 0; i < $scope.chosen_trigger_channel.trigger_list.length; i++) {
+                                contained = false;
+                                for (j = 0; j < params.length; j++) {
+                                    if ($scope.chosen_trigger_channel.trigger_list[i].id == params[j].trigger.id) {
+                                        contained = true;
+                                        break;
+                                    }
+                                }
+                                if (contained)
+                                    normalized_array[i] = output_distinct.pop();
+                            }
+
+                            for (i = 0; i < $scope.chosen_trigger_channel.trigger_list.length; i++) {
+                                var params_same_id_trigger = [];
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_radio = false;
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_time = false;
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_email = false;
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = false;
+                                $scope.chosen_trigger_channel.trigger_list[i].contains_textarea = false;
+                                //check if trigger is contained in ouput_distinct
+                                var contained = false;
+                                for (var j = 0; j < params.length; j++) {
+                                    if ($scope.chosen_trigger_channel.trigger_list[i].id == params[j].trigger.id) {
+                                        contained = true;
+                                        break;
+                                    }
+                                }
+                                if (contained) {
+                                    for (j = 0; j < params.length; j++) {
+                                        if (params[j].trigger.id == normalized_array[i]) {
+                                            var element_parameters_triggers = {};
+                                            element_parameters_triggers.name = params[j].name;
+                                            element_parameters_triggers.id = params[j].id;
+                                            element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
+                                            element_parameters_triggers.type = params[j].type;
+                                            if (element_parameters_triggers.type.localeCompare("radio") == 0) {
+                                                element_parameters_triggers.is_radio = true;
+                                                $scope.chosen_trigger_channel.trigger_list[i].contains_radio = true;
+                                            }
+                                            else {
+                                                element_parameters_triggers.is_radio = false;
+                                            }
+                                            if (element_parameters_triggers.type.localeCompare("number") == 0) {
+                                                element_parameters_triggers.is_number = true;
+                                            }
+                                            else {
+                                                element_parameters_triggers.is_number = false;
+                                            }
+                                            if (element_parameters_triggers.type.localeCompare("time") == 0) {
+                                                $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
+                                                element_parameters_triggers.is_time = true;
+                                            }
+                                            else {
+                                                element_parameters_triggers.is_time = false;
+                                            }
+                                            if (element_parameters_triggers.type.localeCompare("textarea") == 0) {
+                                                $scope.chosen_trigger_channel.trigger_list[i].contains_textarea = true;
+                                                element_parameters_triggers.is_textarea = true;
+                                            }
+                                            else {
+                                                element_parameters_triggers.is_textarea = false;
+                                            }
+                                            if (element_parameters_triggers.type.localeCompare("email") == 0) {
+                                                element_parameters_triggers.is_email = true;
+                                            }
+                                            else {
+                                                element_parameters_triggers.is_email = false;
+                                            }
+                                            if (element_parameters_triggers.type.localeCompare("checkbox") == 0) {
+                                                element_parameters_triggers.is_checkbox = true;
+                                                $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = true;
+                                            }
+                                            else {
+                                                element_parameters_triggers.is_checkbox = false;
+                                            }
+                                            params_same_id_trigger.push(element_parameters_triggers);
+                                        }
+                                    }
+                                    $scope.chosen_trigger_channel.trigger_list[i].params = params_same_id_trigger;
+                                }
+                            }
+*/
+
+                        },
+                        function errorCallback(resp) {
+                            $scope.channelTriggersData = false;
+                            messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+                        });
+                },
+                function errorCallback(resp) {
+                    $scope.channelTriggersData = false;
+                    messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+                }
+            );
         };
 
         $scope.connectChannel = function (channel) {
@@ -126,179 +323,36 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             } else {
                 $scope.stepNext(3);
             }
-
-
-
-
-
-
-
-
-
-
-            $rootScope.chosen_trigger_channel = channel;
-
-            $http({
-                method: 'GET',
-                url: $rootScope.ipServer + '/triggers/' + channel.channelId,
-                headers: {'Content-Type': 'application/json'}
-            }).then(function successCallback(response) {
-                $scope.chosen_trigger_channel.trigger_list = response.data; //List<Trigger>
-                $http({
-                    method: 'GET',
-                    url: $rootScope.ipServer + '/parameters_triggers/' + channel.channelId,
-                    headers: {'Content-Type': 'application/json'}
-                }).then(function successCallback(response) {
-                    var params = response.data; //List<ParametersTriggers>
-                    var output_distinct = [], l = params.length, i;
-                    for (i = 0; i < l; i++) {
-                        var present = false;
-                        for (var j = 0; j < output_distinct.length; j++) {
-                            if (output_distinct[j] == params[i].trigger.id) {
-                                present = true;
-                                break;
-                            }
-                        }
-                        if (!present)
-                            output_distinct.push(params[i].trigger.id);
-                    }
-                    //creating array_parameters_triggers_same_id_trigger
-                    for (var i = 0; i < $scope.chosen_trigger_channel.trigger_list.length; i++) {
-                        $scope.chosen_trigger_channel.trigger_list[i].params = [];
-                    }
-                    //normalize output_distinct in a new array
-                    var normalized_array = [];
-                    output_distinct.reverse();
-                    for (var i = 0; i < $scope.chosen_trigger_channel.trigger_list.length; i++) {
-                        var contained = false;
-                        for (var j = 0; j < params.length; j++) {
-                            if ($scope.chosen_trigger_channel.trigger_list[i].id == params[j].trigger.id) {
-                                contained = true;
-                                break;
-                            }
-                        }
-                        if (contained)
-                            normalized_array[i] = output_distinct.pop();
-                    }
-                    for (var i = 0; i < $scope.chosen_trigger_channel.trigger_list.length; i++) {
-                        var params_same_id_trigger = [];
-                        $scope.chosen_trigger_channel.trigger_list[i].contains_radio = false;
-                        $scope.chosen_trigger_channel.trigger_list[i].contains_time = false;
-                        $scope.chosen_trigger_channel.trigger_list[i].contains_email = false;
-                        $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = false;
-                        $scope.chosen_trigger_channel.trigger_list[i].contains_textarea = false;
-                        //check if trigger is contained in ouput_distinct
-                        var contained = false;
-                        for (var j = 0; j < params.length; j++) {
-                            if ($scope.chosen_trigger_channel.trigger_list[i].id == params[j].trigger.id) {
-                                contained = true;
-                                break;
-                            }
-                        }
-                        if (contained) {
-                            for (var j = 0; j < params.length; j++) {
-                                if (params[j].trigger.id == normalized_array[i]) {
-                                    var element_parameters_triggers = {};
-                                    element_parameters_triggers.name = params[j].name;
-                                    element_parameters_triggers.id = params[j].id;
-                                    element_parameters_triggers.unbinded_name = element_parameters_triggers.name.replace(/[_-]/g, " ").capitalize();
-                                    element_parameters_triggers.type = params[j].type;
-                                    if (element_parameters_triggers.type.localeCompare("radio") == 0) {
-                                        element_parameters_triggers.is_radio = true;
-                                        $scope.chosen_trigger_channel.trigger_list[i].contains_radio = true;
-                                    }
-                                    else {
-                                        element_parameters_triggers.is_radio = false;
-                                    }
-                                    if (element_parameters_triggers.type.localeCompare("number") == 0) {
-                                        element_parameters_triggers.is_number = true;
-                                    }
-                                    else {
-                                        element_parameters_triggers.is_number = false;
-                                    }
-                                    if (element_parameters_triggers.type.localeCompare("time") == 0) {
-                                        $scope.chosen_trigger_channel.trigger_list[i].contains_time = true;
-                                        element_parameters_triggers.is_time = true;
-                                    }
-                                    else {
-                                        element_parameters_triggers.is_time = false;
-                                    }
-                                    if (element_parameters_triggers.type.localeCompare("textarea") == 0) {
-                                        $scope.chosen_trigger_channel.trigger_list[i].contains_textarea = true;
-                                        element_parameters_triggers.is_textarea = true;
-                                    }
-                                    else {
-                                        element_parameters_triggers.is_textarea = false;
-                                    }
-                                    if (element_parameters_triggers.type.localeCompare("email") == 0) {
-                                        element_parameters_triggers.is_email = true;
-                                    }
-                                    else {
-                                        element_parameters_triggers.is_email = false;
-                                    }
-                                    if (element_parameters_triggers.type.localeCompare("checkbox") == 0) {
-                                        element_parameters_triggers.is_checkbox = true;
-                                        $scope.chosen_trigger_channel.trigger_list[i].contains_checkbox = true;
-                                    }
-                                    else {
-                                        element_parameters_triggers.is_checkbox = false;
-                                    }
-                                    params_same_id_trigger.push(element_parameters_triggers);
-                                }
-                            }
-                            $scope.chosen_trigger_channel.trigger_list[i].params = params_same_id_trigger;
-                        }
-                    }
-
-                    /*
-                     $scope.array_try = [];
-                     var elem_try = {};
-                     elem_try.aa = "aa";
-                     elem_try.bb = "bb";
-                     $scope.array_try.push(elem_try);
-                     elem_try.aa = "AA";
-                     elem_try.bb = "BB";
-                     $scope.array_try.push(elem_try);
-                     */
-                    //preparing parameters to pass to form
-                    /*
-                     $scope.parameters_triggers_names_list = [];
-                     $scope.chosen_trigger_channel.trigger_list.params = [];
-                     for(var j=0; j<$scope.array_parameters_triggers.length; j++) {
-                     for(var k=0; k<$scope.chosen_trigger_channel.trigger_list.params.length; k++) {
-                     chosen_trigger_channel.trigger_list.params.push($scope.chosen_trigger_channel.trigger_list.params[k].name);
-                     }
-                     }
-                     */
-                    /*
-                     for(var j=0; j<$scope.array_parameters_triggers.length; j++) {
-                     //preparing <h4>Email address:</h4><input type='text' name='email_address' ng-model='email_address'><br> couples
-                     $scope.parameters_triggers_couples = "";
-                     for (var i = 0; i < array_parameters_triggers[j].array_same_id_trigger.length; i++) {
-                     $scope.parameters_triggers_couples += "<h4>" + array_parameters_triggers[j].array_same_id_trigger[i].name + "</h4>";
-                     $scope.parameters_triggers_couples += "<input type='" + array_parameters_triggers[j].array_same_id_trigger[i].type + "' name='" + array_parameters_triggers[j].array_same_id_trigger[i].name + "' ng-model='" + array_parameters_triggers[j].array_same_id_trigger[i].name + "' <br> ";
-                     }
-                     $scope.chosen_trigger_channel.trigger_list[j].extra_element = "<br><br><form novalidate ng-submit='submit_trigger(" +$scope.parameters_triggers_names_list[j] + ")'>" + $scope.parameters_triggers_couples + " <input scroll-on-click href='#step_2_b' type='submit' class='btn btn-info btn-large' style='float:left' value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'></form>"
-                     }
-                     */
-                    $scope.emailFormat = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
-                }, function errorCallback(response) {
-                    alert("You can not get the triggers parameters list of trigger channel from Server");
-                });
-
-            }, function errorCallback(response) {
-                alert("You can not get the triggers list of trigger channel from Server");
-            });
-
-
-
-
-
-
         };
 
+        $scope.triggerSubmit = function (triggerID) {
 
 
+
+
+
+
+            for (var i = 0; i < triggers_parameters.length; i++) {
+                console.log("Input data: " + triggers_parameters[i]);
+            }
+            //save parameters for showing them later in parameters' keyword section
+            $rootScope.possible_parameters_keyword = [];
+            for (var i = 0; i < data_trigger.params.length; i++) {
+                $rootScope.possible_parameters_keyword.push(data_trigger.params[i]);
+            }
+            delete data_trigger.params;
+            $('html, body').animate({
+                    scrollTop: $("#step_2_b").offset().top
+                }, "slow"
+            );
+            //$("html, body").animate({ scrollTop: "300px" });
+            $rootScope.chosen_trigger_job = trigger_header;
+            for (var i = 0; i < triggers_parameters.length; i++) {
+                triggers_parameters[i].unbinded_name = triggers_parameters[i].unbinded_name.toLowerCase().replace(/ /g, "_");
+            }
+            $rootScope.chosen_trigger_parameters = triggers_parameters;
+            $rootScope.chosen_trigger_data = data_trigger;
+        };
 
         //all functions handled by controller
 
@@ -460,26 +514,7 @@ function choose_action_channel($scope, $http, $rootScope, o, userFactory) {
 }
 
 function submit_trigger($rootScope, $scope, triggers_parameters, is_form_valid, $location, $anchorScroll, trigger_header, data_trigger) {
-    for (var i = 0; i < triggers_parameters.length; i++) {
-        console.log("Input data: " + triggers_parameters[i]);
-    }
-    //save parameters for showing them later in parameters' keyword section
-    $rootScope.possible_parameters_keyword = [];
-    for (var i = 0; i < data_trigger.params.length; i++) {
-        $rootScope.possible_parameters_keyword.push(data_trigger.params[i]);
-    }
-    delete data_trigger.params;
-    $('html, body').animate({
-            scrollTop: $("#step_2_b").offset().top
-        }, "slow"
-    );
-    //$("html, body").animate({ scrollTop: "300px" });
-    $rootScope.chosen_trigger_job = trigger_header;
-    for (var i = 0; i < triggers_parameters.length; i++) {
-        triggers_parameters[i].unbinded_name = triggers_parameters[i].unbinded_name.toLowerCase().replace(/ /g, "_");
-    }
-    $rootScope.chosen_trigger_parameters = triggers_parameters;
-    $rootScope.chosen_trigger_data = data_trigger;
+
 }
 
 function submit_action($rootScope, $scope, actions_parameters, is_form_valid, $location, $anchorScroll, action_header, data_action, parameters_keyword) {

@@ -30,7 +30,8 @@
                     </button>
                 </div>
                 <div class="progress" style="width:400px;">
-                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ 100/totalSteps*1 }}"
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*1 }}"
                          aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*1 }}%">
                         step 1 of {{totalSteps}}
                     </div>
@@ -97,7 +98,8 @@
                     </button>
                 </div>
                 <div class="progress" style="width:400px;">
-                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ 100/totalSteps*2 }}"
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*2 }}"
                          aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*2 }}%">
                         step 2 of {{totalSteps}}
                     </div>
@@ -165,7 +167,7 @@
     </div>
 
     <!-- STEP 3 -->
-    <div id="step_3" style="height:1000px;padding-top:5%">
+    <div id="step_3" style="height:1000px;padding-top:2%">
         <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[3]">
             <div layout="column" layout-align="center center">
                 <div>
@@ -176,123 +178,87 @@
                     </button>
                 </div>
                 <div class="progress" style="width:400px;">
-                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ 100/totalSteps*3 }}"
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*3 }}"
                          aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*3 }}%">
                         step 3 of {{totalSteps}}
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-                <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                    <h3 class="step_1">Choose a Trigger</h3><h6 class="step_1_helper">(2/5)</h6>
-                </md-content>
-                <div div layout="column">
-                    <div div layout="row" layout-align="center" style="min-height: 500px" ng-show="chosen_trigger_channel">
-                        <br>
-                        <br>
-                        <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
-                            <md-list>
-                                <md-list-item ng-repeat="data_triggers in chosen_trigger_channel.trigger_list track by $index"
-                                              class="trigger-list_item" style="display: inline">
-                                    <h3>{{data_triggers.header}}</h3>
-                                    <p>{{data_triggers.paragraph}}</p>
-                                    <br>
-                                    <br>
-                                    <form id="triggerForm" name="triggerForm" novalidate
-                                          ng-submit="triggerForm.$valid && submit_trigger( data_triggers.params, triggerForm.$valid, data_triggers.header, data_triggers )">
-                                        <div ng-repeat="same_id_trigger in data_triggers.params track by $index">
-                                            <h4 ng-if="!same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}</h4><br>
-                                            <input ng-if="!same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea && !same_id_trigger.is_email && !same_id_trigger.is_number"
-                                                   type='{{same_id_trigger.type}}' name='field_name'
-                                                   ng-model="same_id_trigger.name"
-                                                   required>
-                                            <input ng-if="same_id_trigger.is_email && !same_id_trigger.is_radio && !same_id_trigger.is_checkbox && !same_id_trigger.is_time && !same_id_trigger.is_textarea"
-                                                   type='email' name='field_name' ng-model="same_id_trigger.name"
-                                                   ng-pattern="emailFormat" required>
-                                            <input ng-if="same_id_trigger.is_radio" type="radio" name='radio_button_form'
-                                                   value="{{same_id_trigger.name}}"
-                                                   ng-model="same_id_trigger.radio_button_form"><span
-                                                ng-if="same_id_trigger.is_radio">{{ same_id_trigger.unbinded_name }}<br></span>
-                                            <input ng-if="same_id_trigger.is_checkbox" type='{{same_id_trigger.type}}'
-                                                   name='radio_button_form' value="{{same_id_trigger.name}}"
-                                                   ng-model="same_id_trigger.checkbox_button_form">
-                                            <input ng-if="same_id_trigger.is_time" type="time" ng-model="same_id_trigger.name"
-                                                   name="input_time" ng-required="true">
-                                            <input ng-if="same_id_trigger.is_number" type="number"
-                                                   ng-model="same_id_trigger.name"
-                                                   placeholder="0">
-                                            <div ng-if="same_id_trigger.is_textarea"><textarea rows="2" cols="30"
-                                                                                               ng-model="same_id_trigger.name"></textarea>
-                                            </div>
-                                            <br>
-                                        </div>
-                                        <div ng-if="!data_triggers.contains_textarea && !data_triggers.contains_radio"><h4
-                                                ng-show="triggerForm.$invalid" style="color: red; font-size:small;">Your input
-                                            has
-                                            errors, please try again!</h4></div>
-                                        <div ng-show="data_triggers.contains_textarea && !data_triggers.contains_radio"><h4
-                                                ng-show="triggerForm.$pristine" style="color: red; font-size:small;">Your input
-                                            has
-                                            errors, please try again!</h4></div>
-                                        <br>
-                                        <input ng-if="data_triggers.contains_checkbox" type='submit'
-                                               class='btn btn-info btn-large'
-                                               style='float:left' ng-disabled="triggerForm.$pristine"
-                                               value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                        <input ng-if="data_triggers.contains_textarea" type='submit'
-                                               class='btn btn-info btn-large'
-                                               style='float:left'
-                                               value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                        <input ng-if="data_triggers.contains_radio" type='submit' class='btn btn-info btn-large'
-                                               style='float:left' ng-disabled="triggerForm.$invalid || triggerForm.$pristine"
-                                               value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                        <input ng-if="!data_triggers.contains_radio && data_triggers.contains_time && !data_triggers.contains_checkbox && !data_triggers.contains_textarea"
-                                               type='submit' class='btn btn-info btn-large' style='float:left'
-                                               ng-disabled="triggerForm.$invalid"
-                                               value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                        <input ng-if="!data_triggers.contains_radio && !data_triggers.contains_time && !data_triggers.contains_checkbox && !data_triggers.contains_textarea"
-                                               type='submit' class='btn btn-info btn-large' style='float:left'
-                                               ng-disabled="triggerForm.$invalid"
-                                               value='&nbsp;&nbsp;&nbsp;Create Trigger&nbsp&nbsp&nbsp'>
-                                    </form>
-                                    <br>
-                                    <br>
-                                </md-list-item>
-                            </md-list>
-                        </md-content>
-                    </div>
-                    <div ng-show="!chosen_trigger_channel">
-                        <h3>You have to choose a trigger channel to select a trigger event</h3>
-                    </div>
+                <div>
+                    <h3 class="step_1">
+                        Choose a Trigger in
+                        <img src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                             alt="{{ chosen_trigger_channel.name }}" height="40" width="40"/>
+                    </h3>
                 </div>
+                <div style="overflow-y: auto;">
+                    <md-list layout="row" layout-align="center start">
+                        <md-list-item layout="column" layout-align="start center"
+                                      ng-repeat="data_triggers in chosen_trigger_channel.trigger_list track by $index"
+                                      class="trigger-list_item">
+                            <div flex-sm-auto>
+                                <h4>{{data_triggers.header}}</h4>
+                                <p class="trigger_description">{{data_triggers.paragraph}}</p>
+                                <br/>
+                            </div>
+                            <div flex>
+                                <form name="triggerForm[{{data_triggers.id}}]"
+                                      novalidate layout="column"
+                                      ng-submit="triggerSubmit(data_triggers.id)">
 
 
+                                    <div flex ng-if="data_triggers.params.length > 0">
+                                        <div ng-repeat="inputs_trigger in data_triggers.params track by $index">
+
+                                            <md-input-container ng-if="inputs_trigger.type != 'textarea'">
+                                                <label>{{ inputs_trigger.unbinded_name }}</label>
+                                                <input type="{{inputs_trigger.type}}"
+                                                       ng-model="inputs_trigger.value"/>
+                                            </md-input-container>
+
+                                            <md-input-container ng-if="inputs_trigger.type == 'textarea'">
+                                                <label>{{ inputs_trigger.unbinded_name }}</label>
+                                                                            <textarea ng-model="inputs_trigger.value"
+                                                                                      md-maxlength="150"
+                                                                                      rows="2" cols="30"
+                                                                                      md-select-on-focus></textarea>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
 
 
+                                    <div flex ng-if="data_triggers.checkboxes.length > 0">
+                                        <div ng-repeat="checkboxes_trigger in data_triggers.checkboxes track by $index">
+                                            <md-input-container>
+                                                <label>
+                                                    <input type="{{checkboxes_trigger.type}}"
+                                                           ng-model="checkboxes_trigger.value"/>
+                                                    {{ checkboxes_trigger.unbinded_name }}
+                                                </label>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
 
+                                    <div flex ng-if="data_triggers.radios.length > 0">
+                                        <md-radio-group
+                                                ng-model="data_triggers.radio_value"
+                                                ng-repeat="radios_trigger in data_triggers.radios track by $index">
+                                            <md-radio-button value="{{radios_trigger.name}}">
+                                                {{ radios_trigger.unbinded_name }}
+                                            </md-radio-button>
+                                        </md-radio-group>
+                                    </div>
 
+                                    <div flex style="margin-top:10px;">
+                                        <input type="submit" class='btn btn-info btn-large' value='Create Trigger'/>
+                                    </div>
 
+                                </form>
+                            </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        </md-list-item>
+                    </md-list>
+                </div>
             </div>
         </md-content>
         <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[2] && !stepsEnabled[3]">
@@ -312,34 +278,6 @@
             </div>
         </md-content>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <br>
