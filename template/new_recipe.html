@@ -624,26 +624,52 @@
                         step 8 of {{totalSteps}}
                     </div>
                 </div>
-            </div>
-            <div layout="row" layout-align="center start">
-                <div class="step_0">
-                    if
-                    <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
-                         alt="{{ chosen_trigger_channel.name }}" height="110"/>
-                    then
-                    <img ng-src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
-                         alt="{{ chosen_action_channel.name }}" height="110"/>
+                <div layout="row" layout-align="center start">
+                    <div class="step_0">
+                        if
+                        <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                             alt="{{ chosen_trigger_channel.name }}" height="110"/>
+                        then
+                        <img ng-src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
+                             alt="{{ chosen_action_channel.name }}" height="110"/>
+                    </div>
+                </div>
+
+                <div flex style="width:80%;">
+                    <form name="recipeForm"
+                          id="recipeForm"
+                          novalidate
+                          layout="column"
+                          layout-align="center center"
+                          ng-submit="recipeSubmit(this.actionForm)">
+
+                        <div>
+                            <md-input-container>
+                                <label>Give a name to your Recipe</label>
+                                <input type="text"
+                                       name="recipe_name"
+                                       required
+                                       style="width:300px;"
+                                       ng-model="recipe.name"/>
+                            </md-input-container>
+                        </div>
+
+                        <div flex style="margin-top:10px;">
+                            <input type="submit" class='btn btn-info btn-large' value='Save the recipe'/>
+                        </div>
+
+                        <div flex>
+                            <div ng-show="recipeForm.$invalid && recipeForm.$submitted"
+                                 class="form-error">
+                                Give a name to your recipe!
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
             </div>
 
 
-            <form novalidate ng-submit='submit_recipe(recipe_description)' id="submit_recipe">
-                <br>
-                <h3>Recipe title: </h3>
-                <textarea rows="4" cols="50" name="recipe_description" ng-model="recipe_description">{{recipe_description}}</textarea>
-                <input aria-label="input" type="submit" class="btn btn-info btn-large"
-                       value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp"/>
-            </form>
 
 
 

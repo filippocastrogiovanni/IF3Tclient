@@ -427,6 +427,8 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         $scope.actionSubmit = function (actionID, form) {
             var i;
+            $scope.recipe = {};
+            $scope.recipe.name = "";
 
             $scope.chosen_action_channel.chosen_action = {};
             for (i = 0; i < $scope.chosen_action_channel.action_list.length; i++) {
