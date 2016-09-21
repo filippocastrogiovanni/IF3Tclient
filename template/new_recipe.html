@@ -196,18 +196,18 @@
                         <md-list-item layout="column" layout-align="start center"
                                       ng-repeat="data_triggers in chosen_trigger_channel.trigger_list track by $index"
                                       class="trigger-list_item">
-                            <div flex-sm-auto>
+                            <div>
                                 <h4>{{data_triggers.header}}</h4>
                                 <p class="trigger_description">{{data_triggers.paragraph}}</p>
                                 <br/>
                             </div>
-                            <div flex>
+                            <div>
                                 <form name="triggerForm"
                                       id="{{ 'triggerForm-' + data_triggers.id}}"
-                                      novalidate layout="column"
+                                      novalidate layout="column" layout-align="start center"
                                       ng-submit="triggerSubmit(data_triggers.id, this.triggerForm)">
 
-                                    <div flex ng-if="data_triggers.params.length > 0">
+                                    <div ng-if="data_triggers.params.length > 0">
                                         <div ng-repeat="inputs_trigger in data_triggers.params track by $index">
                                             <md-input-container ng-if="inputs_trigger.type != 'textarea'">
                                                 <label>{{ inputs_trigger.unbinded_name }}</label>
@@ -226,7 +226,7 @@
                                         </div>
                                     </div>
 
-                                    <div flex ng-if="data_triggers.checkboxes.length > 0">
+                                    <div ng-if="data_triggers.checkboxes.length > 0">
                                         <div ng-repeat="checkboxes_trigger in data_triggers.checkboxes track by $index">
                                             <md-input-container>
                                                 <label>
@@ -238,7 +238,7 @@
                                         </div>
                                     </div>
 
-                                    <div flex ng-if="data_triggers.radios.length > 0">
+                                    <div ng-if="data_triggers.radios.length > 0">
                                         <md-radio-group
                                                 ng-model="data_triggers.radio_value"
                                                 ng-repeat="radios_trigger in data_triggers.radios track by $index">
@@ -248,11 +248,11 @@
                                         </md-radio-group>
                                     </div>
 
-                                    <div flex style="margin-top:10px;">
+                                    <div style="margin-top:10px;">
                                         <input type="submit" class='btn btn-info btn-large' value='Create Trigger'/>
                                     </div>
 
-                                    <div flex>
+                                    <div>
                                         <div ng-show="this.triggerForm.$invalid && this.triggerForm.$dirty"
                                              class="form-error">
                                             One or more inputs are not correct, you can't submit this trigger.
@@ -517,18 +517,18 @@
                         <md-list-item layout="column" layout-align="start center"
                                       ng-repeat="data_actions in chosen_action_channel.action_list track by $index"
                                       class="trigger-list_item">
-                            <div flex-sm-auto>
+                            <div>
                                 <h4>{{data_actions.header}}</h4>
                                 <p class="trigger_description">{{data_actions.paragraph}}</p>
                                 <br/>
                             </div>
-                            <div flex>
+                            <div>
                                 <form name="actionForm"
                                       id="{{ 'actionForm-' + data_actions.id}}"
-                                      novalidate layout="column"
+                                      novalidate layout="column" layout-align="start center"
                                       ng-submit="actionSubmit(data_actions.id, this.actionForm)">
 
-                                    <div flex ng-if="data_actions.params.length > 0">
+                                    <div ng-if="data_actions.params.length > 0">
                                         <div ng-repeat="inputs_action in data_actions.params track by $index">
                                             <md-input-container ng-if="inputs_action.type != 'textarea'">
                                                 <label>{{ inputs_action.unbinded_name }}</label>
@@ -547,7 +547,7 @@
                                         </div>
                                     </div>
 
-                                    <div flex ng-if="data_actions.checkboxes.length > 0">
+                                    <div ng-if="data_actions.checkboxes.length > 0">
                                         <div ng-repeat="checkboxes_action in data_actions.checkboxes track by $index">
                                             <md-input-container>
                                                 <label>
@@ -559,7 +559,7 @@
                                         </div>
                                     </div>
 
-                                    <div flex ng-if="data_actions.radios.length > 0">
+                                    <div ng-if="data_actions.radios.length > 0">
                                         <md-radio-group
                                                 ng-model="data_actions.radio_value"
                                                 ng-repeat="radios_action in data_actions.radios track by $index">
@@ -569,11 +569,11 @@
                                         </md-radio-group>
                                     </div>
 
-                                    <div flex style="margin-top:10px;">
+                                    <div style="margin-top:10px;">
                                         <input type="submit" class='btn btn-info btn-large' value='Create Action'/>
                                     </div>
 
-                                    <div flex>
+                                    <div>
                                         <div ng-show="this.actionForm.$invalid && this.actionForm.$dirty"
                                              class="form-error">
                                             One or more inputs are not correct, you can't submit this action.
@@ -668,15 +668,6 @@
                     </form>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
         </md-content>
         <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[7] && !stepsEnabled[8]">
             <div layout="column" layout-align="center center">
@@ -695,45 +686,6 @@
             </div>
         </md-content>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <!--
