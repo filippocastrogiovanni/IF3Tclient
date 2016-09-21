@@ -155,6 +155,12 @@ h3.step_1, h6.step_1_helper{
     font-size: xx-large;
 }
 
+.form-error {
+    color: red;
+    padding-top:10px;
+    font-size: 0.9em;
+}
+
 /*************************************************Create a recipe - END************************************************/
 
 h2.recipe

@@ -1,6 +1,6 @@
 <div id="noscroll">
 
-    <!-- STEP 0 -->
+    <!-- STEP 0: If This Than That-->
     <div id="step_0" style="height:1000px;padding-top:10%;">
         <md-content flex layout-padding class="flexbox-parent">
             <div layout="row" layout-align="center start">
@@ -18,7 +18,7 @@
         </md-content>
     </div>
 
-    <!-- STEP 1 -->
+    <!-- STEP 1: Select trigger channel -->
     <div id="step_1" style="height:1000px;padding-top:10%">
         <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[1]">
             <div layout="column" layout-align="center center">
@@ -55,7 +55,7 @@
                         <md-list-item data-ng-repeat="channel in channels | orderBy:'name' | filter:searchBox1"
                                       style="display: inline">
                             <img class="step_1_image" imageonload style="cursor: pointer"
-                                 src="{{ipServer}}/{{ channel.image_url }}"
+                                 ng-src="{{ipServer}}/{{ channel.image_url }}"
                                  alt="{{ channel.name }}" height="100" width="100"
                                  scroll-on-click-and-choose-trigger-channel
                                  callback-fn="choose_trigger_channel(channel)" href="#step_2"/>
@@ -86,7 +86,7 @@
         </md-content>
     </div>
 
-    <!-- STEP 2 -->
+    <!-- STEP 2: Trigger channel authorization -->
     <div id="step_2" style="height:1000px;padding-top:5%">
         <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[2]">
             <div layout="column" layout-align="center center">
@@ -114,7 +114,7 @@
                     <h6 class="step_0_helper">You only have to do this once.</h6>
                     <div layout="row" layout-align="center center">
                         <div>
-                            <img src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                            <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
                                  alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
                         </div>
                         <div style="padding-left: 30px;">
@@ -134,7 +134,7 @@
                     </h3>
                     <div layout="row" layout-align="center center">
                         <div>
-                            <img src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                            <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
                                  alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
                         </div>
                         <div style="padding-left: 30px;">
@@ -166,7 +166,7 @@
         </md-content>
     </div>
 
-    <!-- STEP 3 -->
+    <!-- STEP 3: choose a trigger of the channel -->
     <div id="step_3" style="height:1000px;padding-top:2%">
         <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[3]">
             <div layout="column" layout-align="center center">
@@ -187,7 +187,7 @@
                 <div>
                     <h3 class="step_1">
                         Choose a Trigger in
-                        <img src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                        <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
                              alt="{{ chosen_trigger_channel.name }}" height="40" width="40"/>
                     </h3>
                 </div>
@@ -202,20 +202,20 @@
                                 <br/>
                             </div>
                             <div flex>
-                                <form name="triggerForm[{{data_triggers.id}}]"
+                                <form name="triggerForm"
+                                      id="{{ 'triggerForm-' + data_triggers.id}}"
                                       novalidate layout="column"
-                                      ng-submit="triggerSubmit(data_triggers.id)">
-
+                                      ng-submit="triggerSubmit(data_triggers.id, this.triggerForm)">
 
                                     <div flex ng-if="data_triggers.params.length > 0">
                                         <div ng-repeat="inputs_trigger in data_triggers.params track by $index">
-
                                             <md-input-container ng-if="inputs_trigger.type != 'textarea'">
                                                 <label>{{ inputs_trigger.unbinded_name }}</label>
                                                 <input type="{{inputs_trigger.type}}"
+                                                       id="{{inputs_trigger.name}}"
+                                                       name="{{inputs_trigger.name}}"
                                                        ng-model="inputs_trigger.value"/>
                                             </md-input-container>
-
                                             <md-input-container ng-if="inputs_trigger.type == 'textarea'">
                                                 <label>{{ inputs_trigger.unbinded_name }}</label>
                                                                             <textarea ng-model="inputs_trigger.value"
@@ -225,7 +225,6 @@
                                             </md-input-container>
                                         </div>
                                     </div>
-
 
                                     <div flex ng-if="data_triggers.checkboxes.length > 0">
                                         <div ng-repeat="checkboxes_trigger in data_triggers.checkboxes track by $index">
@@ -251,6 +250,13 @@
 
                                     <div flex style="margin-top:10px;">
                                         <input type="submit" class='btn btn-info btn-large' value='Create Trigger'/>
+                                    </div>
+
+                                    <div flex>
+                                        <div ng-show="this.triggerForm.$invalid && this.triggerForm.$dirty"
+                                             class="form-error">
+                                            One or more inputs are not correct, you can't submit this trigger.
+                                        </div>
                                     </div>
 
                                 </form>
@@ -279,176 +285,436 @@
         </md-content>
     </div>
 
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <!-- PART B -->
-    <div id="step_4">
-        <div class="flexbox-parent">
-            <div layout="row" layout-align="center center" style="min-height: 500px">
+    <!-- PART 4: If This Than That -->
+    <div id="step_4" style="height:1000px;padding-top:2%">
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[4]">
+            <div layout="column" layout-align="center center">
                 <div>
-                    <md-content>
-                        <!--
-                        <h3 class="step_0">if</h3>
-                        <h6 class="step_0_anchor">{{ chosen_trigger_channel.header }}</h6>
-                        -->
-                        <h3 class="step_0">then</h3>
-                        <span class="step_0_anchor" scroll-on-click href="#step_3_a">that</span>
-                        <!--ng-href="#/newrecipe#step_3_a"-->
-                    </md-content>
+                    <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                            href="#step_3" type="button" aria-label="Back">
+                        Back
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                    </button>
                 </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <!-- STEP 3 -->
-    <div id="step_5">
-        <br>
-        <br>
-        <br>
-        <div class="flexbox-parent">
-            <div layout="row" layout-align="center center" style="min-height: 500px">
-                <div ng-cloak class="md-inline-form">
-                    <!-- PART A -->
-                    <md-content flex md-theme="docs-dark">
-                        <h3 class="step_1">Choose Action Channel</h3>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<h6
-                            class="step_1_helper">(3/5)</h6>
-                        <br>
-                        <br>
-                        <div>
-                            <form>
-                                <md-input-container>
-                                    <input aria-label="input" autocapitalization="off" class="step_1_channels_search"
-                                           placeholder="Search Channels" type="text"
-                                           ng-model="searchBox2.name"
-                                    />
-                                </md-input-container>
-                            </form>
-                        </div>
-                        <br>
-                        <md-list>
-                            <md-list-item data-ng-repeat="channel in channels | filter:searchBox2"
-                                          style="display: inline">
-
-                                <img style="cursor: pointer" src="{{ipServer}}/{{ channel.image_url }}"
-                                     alt="{{ channel.name }}"
-                                     height="100" width="100" scroll-on-click-and-choose-action-channel
-                                     callback-fn="choose_action_channel(channel)" href="#step_3_b"/>
-
-                            </md-list-item>
-                        </md-list>
-                    </md-content>
-                    <br>
-                    <br>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <!-- PART B -->
-    <div id="step_6">
-        <div class="flexbox-parent">
-            <div layout="row" layout-align="center center" style="min-height: 500px">
-                <div ng-show="chosen_action_channel">
-                    <md-content flex md-theme="docs-dark">
-                        <h3 class="step_1">To make the recipe work you will later need to authorize the app to use the
-                            {{
-                            chosen_action_channel.name }} channel</h3>
-                        <br>
-                        <h6 class="step_0_helper">You'll only have to do this once.</h6>
-                    </md-content>
-                    <br>
-                    <br>
-                    <div>
-                        <img style="margin-left: 25px;" src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
-                             alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
-
-                        <!--<a id="channel_to_connect_2_anchor" > <!--ng-href="#/newrecipe#step_4_a"-->
-                        <button scroll-on-click href="#step_4_a" style="margin-left: 25px;"
-                                class="md-raised md-primary md-button md-ink-ripple" type="button"
-                                aria-label="Continue to the next step"><span class="ng-scope">&nbsp&nbsp&nbspContinue to the next step&nbsp&nbsp&nbsp</span>
-                        </button>
-                        <!--</a>
-
-                        <a > <!--ng-href="#/newrecipe#step_3_a"-->
-                        <button scroll-on-click href="#step_3_a" aria-label="md-button"
-                                class="md-warn md-button md-ink-ripple" type="button" aria-label="Back">Back
-                        </button>
-                        <!--</a>-->
+                <div class="progress" style="width:400px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*4 }}"
+                         aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*3 }}%">
+                        step 4 of {{totalSteps}}
                     </div>
                 </div>
-                <div ng-show="!chosen_action_channel">
-                    <h3>You have to choose a action channel first</h3>
+            </div>
+            <div layout="row" layout-align="center start">
+                <div class="step_0">
+                    if
+                    <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                         alt="{{ chosen_trigger_channel.name }}" height="110"/>
+                </div>
+                <div class="step_0">&nbsp;then&nbsp;</div>
+                <div layout-align="center" align="center">
+                    <span class="step_0_anchor" scroll-on-click href="#step_5">that</span>
+                    <br/>
+                    <h6 class="step_0_helper">
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                        &nbsp;Click "that" to get ahead
+                    </h6>
                 </div>
             </div>
-        </div>
+        </md-content>
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[3] && !stepsEnabled[4]">
+            <div layout="column" layout-align="center center">
+                <div layout="column" layout-align="center center">
+                    <div>
+                        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                                href="#step_3" type="button" aria-label="Back">
+                            Back
+                            <span class="glyphicon glyphicon-hand-up"></span>
+                        </button>
+                    </div>
+                    <div>
+                        <h3 class="step_1">Some problem occured in your trigger creation! Go back.</h3>
+                    </div>
+                </div>
+            </div>
+        </md-content>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 
-    <!-- STEP 4 -->
+    <!-- STEP 5: Select action channel -->
+    <div id="step_5" style="height:1000px;padding-top:10%">
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[5]">
+            <div layout="column" layout-align="center center">
+                <div>
+                    <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                            href="#step_4" type="button" aria-label="Back">
+                        Back
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                    </button>
+                </div>
+                <div class="progress" style="width:400px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*5 }}"
+                         aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*5 }}%">
+                        step 5 of {{totalSteps}}
+                    </div>
+                </div>
+                <div layout="row" layout-align="left center">
+                    <div>
+                        <h3 class="step_1">Choose action channel</h3>
+                    </div>
+                    <div style="padding-left:30px;padding-top:15px;">
+                        <md-input-container class="inner-addon right-addon">
+                            <i class="glyphicon glyphicon-search"></i>
+                            <input aria-label="input" autocapitalization="off"
+                                   placeholder="Search for channel..." type="text"
+                                   ng-model="searchBox2.name"
+                            />
+                        </md-input-container>
+                    </div>
+                </div>
+                <div>
+                    <md-list>
+                        <md-list-item data-ng-repeat="channel in channels | orderBy:'name' | filter:searchBox2"
+                                      style="display: inline">
+                            <img class="step_1_image" imageonload style="cursor: pointer"
+                                 ng-src="{{ipServer}}/{{ channel.image_url }}"
+                                 alt="{{ channel.name }}" height="100" width="100"
+                                 scroll-on-click-and-choose-action-channel
+                                 callback-fn="choose_action_channel(channel)" href="#step_6"/>
+                        </md-list-item>
+                    </md-list>
+                </div>
+                <div>
+                    <h6 class="step_0_helper">
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                        &nbsp;Click on the action channel you need
+                    </h6>
+                </div>
+            </div>
+        </md-content>
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[4] && !stepsEnabled[5]">
+            <div layout="column" layout-align="center center">
+                <div>
+                    <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                            href="#step_4" type="button" aria-label="Back">
+                        Back
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                    </button>
+                </div>
+                <div>
+                    <h3 class="step_1">Loading channels...</h3>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <!-- STEP 6: Action channel authorization -->
+    <div id="step_6" style="height:1000px;padding-top:5%">
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[6]">
+            <div layout="column" layout-align="center center">
+                <div>
+                    <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                            href="#step_5" type="button" aria-label="Back">
+                        Back
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                    </button>
+                </div>
+                <div class="progress" style="width:400px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*6 }}"
+                         aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*6 }}%">
+                        step 6 of {{totalSteps}}
+                    </div>
+                </div>
+                <div ng-if="!channelsDetail[chosen_action_channel.channelId].connected" style="width:50%;">
+                    <h3 class="step_1">
+                        To make the recipe work you need to authorize the app to use the
+                        {{ chosen_action_channel.name }}
+                        channel.
+                    </h3>
+                    <br/>
+                    <h6 class="step_0_helper">You only have to do this once.</h6>
+                    <div layout="row" layout-align="center center">
+                        <div>
+                            <img ng-src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
+                                 alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
+                        </div>
+                        <div style="padding-left: 30px;">
+                            <button type="button" class="btn btn-primary"
+                                    ng-click="connectChannel(chosen_action_channel)">
+                                <span class="glyphicon glyphicon-hand-left"></span>&nbsp;
+                                Authorize the channel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="channelsDetail[chosen_action_channel.channelId].connected" style="width:50%;">
+                    <h3 class="step_1">
+                        The channel
+                        {{ chosen_action_channel.name }}
+                        is authorized to be used.
+                    </h3>
+                    <div layout="row" layout-align="center center">
+                        <div>
+                            <img ng-src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
+                                 alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
+                        </div>
+                        <div style="padding-left: 30px;">
+                            <button ng-click="isActionChannelAuthorized(chosen_action_channel)" scroll-on-click
+                                    type="button" class="btn btn-success" href="#step_7" type="button">
+                                Continue to the next step
+                                &nbsp;<span class="glyphicon glyphicon-hand-down"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </md-content>
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[5] && !stepsEnabled[6]">
+            <div layout="column" layout-align="center center">
+                <div layout="column" layout-align="center center">
+                    <div>
+                        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                                href="#step_5" type="button" aria-label="Back">
+                            Back
+                            <span class="glyphicon glyphicon-hand-up"></span>
+                        </button>
+                    </div>
+                    <div>
+                        <h3 class="step_1">You have to choose an action channel first! Go back.</h3>
+                    </div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <!-- STEP 7: choose an action of the channel -->
+    <div id="step_7" style="height:1000px;padding-top:2%">
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[7]">
+            <div layout="column" layout-align="center center">
+                <div>
+                    <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                            href="#step_5" type="button" aria-label="Back">
+                        Back
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                    </button>
+                </div>
+                <div class="progress" style="width:400px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*7 }}"
+                         aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*7 }}%">
+                        step 7 of {{totalSteps}}
+                    </div>
+                </div>
+                <div>
+                    <h3 class="step_1">
+                        Choose an Action in
+                        <img ng-src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
+                             alt="{{ chosen_action_channel.name }}" height="40" width="40"/>
+                    </h3>
+                </div>
+                <div style="overflow-y: auto;">
+                    <md-list layout="row" layout-align="center start">
+                        <md-list-item layout="column" layout-align="start center"
+                                      ng-repeat="data_actions in chosen_action_channel.action_list track by $index"
+                                      class="trigger-list_item">
+                            <div flex-sm-auto>
+                                <h4>{{data_actions.header}}</h4>
+                                <p class="trigger_description">{{data_actions.paragraph}}</p>
+                                <br/>
+                            </div>
+                            <div flex>
+                                <form name="actionForm"
+                                      id="{{ 'actionForm-' + data_actions.id}}"
+                                      novalidate layout="column"
+                                      ng-submit="actionSubmit(data_actions.id, this.actionForm)">
+
+                                    <div flex ng-if="data_actions.params.length > 0">
+                                        <div ng-repeat="inputs_action in data_actions.params track by $index">
+                                            <md-input-container ng-if="inputs_action.type != 'textarea'">
+                                                <label>{{ inputs_action.unbinded_name }}</label>
+                                                <input type="{{inputs_action.type}}"
+                                                       id="{{inputs_action.name}}"
+                                                       name="{{inputs_action.name}}"
+                                                       ng-model="inputs_action.value"/>
+                                            </md-input-container>
+                                            <md-input-container ng-if="inputs_action.type == 'textarea'">
+                                                <label>{{ inputs_action.unbinded_name }}</label>
+                                                                            <textarea ng-model="inputs_action.value"
+                                                                                      md-maxlength="150"
+                                                                                      rows="2" cols="30"
+                                                                                      md-select-on-focus></textarea>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+
+                                    <div flex ng-if="data_actions.checkboxes.length > 0">
+                                        <div ng-repeat="checkboxes_action in data_actions.checkboxes track by $index">
+                                            <md-input-container>
+                                                <label>
+                                                    <input type="{{checkboxes_action.type}}"
+                                                           ng-model="checkboxes_action.value"/>
+                                                    {{ checkboxes_action.unbinded_name }}
+                                                </label>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+
+                                    <div flex ng-if="data_actions.radios.length > 0">
+                                        <md-radio-group
+                                                ng-model="data_actions.radio_value"
+                                                ng-repeat="radios_action in data_actions.radios track by $index">
+                                            <md-radio-button value="{{radios_action.name}}">
+                                                {{ radios_action.unbinded_name }}
+                                            </md-radio-button>
+                                        </md-radio-group>
+                                    </div>
+
+                                    <div flex style="margin-top:10px;">
+                                        <input type="submit" class='btn btn-info btn-large' value='Create Action'/>
+                                    </div>
+
+                                    <div flex>
+                                        <div ng-show="this.actionForm.$invalid && this.actionForm.$dirty"
+                                             class="form-error">
+                                            One or more inputs are not correct, you can't submit this action.
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                        </md-list-item>
+                    </md-list>
+                </div>
+            </div>
+        </md-content>
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[6] && !stepsEnabled[7]">
+            <div layout="column" layout-align="center center">
+                <div layout="column" layout-align="center center">
+                    <div>
+                        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                                href="#step_6" type="button" aria-label="Back">
+                            Back
+                            <span class="glyphicon glyphicon-hand-up"></span>
+                        </button>
+                    </div>
+                    <div>
+                        <h3 class="step_1">Some problem occured in your authorization! Go back.</h3>
+                    </div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <!-- PART 8: If This Than That -->
+    <div id="step_8" style="height:1000px;padding-top:2%">
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[8]">
+            <div layout="column" layout-align="center center">
+                <div>
+                    <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                            href="#step_7" type="button" aria-label="Back">
+                        Back
+                        <span class="glyphicon glyphicon-hand-up"></span>
+                    </button>
+                </div>
+                <div class="progress" style="width:400px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         aria-valuenow="{{ 100/totalSteps*8 }}"
+                         aria-valuemin="0" aria-valuemax="100" style="width:{{ 100/totalSteps*8 }}%">
+                        step 8 of {{totalSteps}}
+                    </div>
+                </div>
+            </div>
+            <div layout="row" layout-align="center start">
+                <div class="step_0">
+                    if
+                    <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                         alt="{{ chosen_trigger_channel.name }}" height="110"/>
+                    then
+                    <img ng-src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
+                         alt="{{ chosen_action_channel.name }}" height="110"/>
+                </div>
+            </div>
+
+
+            <form novalidate ng-submit='submit_recipe(recipe_description)' id="submit_recipe">
+                <br>
+                <h3>Recipe title: </h3>
+                <textarea rows="4" cols="50" name="recipe_description" ng-model="recipe_description">{{recipe_description}}</textarea>
+                <input aria-label="input" type="submit" class="btn btn-info btn-large"
+                       value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp"/>
+            </form>
+
+
+
+
+
+
+
+        </md-content>
+        <md-content flex layout-padding class="flexbox-parent" ng-if="stepsEnabled[7] && !stepsEnabled[8]">
+            <div layout="column" layout-align="center center">
+                <div layout="column" layout-align="center center">
+                    <div>
+                        <button aria-label="md-button" class="md-warn md-button md-ink-ripple" scroll-on-click
+                                href="#step_7" type="button" aria-label="Back">
+                            Back
+                            <span class="glyphicon glyphicon-hand-up"></span>
+                        </button>
+                    </div>
+                    <div>
+                        <h3 class="step_1">Some problem occured in your action creation! Go back.</h3>
+                    </div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--
     <div id="step_7" div layout="row" layout-align="space-around center" style="min-height: 500px">
         <br>
         <br>
         <br>
-        <!-- PART A -->
         <md-content flex md-theme="docs-dark" layout-padding class="is_dimmable">
             <h3 class="step_1">Choose </h3>
             <h3 class="step_1">an </h3>
@@ -538,79 +804,17 @@
         <div ng-show="!chosen_action_channel">
             <h3>You have to choose an action channel to select an action event</h3>
         </div>
-        <a style="float:right"> <!--ng-href="#/newrecipe#step_3_b"-->
+        <a style="float:right">
             <button scroll-on-click href="#step_3_b" aria-label="md-button" class="md-warn md-button md-ink-ripple"
                     type="button" aria-label="Back">Back
             </button>
         </a>
     </div>
+    -->
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 
-    <!-- STEP 5 -->
-    <div id="step_8">
-        <br>
-        <br>
-        <br>
-        <div ng-show="chosen_trigger_channel && chosen_action_channel" class="flexbox-parent">
-            <div layout="column" layout-align="center center" style="min-height: 500px">
-                <md-content>
-                    <h3 class="step_0">if</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;"
-                         src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
-                         alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
-                    <h3 class="step_0">&emsp;then</h3>
-                    <img style="margin-left: 25px; margin-bottom: 40px;"
-                         src="{{ipServer}}/{{ chosen_action_channel.image_url }}"
-                         alt="{{ chosen_action_channel.name }}" height="150" width="150"/>
-                </md-content>
-                <br>
-                <form novalidate ng-submit='submit_recipe(recipe_description)' id="submit_recipe">
-                    <br>
-                    <h3>Recipe title: </h3>
-                    <textarea rows="4" cols="50" name="recipe_description" ng-model="recipe_description">{{recipe_description}}</textarea>
-                    <input aria-label="input" type="submit" class="btn btn-info btn-large"
-                           value="&nbsp;&nbsp;&nbsp;Create recipe&nbsp&nbsp&nbsp"/> <!--ng-href="#/home"-->
-                </form>
-                <br>
-                <br>
-                <br>
-                <br>
-            </div>
-        </div>
-        <div ng-show="!chosen_trigger_channel || !chosen_action_channel" layout="column" layout-align="center center">
-            <h3>You have to choose a trigger event and an action event to create a recipe</h3>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
+
 
 
 </div>
