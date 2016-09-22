@@ -512,9 +512,9 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                             $scope.recipe.trigger_ingredients[k] = {};
                             $scope.recipe.trigger_ingredients[k].param = $scope.parameters_triggers[j];
                             if (value == $scope.parameters_triggers[j].keyword) {
-                                $scope.recipe.trigger_ingredients[k].value = true;
+                                $scope.recipe.trigger_ingredients[k].value = value;
                             } else {
-                                $scope.recipe.trigger_ingredients[k].value = false;
+                                $scope.recipe.trigger_ingredients[k].value = "unchecked_radio_button";
                             }
                             k++;
                             break;
@@ -528,7 +528,11 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                         if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].id) {
                             $scope.recipe.trigger_ingredients[k] = {};
                             $scope.recipe.trigger_ingredients[k].param = $scope.parameters_triggers[j];
-                            $scope.recipe.trigger_ingredients[k].value = $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].value;
+                            if($scope.parameters_triggers[j].keyword == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].value) {
+                                $scope.recipe.trigger_ingredients[k].value = $scope.parameters_triggers[j].keyword;
+                            } else {
+                                $scope.recipe.trigger_ingredients[k].value = "unchecked_checkbox_button";
+                            }
                             k++;
                             break;
                         }
@@ -561,9 +565,9 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                             $scope.recipe.action_ingredients[k] = {};
                             $scope.recipe.action_ingredients[k].param = $scope.parameters_actions[j];
                             if (value == $scope.parameters_actions[j].keyword) {
-                                $scope.recipe.action_ingredients[k].value = true;
+                                $scope.recipe.action_ingredients[k].value = value;
                             } else {
-                                $scope.recipe.action_ingredients[k].value = false;
+                                $scope.recipe.action_ingredients[k].value = "unchecked_radio_button";
                             }
                             k++;
                             break;
@@ -577,7 +581,11 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                         if ($scope.parameters_actions[j].id == $scope.chosen_action_channel.chosen_action.checkboxes[i].id) {
                             $scope.recipe.action_ingredients[k] = {};
                             $scope.recipe.action_ingredients[k].param = $scope.parameters_actions[j];
-                            $scope.recipe.action_ingredients[k].value = $scope.chosen_action_channel.chosen_action.checkboxes[i].value;
+                            if($scope.parameters_actions[j].keyword == $scope.chosen_action_channel.chosen_action.checkboxes[i].value) {
+                                $scope.recipe.action_ingredients[k].value = $scope.parameters_actions[j].keyword;
+                            } else {
+                                $scope.recipe.action_ingredients[k].value = "unchecked_checkbox_button";
+                            }
                             k++;
                             break;
                         }
