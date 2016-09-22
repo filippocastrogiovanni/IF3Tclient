@@ -50,6 +50,12 @@ if3tApp.controller('ChannelsController', ['$scope', '$rootScope', '$routeParams'
                 return;
             }
 
+            if(!channel.isNeededAuth) {
+                $scope.channelDetail[channel.channelId].connected = true;
+                $scope.channelDetail[channel.channelId].visible = false;
+                return;
+            }
+
             $http({
                 method: 'GET',
                 dataType: 'json',

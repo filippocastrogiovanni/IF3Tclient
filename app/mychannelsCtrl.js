@@ -39,6 +39,12 @@ if3tApp.controller('MyChannelsController', ['messageFactory', '$scope', '$rootSc
             $scope.channelDetail[channel.channelId].visible = true;
             $scope.channelDetail[channel.channelId].url = "";
 
+            if(!channel.isNeededAuth) {
+                $scope.channelDetail[channel.channelId].connected = true;
+                $scope.channelDetail[channel.channelId].visible = false;
+                return;
+            }
+
             $http({
                 method: 'GET',
                 dataType: 'json',
