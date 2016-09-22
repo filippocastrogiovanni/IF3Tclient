@@ -38,17 +38,27 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
         $scope.stepNext(0);
 
         messageFactory.showLoading();
-        $http.get($rootScope.ipServer + "/channels")
+        $http.get($rootScope.ipServer + "/trigger_channels")
             .then(
                 function success(resp) {
                     messageFactory.hideLoading();
-                    $scope.channels = resp.data;
+                    $scope.trigger_channels = resp.data;
                     $scope.stepNext(1);
                 },
                 function error(resp) {
                     messageFactory.hideLoading();
                     messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
                     $scope.stepNext(0);
+                }
+            );
+
+        $http.get($rootScope.ipServer + "/action_channels")
+            .then(
+                function success(resp) {
+                    $scope.action_channels = resp.data;
+                },
+                function error(resp) {
+                    messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
                 }
             );
 
@@ -184,6 +194,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                                     }
                                 }
                             }
+                            console.log($scope.chosen_trigger_channel.trigger_list);
                         },
                         function errorCallback(resp) {
                             $scope.channelTriggersData = false;
@@ -423,6 +434,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                                     }
                                 }
                             }
+                            console.log($scope.chosen_action_channel.action_list);
                         },
                         function errorCallback(resp) {
                             $scope.channelActionsData = false;

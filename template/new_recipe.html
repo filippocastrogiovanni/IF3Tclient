@@ -52,7 +52,7 @@
                 </div>
                 <div>
                     <md-list>
-                        <md-list-item data-ng-repeat="channel in channels | orderBy:'name' | filter:searchBox1"
+                        <md-list-item data-ng-repeat="channel in trigger_channels | orderBy:'name' | filter:searchBox1"
                                       style="display: inline">
                             <img class="step_1_image" imageonload style="cursor: pointer"
                                  ng-src="{{ipServer}}/{{ channel.image_url }}"
@@ -373,7 +373,7 @@
                 </div>
                 <div>
                     <md-list>
-                        <md-list-item data-ng-repeat="channel in channels | orderBy:'name' | filter:searchBox2"
+                        <md-list-item data-ng-repeat="channel in action_channels | orderBy:'name' | filter:searchBox2"
                                       style="display: inline">
                             <img class="step_1_image" imageonload style="cursor: pointer"
                                  ng-src="{{ipServer}}/{{ channel.image_url }}"
@@ -536,6 +536,12 @@
                                                        id="{{inputs_action.name}}"
                                                        name="{{inputs_action.name}}"
                                                        ng-model="inputs_action.value"/>
+                                                <md-tooltip md-autohide="false" md-direction="bottom" md-visible="inputs_action.canReceive">
+                                                    You can insert the following parameters:
+                                                    <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
+                                                        <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
+                                                    </span>
+                                                </md-tooltip>
                                             </md-input-container>
                                             <md-input-container ng-if="inputs_action.type == 'textarea'">
                                                 <label>{{ inputs_action.unbinded_name }}</label>
@@ -543,6 +549,12 @@
                                                                                       md-maxlength="150"
                                                                                       rows="2" cols="30"
                                                                                       md-select-on-focus></textarea>
+                                                <md-tooltip md-autohide="false" md-direction="bottom" md-visible="inputs_action.canReceive">
+                                                    You can insert the following parameters:
+                                                    <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
+                                                        <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
+                                                    </span>
+                                                </md-tooltip>
                                             </md-input-container>
                                         </div>
                                     </div>
