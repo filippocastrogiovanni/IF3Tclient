@@ -19,6 +19,12 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
         $scope.stepsEnabled = [];
         $scope.totalSteps = 8;
 
+        $scope.recipe = {};
+        $scope.recipe.groupId = "";
+        $scope.recipe.description = "";
+        $scope.recipe.isPublic = false;
+        $scope.recipe.isEnabled = true;
+
         $scope.stepNext = function (nr) {
             for (i = 0; i <= $scope.totalSteps; i++) {
                 if (i <= nr) {
@@ -121,6 +127,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                     }).then(
                         function successCallback(response) {
                             var params = response.data; //List<ParametersTriggers>
+                            $scope.parameters_triggers = params;
                             var i, j, counter, radioNr, checkboxNr;
 
                             //creating array_parameters_triggers_same_id_trigger
@@ -236,6 +243,9 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                 return false;
             }
 
+            $scope.recipe.trigger = $scope.chosen_trigger_channel.chosen_trigger;
+            $scope.recipe.trigger_ingredients = [];
+
             //TODO bisogna implementare i vincoli sui campi
 
             var validity = false;
@@ -267,6 +277,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
         $scope.choose_action_channel = function (channel) {
 
             $scope.chosen_action_channel = channel;
+
             $scope.channelsDetail[channel.channelId] = {};
             $scope.channelsDetail[channel.channelId].connected = false;
             $scope.channelsDetail[channel.channelId].url = "";
@@ -356,6 +367,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                     }).then(
                         function successCallback(response) {
                             var params = response.data; //List<ParametersActions>
+                            $scope.parameters_actions = params;
                             var i, j, counter, radioNr, checkboxNr;
 
                             for (i = 0; i < $scope.chosen_action_channel.action_list.length; i++) {
@@ -427,8 +439,6 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         $scope.actionSubmit = function (actionID, form) {
             var i;
-            $scope.recipe = {};
-            $scope.recipe.name = "";
 
             $scope.chosen_action_channel.chosen_action = {};
             for (i = 0; i < $scope.chosen_action_channel.action_list.length; i++) {
@@ -441,6 +451,9 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             if (!$scope.chosen_action_channel.chosen_action) {
                 return false;
             }
+
+            $scope.recipe.action = $scope.chosen_action_channel.chosen_action;
+            $scope.recipe.action_ingredients = [];
 
             //TODO bisogna implementare i vincoli sui campi
 
@@ -468,6 +481,137 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             return true;
         };
 
+        $scope.recipeSubmit = function (form) {
+            var i, j, k, value;
+
+            if (!form.$valid)
+                return;
+
+            k = 0;
+            if ($scope.chosen_trigger_channel.chosen_trigger.params.length > 0) {
+                for (i = 0; i < $scope.chosen_trigger_channel.chosen_trigger.params.length; i++) {
+                    value = $scope.chosen_trigger_channel.chosen_trigger.params[i].value;
+                    if (value != null && value != "") {
+                        for (j = 0; j < $scope.parameters_triggers.length; j++) {
+                            if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.params[i].id) {
+                                $scope.recipe.trigger_ingredients[k] = {};
+                                $scope.recipe.trigger_ingredients[k].param = $scope.parameters_triggers[j];
+                                $scope.recipe.trigger_ingredients[k].value = value;
+                                k++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if ($scope.chosen_trigger_channel.chosen_trigger.radios.length > 0) {
+                for (i = 0; i < $scope.chosen_trigger_channel.chosen_trigger.radios.length; i++) {
+                    value = $scope.chosen_trigger_channel.chosen_trigger.radio_value;
+                    for (j = 0; j < $scope.parameters_triggers.length; j++) {
+                        if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.radios[i].id) {
+                            $scope.recipe.trigger_ingredients[k] = {};
+                            $scope.recipe.trigger_ingredients[k].param = $scope.parameters_triggers[j];
+                            if (value == $scope.parameters_triggers[j].keyword) {
+                                $scope.recipe.trigger_ingredients[k].value = true;
+                            } else {
+                                $scope.recipe.trigger_ingredients[k].value = false;
+                            }
+                            k++;
+                            break;
+                        }
+                    }
+                }
+            }
+            if ($scope.chosen_trigger_channel.chosen_trigger.checkboxes.length > 0) {
+                for (i = 0; i < $scope.chosen_trigger_channel.chosen_trigger.checkboxes.length; i++) {
+                    for (j = 0; j < $scope.parameters_triggers.length; j++) {
+                        if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].id) {
+                            $scope.recipe.trigger_ingredients[k] = {};
+                            $scope.recipe.trigger_ingredients[k].param = $scope.parameters_triggers[j];
+                            $scope.recipe.trigger_ingredients[k].value = $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].value;
+                            k++;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            k = 0;
+            if ($scope.chosen_action_channel.chosen_action.params.length > 0) {
+                for (i = 0; i < $scope.chosen_action_channel.chosen_action.params.length; i++) {
+                    value = $scope.chosen_action_channel.chosen_action.params[i].value;
+                    if (value != null && value != "") {
+                        for (j = 0; j < $scope.parameters_actions.length; j++) {
+                            if ($scope.parameters_actions[j].id == $scope.chosen_action_channel.chosen_action.params[i].id) {
+                                $scope.recipe.action_ingredients[k] = {};
+                                $scope.recipe.action_ingredients[k].param = $scope.parameters_actions[j];
+                                $scope.recipe.action_ingredients[k].value = value;
+                                k++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if ($scope.chosen_action_channel.chosen_action.radios.length > 0) {
+                for (i = 0; i < $scope.chosen_action_channel.chosen_action.radios.length; i++) {
+                    value = $scope.chosen_action_channel.chosen_action.radio_value;
+                    for (j = 0; j < $scope.parameters_actions.length; j++) {
+                        if ($scope.parameters_actions[j].id == $scope.chosen_action_channel.chosen_action.radios[i].id) {
+                            $scope.recipe.action_ingredients[k] = {};
+                            $scope.recipe.action_ingredients[k].param = $scope.parameters_actions[j];
+                            if (value == $scope.parameters_actions[j].keyword) {
+                                $scope.recipe.action_ingredients[k].value = true;
+                            } else {
+                                $scope.recipe.action_ingredients[k].value = false;
+                            }
+                            k++;
+                            break;
+                        }
+                    }
+                }
+            }
+            if ($scope.chosen_action_channel.chosen_action.checkboxes.length > 0) {
+                for (i = 0; i < $scope.chosen_action_channel.chosen_action.checkboxes.length; i++) {
+                    for (j = 0; j < $scope.parameters_actions.length; j++) {
+                        if ($scope.parameters_actions[j].id == $scope.chosen_action_channel.chosen_action.checkboxes[i].id) {
+                            $scope.recipe.action_ingredients[k] = {};
+                            $scope.recipe.action_ingredients[k].param = $scope.parameters_actions[j];
+                            $scope.recipe.action_ingredients[k].value = $scope.chosen_action_channel.chosen_action.checkboxes[i].value;
+                            k++;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (userFactory.isAuthenticated()) {
+
+                console.log($scope.recipe);
+
+                messageFactory.showLoading();
+                $http({
+                    method: 'POST',
+                    dataType: 'json',
+                    url: $rootScope.ipServer + '/add_recipe?_csrf=' + userFactory.getXsrfCookie(),
+                    headers: {'Content-Type': 'application/json'},
+                    data: angular.toJson($scope.recipe)
+                }).then(function successCallback() {
+                    messageFactory.hideLoading();
+                    console.log("saved");
+                    $window.location.href = '#/myrecipes';
+                }, function errorCallback(response) {
+                    messageFactory.hideLoading();
+                    messageFactory.showError(response.data.code + " - " + response.data.reasonPhrase, response.data.message);
+                    console.log("ERROR");
+                });
+
+
+            } else {
+                $window.location.href = "#/home";
+            }
+
+        };
 
         /*
          $http({
@@ -594,23 +738,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             $scope.recipes_list = [];
             console.log("Submitting recipe");
             //preparing data to POST (List<Recipe>) phase2
-            /*
-             for (var i = 0; i < $scope.recipes_list.length; i++) {
-             $scope.recipes_list[i].description = recipe_description;
-             $scope.recipes_list[i].trigger = $rootScope.chosen_trigger_data;
-             $scope.recipes_list[i].action = $rootScope.chosen_action_data;
-             $scope.recipes_list[i].trigger_ingredients = $rootScope.chosen_trigger_parameters;
-             $scope.recipes_list[i].action_ingredients = $rootScope.chosen_action_parameters;
-             for(var j=0; j<$scope.recipes_list[i].trigger_ingredients.length; j++) {
-             delete $scope.recipes_list[i].trigger_ingredients[j].unbinded_name;
-             }
-             for(var j=0; j<$scope.recipes_list[i].action_ingredients.length; j++) {
-             delete $scope.recipes_list[i].action_ingredients[j].unbinded_name;
-             }
-             $scope.recipes_list[i].is_public = false;
-             $scope.recipes_list[i].is_enabled = false;
-             }
-             */
+
             var element_recipe = {};
             if (recipe_description != undefined && (new String(recipe_description.trim())) != new String("")) {
                 element_recipe.description = recipe_description;
@@ -766,6 +894,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                 alert("You are noy logged so you can not save the recipe on Server");
             }
         };
+
     }
 ]);
 

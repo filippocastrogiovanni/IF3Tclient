@@ -668,7 +668,7 @@ function toggle_nav()
 function click_nav()
 {
     //FIXME to remove
-    console.log("BEFORE " + boolean_toggle_nav);
+    //console.log("BEFORE " + boolean_toggle_nav);
     if(boolean_toggle_nav){
         $("#id_nav_button").click();
         boolean_toggle_nav = false;

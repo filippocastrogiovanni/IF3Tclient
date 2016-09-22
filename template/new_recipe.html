@@ -641,7 +641,7 @@
                           novalidate
                           layout="column"
                           layout-align="center center"
-                          ng-submit="recipeSubmit(this.actionForm)">
+                          ng-submit="recipeSubmit(recipeForm)">
 
                         <div>
                             <md-input-container>
@@ -650,7 +650,7 @@
                                        name="recipe_name"
                                        required
                                        style="width:300px;"
-                                       ng-model="recipe.name"/>
+                                       ng-model="recipe.description"/>
                             </md-input-container>
                         </div>
 
