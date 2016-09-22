@@ -537,7 +537,7 @@
                                                        name="{{inputs_action.name}}"
                                                        ng-model="inputs_action.value"/>
                                                 <md-tooltip md-autohide="false" md-direction="bottom" md-visible="inputs_action.canReceive">
-                                                    You can insert the following parameters:
+                                                    You can insert the following trigger parameters:
                                                     <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
                                                         <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
                                                     </span>
@@ -550,7 +550,7 @@
                                                                                       rows="2" cols="30"
                                                                                       md-select-on-focus></textarea>
                                                 <md-tooltip md-autohide="false" md-direction="bottom" md-visible="inputs_action.canReceive">
-                                                    You can insert the following parameters:
+                                                    You can insert the following trigger parameters:
                                                     <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
                                                         <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
                                                     </span>
