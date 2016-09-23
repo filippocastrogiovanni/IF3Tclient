@@ -126,7 +126,8 @@
                         </div>
                     </div>
                 </div>
-                <div ng-if="channelsDetail[chosen_trigger_channel.channelId].connected" style="width:50%;">
+                <div ng-if="channelsDetail[chosen_trigger_channel.channelId].connected &&
+                chosen_trigger_channel.channelId !=3" style="width:50%;">
                     <h3 class="step_1">
                         The channel
                         {{ chosen_trigger_channel.name }}
@@ -143,6 +144,46 @@
                                 Continue to the next step
                                 &nbsp;<span class="glyphicon glyphicon-hand-down"></span>
                             </button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="chosen_trigger_channel.channelId == 3" style="width:50%;height:900px;">
+                    <h3 class="step_1">
+                        The channel
+                        {{ chosen_trigger_channel.name }}
+                        needs a location to be used.
+                    </h3>
+                    <div layout="row" layout-align="center center">
+                        <div>
+                            <img ng-src="{{ipServer}}/{{ chosen_trigger_channel.image_url }}"
+                                 alt="{{ chosen_trigger_channel.name }}" height="150" width="150"/>
+                        </div>
+                        <div flex-grow style="padding-left: 30px;">
+                            <button ng-if="weather.connected" ng-click="isTriggerChannelAuthorized(chosen_trigger_channel)" scroll-on-click
+                                    type="button" class="btn btn-success" href="#step_3" type="button">
+                                Continue to the next step
+                                &nbsp;<span class="glyphicon glyphicon-hand-down"></span>
+                            </button>
+
+                            <div class="dropdown pull-right makePaymentDropdownMainDiv" auto-close="outsideClick">
+                                <button class="btn btn-default dropdown-toggle makePaymentDropdownBtn" type="button"
+                                        id="individualDrop" data-toggle="dropdown">{{weather.location.name}}<span
+                                        class="caret pull-right"></span></button>
+                                <span ng-show="!weather.location"><label class="error">Select a location</label></span>
+                                <ul class="dropdown-menu makePaymentDropdownUlStyle" role="menu"
+                                    aria-labelledby="individualDrop">
+                                    <input
+                                            disable-auto-close
+                                            type="search"
+                                            ng-model="weather.serchFilter"
+                                            ng-change="getMatches(weather.serchFilter)"
+                                            placeholder="Search" />
+                                    <li role="presentation" ng-repeat="item in weather.locations" style="cursor:pointer;">
+                                        <a role="menuitem" ng-click="selectLocation(item)">{{item.name}} ({{item.country}})</a>
+                                    </li>
+                                </ul>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -536,7 +577,8 @@
                                                        id="{{inputs_action.name}}"
                                                        name="{{inputs_action.name}}"
                                                        ng-model="inputs_action.value"/>
-                                                <md-tooltip md-autohide="false" md-direction="bottom" md-visible="inputs_action.canReceive">
+                                                <md-tooltip md-autohide="false" md-direction="bottom"
+                                                            md-visible="inputs_action.canReceive">
                                                     You can insert the following trigger parameters:
                                                     <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
                                                         <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
@@ -549,7 +591,8 @@
                                                                                       md-maxlength="150"
                                                                                       rows="2" cols="30"
                                                                                       md-select-on-focus></textarea>
-                                                <md-tooltip md-autohide="false" md-direction="bottom" md-visible="inputs_action.canReceive">
+                                                <md-tooltip md-autohide="false" md-direction="bottom"
+                                                            md-visible="inputs_action.canReceive">
                                                     You can insert the following trigger parameters:
                                                     <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
                                                         <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
@@ -801,10 +844,6 @@
         </a>
     </div>
     -->
-
-
-
-
 
 
 </div>

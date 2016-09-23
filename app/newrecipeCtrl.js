@@ -62,6 +62,56 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                 }
             );
 
+        $scope.weather = {};
+        $scope.weather.locations = [];
+        $http.get($rootScope.ipServer + "/weather/stored_location")
+            .then(
+                function success(resp) {
+                    $scope.weather.location = resp.data;
+                    console.log($scope.weather.location);
+                    $scope.weather.connected = true;
+                },
+                function error(resp) {
+                    $scope.weather.location = null;
+                    $scope.weather.connected = false;
+                }
+            );
+
+        $scope.weather.serchFilter = "";
+        $scope.getMatches = function (query) {
+            var i;
+            if (query) {
+                $http.get($rootScope.ipServer + "/weather/query_locations/" + angular.lowercase(query))
+                    .then(function success(resp) {
+                            $scope.weather.locations = [];
+                            for(i = 0; i<5 && i<resp.data.length;i++) {
+                                $scope.weather.locations[i] = resp.data[i];
+                            }
+                        }, function error(resp) {
+                            console.log("error query");
+                        }
+                    );
+            }
+        };
+        $scope.selectLocation = function (location) {
+            $scope.weather.location = location;
+
+            $http({
+                method: 'POST',
+                dataType: 'json',
+                url: $rootScope.ipServer + '/weather/update_location/'+location.id+'?_csrf=' + userFactory.getXsrfCookie(),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .then(function successCallback() {
+                        $scope.weather.connected = true;
+                    },
+                    function errorCallback(response) {
+                        console.log("ERROR PUT location");
+                    });
+            
+        };
+
+
         $scope.connectChannel = function (channel) {
             $window.open($scope.channelsDetail[channel.channelId].url, "_blank", "location=no," +
                 "menubar=no," +
@@ -540,7 +590,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                         if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].id) {
                             $scope.recipe.trigger_ingredients[k] = {};
                             $scope.recipe.trigger_ingredients[k].param = $scope.parameters_triggers[j];
-                            if($scope.parameters_triggers[j].keyword == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].value) {
+                            if ($scope.parameters_triggers[j].keyword == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].value) {
                                 $scope.recipe.trigger_ingredients[k].value = $scope.parameters_triggers[j].keyword;
                             } else {
                                 $scope.recipe.trigger_ingredients[k].value = "unchecked_checkbox_button";
@@ -593,7 +643,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                         if ($scope.parameters_actions[j].id == $scope.chosen_action_channel.chosen_action.checkboxes[i].id) {
                             $scope.recipe.action_ingredients[k] = {};
                             $scope.recipe.action_ingredients[k].param = $scope.parameters_actions[j];
-                            if($scope.parameters_actions[j].keyword == $scope.chosen_action_channel.chosen_action.checkboxes[i].value) {
+                            if ($scope.parameters_actions[j].keyword == $scope.chosen_action_channel.chosen_action.checkboxes[i].value) {
                                 $scope.recipe.action_ingredients[k].value = $scope.parameters_actions[j].keyword;
                             } else {
                                 $scope.recipe.action_ingredients[k].value = "unchecked_checkbox_button";
