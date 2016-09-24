@@ -605,7 +605,7 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, $window
         messageFactory.showLoading();
 
         $http({
-            method: 'DELETE',
+            method: 'GET',
             url: $rootScope.ipServer + '/delete_recipe/' + id + '?_csrf=' + userFactory.getXsrfCookie()
         }).then
         (
