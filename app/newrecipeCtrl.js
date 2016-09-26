@@ -554,6 +554,14 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                 for (i = 0; i < $scope.chosen_trigger_channel.chosen_trigger.params.length; i++) {
                     value = $scope.chosen_trigger_channel.chosen_trigger.params[i].value;
                     if (value != null && value != "") {
+                        if ($scope.chosen_trigger_channel.chosen_trigger.params[i].type == "time") {
+                            value = moment(value).format("HH:mm");
+                        }
+
+                        if ($scope.chosen_trigger_channel.chosen_trigger.params[i].type == "date") {
+                            value = moment(value).format("DD/MM/YYYY");
+                        }
+
                         for (j = 0; j < $scope.parameters_triggers.length; j++) {
                             if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.params[i].id) {
                                 $scope.recipe.trigger_ingredients[k] = {};
@@ -656,7 +664,6 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             }
 
             if (userFactory.isAuthenticated()) {
-
                 console.log($scope.recipe);
 
                 messageFactory.showLoading();
