@@ -138,6 +138,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             $scope.stepNext(2);
 
             $scope.getChannelTriggers(channel);
+            $scope.getSendableKeyword(channel);
 
             if (channel.isNeededAuth) {
                 $http({
@@ -406,6 +407,24 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                 $scope.stepNext(7);
             }
 
+        };
+
+        $scope.getSendableKeyword = function (channel) {
+
+            $http({
+                method: 'GET',
+                dataType: 'json',
+                url: $rootScope.ipServer + '/channel_keywords/' + channel.keyword,
+                headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
+            }).then(
+                function successCallback(response) {
+                    $scope.sendableKeyword = response.data;
+                },
+                function errorCallback(resp) {
+                    $scope.sendableKeyword = [];
+                    messageFactory.showError(resp.data.code + " - " + resp.data.reasonPhrase, resp.data.message);
+                }
+            );
         };
 
         $scope.getChannelActions = function (channel) {

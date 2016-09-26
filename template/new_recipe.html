@@ -578,10 +578,10 @@
                                                        name="{{inputs_action.name}}"
                                                        ng-model="inputs_action.value"/>
                                                 <md-tooltip md-autohide="false" md-direction="bottom"
-                                                            md-visible="inputs_action.canReceive">
+                                                            ng-if="inputs_action.canReceive">
                                                     You can insert the following trigger parameters:
-                                                    <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
-                                                        <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
+                                                    <span ng-repeat="keyword in sendableKeyword">
+                                                        <span>[{{keyword}}]</span>
                                                     </span>
                                                 </md-tooltip>
                                             </md-input-container>
@@ -594,8 +594,8 @@
                                                 <md-tooltip md-autohide="false" md-direction="bottom"
                                                             md-visible="inputs_action.canReceive">
                                                     You can insert the following trigger parameters:
-                                                    <span ng-repeat="trigger_param in chosen_trigger_channel.chosen_trigger.params">
-                                                        <span ng-if="trigger_param.isSendable">[{{trigger_param.keyword}}]</span>
+                                                    <span ng-repeat="keyword in sendableKeyword">
+                                                        <span>[{{keyword}}]</span>
                                                     </span>
                                                 </md-tooltip>
                                             </md-input-container>
