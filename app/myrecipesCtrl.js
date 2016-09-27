@@ -27,8 +27,8 @@ if3tApp.controller('MyRecipesController', ['$scope', '$rootScope', '$routeParams
 //FIXME aggiornare db under-below
 //FIXME timezones?
 //FIXME capire perchè dopo aver visualizzato un messaggio di errore il contenuto della pagina si sposta a sinistra di un po'
-if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$window', '$location', 'userFactory', 'recipesFactory',
-    function ($scope, $rootscope, $routeParams, $window, $location, userFactory, recipesFactory)
+if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParams', '$window', '$location', 'userFactory', 'recipesFactory', 'messageFactory',
+    function ($scope, $rootscope, $routeParams, $window, $location, userFactory, recipesFactory, messageFactory)
     {
         if (!userFactory.isAuthenticated()) {
             $window.location.href = "#/home";
@@ -189,6 +189,11 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
         $scope.togglePublic = recipesFactory.toggleRecipePublic;
         $scope.delete = recipesFactory.deleteRecipe;
 
+
+        $scope.confirmation = function(message, callbackFunction, param){
+            messageFactory.showDialog("Warning", message, "Confirm", "Cancel", callbackFunction, param);
+        };
+
         $scope.update = function(recipe, isFormValid)
         {
             if (isFormValid)
@@ -205,7 +210,8 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
                     });
                 });*/
 
-                recipesFactory.updateRecipe(recipe);
+                $scope.confirmation("Are you sure you want to update this recipe?", recipesFactory.updateRecipe, recipe);
+                //recipesFactory.updateRecipe(recipe);
             }
         };
 

@@ -446,18 +446,18 @@ if3tApp.factory('messageFactory', function()
         $('#loading').modal('hide');
     };
 
-    factory.showDialog = function (title, message, confirm, cancel, callback) {
+    factory.showDialog = function (title, message, confirm, cancel, callback, callbackParam) {
         $("#dialog-box").modal('show');
         $('#dialog-title').html(title);
         $('#dialog-message').html(message);
         $('#dialog-confirm').html(confirm)
             .click(function(){
-                callback(true);
+                if (typeof callback === "function") {
+                    callback && callback(callbackParam);
+                }
             });
         $('#dialog-cancel').html(cancel)
-            .click(function(){
-                callback(false);
-            });
+            .click(function(){});
     };
 
     factory.showError = function (title, message) {
