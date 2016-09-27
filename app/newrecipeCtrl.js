@@ -207,7 +207,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
                                             $scope.chosen_trigger_channel.trigger_list[i].params[counter]
                                                 .unbinded_name = $scope.chosen_trigger_channel.trigger_list[i].params[counter]
-                                                .name.replace(/[_-]/g, " ").capitalize();
+                                                .name.replace(/_/g, " ").capitalize();
                                             $scope.chosen_trigger_channel.trigger_list[i].params[counter].value = "";
                                             counter++;
                                         }
@@ -217,7 +217,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
                                             $scope.chosen_trigger_channel.trigger_list[i].radios[radioNr]
                                                 .unbinded_name = $scope.chosen_trigger_channel.trigger_list[i].radios[radioNr]
-                                                .name.replace(/[_-]/g, " ").capitalize();
+                                                .name.replace(/_/g, " ").capitalize();
                                             if ($scope.chosen_trigger_channel.trigger_list[i].radio_value == "") {
                                                 $scope
                                                     .chosen_trigger_channel
@@ -237,7 +237,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
                                             $scope.chosen_trigger_channel.trigger_list[i].checkboxes[checkboxNr]
                                                 .unbinded_name = $scope.chosen_trigger_channel.trigger_list[i].checkboxes[checkboxNr]
-                                                .name.replace(/[_-]/g, " ").capitalize();
+                                                .name.replace(/_/g, " ").capitalize();
                                             $scope.chosen_trigger_channel.trigger_list[i].checkboxes[checkboxNr].value = false;
                                             checkboxNr++;
                                         }

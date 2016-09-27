@@ -255,14 +255,14 @@
                                                 <input type="{{inputs_trigger.type}}"
                                                        id="{{inputs_trigger.name}}"
                                                        name="{{inputs_trigger.name}}"
-                                                       ng-model="inputs_trigger.value"/>
+                                                       ng-model="inputs_trigger.value" required />
                                             </md-input-container>
                                             <md-input-container ng-if="inputs_trigger.type == 'textarea'">
                                                 <label>{{ inputs_trigger.unbinded_name }}</label>
-                                                                            <textarea ng-model="inputs_trigger.value"
-                                                                                      md-maxlength="150"
-                                                                                      rows="2" cols="30"
-                                                                                      md-select-on-focus></textarea>
+                                                <textarea ng-model="inputs_trigger.value"
+                                                          md-maxlength="150"
+                                                          rows="2" cols="30"
+                                                          md-select-on-focus required></textarea>
                                             </md-input-container>
                                         </div>
                                     </div>
@@ -296,7 +296,7 @@
                                     <div>
                                         <div ng-show="this.triggerForm.$invalid && this.triggerForm.$dirty"
                                              class="form-error">
-                                            One or more inputs are not correct, you can't submit this trigger.
+                                            One or more inputs are not correct or empty, you can't submit this trigger.
                                         </div>
                                     </div>
 
@@ -576,7 +576,7 @@
                                                 <input type="{{inputs_action.type}}"
                                                        id="{{inputs_action.name}}"
                                                        name="{{inputs_action.name}}"
-                                                       ng-model="inputs_action.value"/>
+                                                       ng-model="inputs_action.value" required/>
                                                 <md-tooltip md-autohide="false" md-direction="bottom"
                                                             ng-if="inputs_action.canReceive">
                                                     You can insert the following trigger parameters:
@@ -587,10 +587,10 @@
                                             </md-input-container>
                                             <md-input-container ng-if="inputs_action.type == 'textarea'">
                                                 <label>{{ inputs_action.unbinded_name }}</label>
-                                                                            <textarea ng-model="inputs_action.value"
-                                                                                      md-maxlength="150"
-                                                                                      rows="2" cols="30"
-                                                                                      md-select-on-focus></textarea>
+                                                        <textarea ng-model="inputs_action.value"
+                                                                  md-maxlength="150"
+                                                                  rows="2" cols="30"
+                                                                  md-select-on-focus required></textarea>
                                                 <md-tooltip md-autohide="false" md-direction="bottom"
                                                             md-visible="inputs_action.canReceive">
                                                     You can insert the following trigger parameters:
@@ -631,7 +631,7 @@
                                     <div>
                                         <div ng-show="this.actionForm.$invalid && this.actionForm.$dirty"
                                              class="form-error">
-                                            One or more inputs are not correct, you can't submit this action.
+                                            One or more inputs are not correct or empty, you can't submit this action.
                                         </div>
                                     </div>
 
