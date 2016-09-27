@@ -617,7 +617,8 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                         if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].id) {
                             $scope.recipe.trigger_ingredients[k] = {};
                             $scope.recipe.trigger_ingredients[k].param = $scope.parameters_triggers[j];
-                            if ($scope.parameters_triggers[j].keyword == $scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].value) {
+                            string_to_check = $scope.parameters_triggers[j].name;
+                            if ($scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].value == true && string_to_check.localeCompare($scope.chosen_trigger_channel.chosen_trigger.checkboxes[i].name)==0) {
                                 $scope.recipe.trigger_ingredients[k].value = $scope.parameters_triggers[j].keyword;
                             } else {
                                 $scope.recipe.trigger_ingredients[k].value = "unchecked_checkbox_button";
