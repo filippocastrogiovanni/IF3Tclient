@@ -77,10 +77,6 @@
                 <i class="glyphicon glyphicon-off" aria-hidden="true"></i>
                 <span>Turn {{ savedRecipe.isEnabled ? 'off' : 'on' }}</span>
             </button>
-            <button class="btn btn-default recipe-menu" ng-click="togglePublic(savedRecipe)">
-                <i class="glyphicon glyphicon-share" aria-hidden="true"></i>
-                <span>{{ savedRecipe.isPublic ? 'Unpublish' : 'Publish' }}</span>
-            </button>
             <button class="btn btn-default recipe-menu" ng-click="delete(savedRecipe.id)">
                 <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
                 <span>Delete</span>

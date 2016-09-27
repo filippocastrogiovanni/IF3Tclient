@@ -692,14 +692,13 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                     url: $rootScope.ipServer + '/add_recipe?_csrf=' + userFactory.getXsrfCookie(),
                     headers: {'Content-Type': 'application/json'},
                     data: angular.toJson($scope.recipe)
-                }).then(function successCallback() {
+                }).then(function successCallback(response) {
                     messageFactory.hideLoading();
-                    console.log("saved");
-                    $window.location.href = '#/myrecipes';
+                    $window.location.href = '#/home';
+                    messageFactory.showSuccessMsg(response.data.message);
                 }, function errorCallback(response) {
                     messageFactory.hideLoading();
                     messageFactory.showError(response.data.code + " - " + response.data.reasonPhrase, response.data.message);
-                    console.log("ERROR");
                 });
 
 

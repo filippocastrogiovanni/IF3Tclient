@@ -477,7 +477,7 @@ if3tApp.factory('messageFactory', function()
     factory.showSuccessMsg = function (message) {
         $("#alert-success").show()
             .html(message)
-            .fadeTo(800, 500).fadeOut(500, function(){
+            .fadeTo(1200, 500).fadeOut(500, function(){
                 $("#alert-success").hide();
             });
     };
@@ -599,7 +599,6 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, $window
         );
     };
 
-    //FIXME capire perchè al redirect la pagina caricata è "diabilitata"
     factory.deleteRecipe = function(id)
     {
         messageFactory.showLoading();
@@ -612,8 +611,9 @@ if3tApp.factory('recipesFactory', function ($http, $cookies, $rootScope, $window
             function successCallback(resp)
             {
                 messageFactory.hideLoading();
+                $window.location.href = '#/home';
                 messageFactory.showSuccessMsg(resp.data.message);
-                $window.location.href = '#/myrecipes';
+
             },
             function errorCallback(resp)
             {
