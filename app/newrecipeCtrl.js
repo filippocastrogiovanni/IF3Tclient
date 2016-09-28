@@ -579,6 +579,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                             value = moment(value).format("DD/MM/YYYY");
                         }
 
+                        console.log(value);
                         for (j = 0; j < $scope.parameters_triggers.length; j++) {
                             if ($scope.parameters_triggers[j].id == $scope.chosen_trigger_channel.chosen_trigger.params[i].id) {
                                 $scope.recipe.trigger_ingredients[k] = {};
@@ -633,6 +634,14 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
                 for (i = 0; i < $scope.chosen_action_channel.chosen_action.params.length; i++) {
                     value = $scope.chosen_action_channel.chosen_action.params[i].value;
                     if (value != null && value != "") {
+                        if ($scope.chosen_action_channel.chosen_action.params[i].type == "time") {
+                            value = moment(value).format("HH:mm");
+                        }
+
+                        if ($scope.chosen_action_channel.chosen_action.params[i].type == "date") {
+                            value = moment(value).format("DD/MM/YYYY");
+                        }
+                        console.log("value:" + value);
                         for (j = 0; j < $scope.parameters_actions.length; j++) {
                             if ($scope.parameters_actions[j].id == $scope.chosen_action_channel.chosen_action.params[i].id) {
                                 $scope.recipe.action_ingredients[k] = {};
