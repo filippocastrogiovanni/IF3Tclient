@@ -453,7 +453,7 @@ if3tApp.factory('messageFactory', function()
         $('#dialog-confirm').html(confirm)
             .click(function(){
                 if (typeof callback === "function") {
-                    callback && callback(callbackParam);
+                    callback(callbackParam);
                 }
             });
         $('#dialog-cancel').html(cancel)

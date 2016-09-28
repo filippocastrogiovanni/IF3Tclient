@@ -188,13 +188,13 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
         $scope.toggleEnabled = recipesFactory.toggleRecipeEnabled;
         $scope.togglePublic = recipesFactory.toggleRecipePublic;
         $scope.delete = recipesFactory.deleteRecipe;
-
+        $scope.updateRecipe = recipesFactory.updateRecipe;
 
         $scope.confirmation = function(message, callbackFunction, param){
             messageFactory.showDialog("Warning", message, "Confirm", "Cancel", callbackFunction, param);
         };
 
-        $scope.update = function(recipe, isFormValid)
+        $scope.update = function(recipe, isFormValid, callback)
         {
             if (isFormValid)
             {
@@ -210,7 +210,7 @@ if3tApp.controller('EditRecipeController', ['$scope', '$rootScope', '$routeParam
                     });
                 });*/
 
-                $scope.confirmation("Are you sure you want to update this recipe?", recipesFactory.updateRecipe, recipe);
+                $scope.confirmation("Are you sure you want to update this recipe?", callback, recipe);
                 //recipesFactory.updateRecipe(recipe);
             }
         };
