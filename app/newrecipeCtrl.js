@@ -136,9 +136,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
             $scope.channelsDetail[channel.channelId].url = "";
 
             $scope.stepNext(2);
-
             $scope.getChannelTriggers(channel);
-            $scope.getSendableKeyword(channel);
 
             if (channel.isNeededAuth) {
                 $http({
@@ -292,7 +290,7 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         $scope.triggerSubmit = function (triggerID, form) {
             var i;
-
+            $scope.getSendableKeyword(triggerID, $scope.chosen_trigger_channel.keyword);
             $scope.chosen_trigger_channel.chosen_trigger = {};
             for (i = 0; i < $scope.chosen_trigger_channel.trigger_list.length; i++) {
                 if ($scope.chosen_trigger_channel.trigger_list[i].id == triggerID) {
@@ -409,12 +407,12 @@ if3tApp.controller('NewRecipeController', ['$scope', '$rootScope', '$routeParams
 
         };
 
-        $scope.getSendableKeyword = function (channel) {
+        $scope.getSendableKeyword = function (triggerID, keyword) {
 
             $http({
                 method: 'GET',
                 dataType: 'json',
-                url: $rootScope.ipServer + '/channel_keywords/' + channel.keyword,
+                url: $rootScope.ipServer + '/channel_keywords/' + triggerID + '/' + keyword,
                 headers: {'Content-Type': 'application/json', 'authorization': userFactory.getAuthorization()}
             }).then(
                 function successCallback(response) {
